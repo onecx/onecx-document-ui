@@ -1,0 +1,35 @@
+app:
+  name: ui
+  image:
+    repository: 'onecx/onecx-document-management-ui'
+  routing:
+    enabled: true
+    path: /mfe/onecxDocumentManagementUi/
+
+  operator:
+    # Microfrontend
+    microfrontend:
+      enabled: true
+      specs:
+        main:
+          exposedModule: './OnecxDocumentManagementUiModule'
+          description: 'OneCX OnecxDocumentManagementUi Module'
+          note: 'OneCX OnecxDocumentManagementUi UI module auto import via MF operator'
+          type: MODULE
+          technology: WEBCOMPONENTMODULE
+          remoteName: onecx-document-management-ui
+          tagName: onecx-document-management-ui-webcomponent
+    # Permission
+    # ACTION S11 Update permissions and roles: https://onecx.github.io/docs/documentation/current/onecx-nx-plugins/generator/search/update-permissions.html#action-11
+    permission:
+      enabled: true
+      spec:
+        permissions:
+    # Keycloak
+    keycloak:
+      client:
+        enabled: true
+        spec:
+          kcConfig:
+            clientId: 'onecx-document-management-ui'
+# PIPE Config
