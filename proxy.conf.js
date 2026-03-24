@@ -25,6 +25,16 @@ const PROXY_CONFIG = {
     logLevel: 'debug',
     bypass: bypassFn,
   },
+  '/rustfs:9000': {
+    target: 'http://rustfs',
+    secure: false,
+    pathRewrite: {
+      '^/rustfs:9000': '',
+    },
+    changeOrigin: true,
+    logLevel: 'debug',
+    bypass: bypassFn,
+  },
 };
 
 module.exports = PROXY_CONFIG;
