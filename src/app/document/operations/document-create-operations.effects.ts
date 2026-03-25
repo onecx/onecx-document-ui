@@ -1,21 +1,90 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
+import { routerNavigatedAction } from '@ngrx/router-store';
+import { Store } from '@ngrx/store';
 import {
   DocumentControllerV1,
   DocumentDetail,
+  DocumentTypeControllerV1,
+  SupportedMimeTypeControllerV1,
   UploadAttachmentPresignedUrlRequest,
 } from 'src/app/shared/generated';
 import { DocumentCreateOperationsActions } from './document-create-operations.actions';
-import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
+import { EMPTY, catchError, filter, map, mergeMap, of, switchMap } from 'rxjs';
 import { FileUploaderService } from '../service/file-uploader.service';
+import { documentQuickUploadSelectors } from '../pages/document-quick-upload/document-quick-upload.selectors';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentCreateOperationsEffects {
   constructor(
     private actions$: Actions,
+    private readonly store: Store,
     private documentService: DocumentControllerV1,
+    private readonly documentTypeService: DocumentTypeControllerV1,
+    private readonly supportedMimeTypeService: SupportedMimeTypeControllerV1,
     private uploaderService: FileUploaderService
   ) {}
+
+  private readonly referenceDataPaths = ['quick-upload', 'create-document'];
+
+  loadReferenceDataOnRouteEnter$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(routerNavigatedAction),
+      map((action) => action.payload.routerState.url),
+      map((url) =>
+        this.referenceDataPaths.some((path) =>
+          url.toLowerCase().includes(`/${path}`)
+        )
+      ),
+      filter((shouldLoad) => shouldLoad),
+      map(() => DocumentCreateOperationsActions.ensureReferenceDataLoaded())
+    );
+  });
+
+  ensureReferenceDataLoaded$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DocumentCreateOperationsActions.ensureReferenceDataLoaded),
+      concatLatestFrom(() => [
+        this.store.select(
+          documentQuickUploadSelectors.selectAvailableDocumentTypes
+        ),
+        this.store.select(
+          documentQuickUploadSelectors.selectAvailableMimeTypes
+        ),
+      ]),
+      switchMap(([, availableDocumentTypes, availableMimeTypes]) => {
+        const documentTypes$ = availableDocumentTypes.length
+          ? of(availableDocumentTypes)
+          : this.documentTypeService.getAllTypesOfDocument();
+        const mimeTypes$ = availableMimeTypes.length
+          ? of(availableMimeTypes)
+          : this.supportedMimeTypeService.getAllSupportedMimeTypes();
+
+        return documentTypes$.pipe(
+          switchMap((types) =>
+            mimeTypes$.pipe(
+              mergeMap((mimeTypes) => [
+                DocumentCreateOperationsActions.availableDocumentTypesReceived({
+                  types,
+                }),
+                DocumentCreateOperationsActions.availableMimeTypesReceived({
+                  mimeTypes,
+                }),
+              ])
+            )
+          ),
+          catchError((error) =>
+            of(
+              DocumentCreateOperationsActions.loadReferenceDataFailed({
+                error: error?.message ?? null,
+              })
+            )
+          )
+        );
+      })
+    );
+  });
 
   startDocumentCreation$ = createEffect(() => {
     return this.actions$.pipe(

@@ -96,6 +96,50 @@
       }
     }
   },
+  "DOCUMENT_QUICK_UPLOAD": {
+    "HEADER": "Quick Upload",
+    "BASIC_FIELDS": {
+      "DOCUMENT_NAME": "Document Name",
+      "DOCUMENT_TYPE": "Document Type",
+      "DOCUMENT_CHANNEL": "Channel",
+      "DOCUMENT_STATUS": "Status"
+    },
+    "ATTACHMENTS": {
+      "DRAG_DROP": "Drag and drop files here",
+      "OR": "or",
+      "CHOOSE_BTN_TITLE": "Choose Files",
+      "ALLOWED_FILETYPE_MESSAGE": "Allowed file types: Audio, Image, Video, Excel, Word, PowerPoint, PDF",
+      "ALLOWED_FILESIZE_MESSAGE": "Max file size: 2 MB",
+      "FILE_SIZE_LIMIT": "File exceeds the maximum size limit",
+      "UPLOAD_SUCCESS": "File uploaded successfully",
+      "UPLOAD_ERROR": "File upload failed",
+      "NAME": "Attachment Name",
+      "SIZE": "File Size",
+      "TYPE": "File Type",
+      "UPLOAD_STATUS": "Upload Status",
+      "NO_DATA": "No attachments"
+    },
+    "CREATE_SUCCESS": "Document created successfully",
+    "CREATE_ERROR": "Failed to create document",
+    "FORM": {
+      "SPECIAL_CHARACTER_ERROR": "Special characters are not allowed"
+    },
+    "CANCEL_MODAL": {
+      "HEADER": "Cancel Document Creation",
+      "CANCEL_CONFIRM_MESSAGE": "Are you sure you want to cancel document creation? All unsaved changes will be lost.",
+      "CONFIRM": "Your changes will not be saved."
+    }
+  },
+  "GENERAL": {
+    "CANCEL": "Cancel",
+    "CREATE": "Create",
+    "PROCESSING": "Processing",
+    "SUCCESS": "Success",
+    "FAILED": "Failed",
+    "REMOVE": "Remove",
+    "NO": "No",
+    "YES": "Yes"
+  },
   "OnecxDocumentManagementUi": {
     "ARIA-LABEL": "OnecxDocumentManagementUi App"
   }

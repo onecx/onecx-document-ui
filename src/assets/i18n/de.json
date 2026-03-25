@@ -96,6 +96,50 @@
       }
     }
   },
+  "DOCUMENT_QUICK_UPLOAD": {
+    "HEADER": "Schnell hochladen",
+    "BASIC_FIELDS": {
+      "DOCUMENT_NAME": "Dokumentname",
+      "DOCUMENT_TYPE": "Dokumenttyp",
+      "DOCUMENT_CHANNEL": "Kanal",
+      "DOCUMENT_STATUS": "Status"
+    },
+    "ATTACHMENTS": {
+      "DRAG_DROP": "Dateien hier ablegen",
+      "OR": "oder",
+      "CHOOSE_BTN_TITLE": "Dateien auswählen",
+      "ALLOWED_FILETYPE_MESSAGE": "Zulässige Dateitypen: Audio, Bild, Video, Excel, Word, PowerPoint, PDF",
+      "ALLOWED_FILESIZE_MESSAGE": "Maximale Dateigröße: 2 MB",
+      "FILE_SIZE_LIMIT": "Die Datei überschreitet die maximale Größe",
+      "UPLOAD_SUCCESS": "Datei erfolgreich hochgeladen",
+      "UPLOAD_ERROR": "Datei-Upload fehlgeschlagen",
+      "NAME": "Dateiname",
+      "SIZE": "Dateigröße",
+      "TYPE": "Dateityp",
+      "UPLOAD_STATUS": "Upload-Status",
+      "NO_DATA": "Keine Anhänge"
+    },
+    "CREATE_SUCCESS": "Dokument erfolgreich erstellt",
+    "CREATE_ERROR": "Fehler beim Erstellen des Dokuments",
+    "FORM": {
+      "SPECIAL_CHARACTER_ERROR": "Sonderzeichen sind nicht zulässig"
+    },
+    "CANCEL_MODAL": {
+      "HEADER": "Dokumenterstellung abbrechen",
+      "CANCEL_CONFIRM_MESSAGE": "Möchten Sie die Dokumenterstellung wirklich abbrechen? Alle ungespeicherten Änderungen gehen verloren.",
+      "CONFIRM": "Ihre Änderungen werden nicht gespeichert."
+    }
+  },
+  "GENERAL": {
+    "CANCEL": "Abbrechen",
+    "CREATE": "Erstellen",
+    "PROCESSING": "Wird bearbeitet",
+    "SUCCESS": "Erfolg",
+    "FAILED": "Fehlgeschlagen",
+    "REMOVE": "Entfernen",
+    "NO": "Nein",
+    "YES": "Ja"
+  },
   "OnecxDocumentManagementUi": {
     "ARIA-LABEL": "OnecxDocumentManagementUi App"
   }

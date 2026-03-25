@@ -24,6 +24,7 @@ import {
 import { selectDocumentSearchViewModel } from './document-search.selectors';
 import { DocumentSearchViewModel } from './document-search.viewmodel';
 import { LifeCycleState } from 'src/app/shared/generated';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-document-search',
@@ -45,7 +46,8 @@ export class DocumentSearchComponent implements OnInit {
     private readonly store: Store,
     private readonly formBuilder: FormBuilder,
     @Inject(LOCALE_ID) public readonly locale: string,
-    private readonly exportDataService: ExportDataService
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) {
     this.viewModel$ = this.store.select(selectDocumentSearchViewModel);
     this.defaultDataSortDirection = DataSortDirection.NONE;
@@ -95,7 +97,9 @@ export class DocumentSearchComponent implements OnInit {
     this.store.dispatch(DocumentSearchActions.resetButtonClicked());
   }
 
-  quickUpload() {}
+  quickUpload() {
+    this.router.navigate(['quick-upload'], { relativeTo: this.route });
+  }
 
   createNewDocument() {}
 
@@ -111,6 +115,7 @@ export class DocumentSearchComponent implements OnInit {
           icon: PrimeIcons.UPLOAD,
           titleKey: 'DOCUMENT_SEARCH.HEADER_ACTIONS.QUICK_UPLOAD',
           show: 'always' as const,
+          permission: 'DOCUMENT#WRITE',
           actionCallback: () => this.quickUpload(),
         },
         {
@@ -118,6 +123,7 @@ export class DocumentSearchComponent implements OnInit {
           icon: PrimeIcons.PLUS,
           titleKey: 'DOCUMENT_SEARCH.HEADER_ACTIONS.CREATE_NEW_DOCUMENT',
           show: 'always' as const,
+          permission: 'DOCUMENT#WRITE',
           actionCallback: () => this.createNewDocument(),
         },
         {

@@ -1,0 +1,100 @@
+.green-bar {
+  background-color: #70ad47;
+}
+.red-bar {
+  background-color: #c00000;
+}
+
+::ng-deep {
+  .p-tooltip {
+    opacity: 1 !important;
+  }
+}
+
+//Tile view
+.tile-item-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  justify-content: flex-start;
+}
+
+.tile-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.tile-item {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.highlight:hover {
+  background-color: #f6f4f4c3;
+}
+
+.tile-item .label {
+  margin-top: 10px;
+}
+
+.tile-remove-icon {
+  width: 100%;
+  text-align: right;
+}
+
+.tile-icon {
+  height: 54px;
+  width: 54px;
+  margin-bottom: 2px;
+}
+
+.tile-statusbar {
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: smaller;
+  padding: 2px;
+  color: #fff;
+  border: none;
+}
+
+.tile-attachment-info-block {
+  position: relative;
+  width: 100%;
+}
+
+//List view
+.list-item {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-item .attachment-name {
+  width: 80%;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.list-item .statusbar {
+  width: 20%;
+  border-radius: 5px;
+  font-size: smaller;
+  padding: 2px;
+  color: #fff;
+  border: none;
+}
+
+.deletediv {
+  width: 30%;
+  display: flex;
+  align-items: flex-end;
+}

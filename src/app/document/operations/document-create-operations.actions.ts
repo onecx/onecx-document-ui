@@ -1,8 +1,9 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import {
-  AttachmentPresignedUrlResponse,
   DocumentCreateUpdate,
   DocumentDetail,
+  DocumentType,
+  SupportedMimeType,
   UploadAttachmentPresignedUrlRequest,
 } from 'src/app/shared/generated';
 import { AttachmentFile } from '../types/document-create.types';
@@ -20,7 +21,7 @@ export const DocumentCreateOperationsActions = createActionGroup({
       files: AttachmentFile[];
     }>(),
     'request document upload urls': props<{
-      createdDocument: DocumentDetail,
+      createdDocument: DocumentDetail;
       uploadRequests: UploadAttachmentPresignedUrlRequest[];
       files: AttachmentFile[];
     }>(),
@@ -33,6 +34,12 @@ export const DocumentCreateOperationsActions = createActionGroup({
     'upload attachment success': props<{
       documentId: string;
       attachmentId: string;
+    }>(),
+    'ensure reference data loaded': emptyProps(),
+    'load reference data failed': props<{ error: string | null }>(),
+    'available document types received': props<{ types: DocumentType[] }>(),
+    'available mime types received': props<{
+      mimeTypes: SupportedMimeType[];
     }>(),
     'attachment upload failed': props<{
       documentId: string;

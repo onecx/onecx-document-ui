@@ -18,9 +18,16 @@ import { DocumentSearchComponent } from './pages/document-search/document-search
 import { DocumentSearchCriteriaComponent } from './pages/document-search/components/document-search-criteria/document-search-criteria.component';
 import { DocumentSearchEffects } from './pages/document-search/document-search.effects';
 import { DocumentCreateOperationsEffects } from './operations/document-create-operations.effects';
+import { DocumentQuickUploadComponent } from './pages/document-quick-upload/document-quick-upload.component';
+import { DocumentQuickUploadFormComponent } from './pages/document-quick-upload/document-quick-upload-form/document-quick-upload-form.component';
 
 @NgModule({
-  declarations: [DocumentSearchComponent, DocumentSearchCriteriaComponent],
+  declarations: [
+    DocumentSearchComponent,
+    DocumentSearchCriteriaComponent,
+    DocumentQuickUploadComponent,
+    DocumentQuickUploadFormComponent,
+  ],
   imports: [
     CommonModule,
     SharedModule,
