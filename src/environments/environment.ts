@@ -6,7 +6,6 @@ export const environment = {
   production: false,
   skipRemoteConfigLoad: true,
   apiPrefix: 'bff',
-  rewriteUploadUrl: (url: string) => url.replace(/^http:\/\/rustfs:9000/, '/rustfs:9000'),
 
   KEYCLOAK_URL: 'http://keycloak-app/',
   KEYCLOAK_REALM: 'OneCX',

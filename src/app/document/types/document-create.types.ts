@@ -1,7 +1,8 @@
 import { Attachment, AttachmentCreateUpdate } from 'src/app/shared/generated';
 
 export type AttachmentFile = {
-  attachmentId: string;
+  fileName: string;
+  attachmentId?: string;
   file: File;
 };
 

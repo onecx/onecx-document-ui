@@ -42,13 +42,14 @@
     <app-document-quick-upload-form
       (enableCreateButton)="createButtonEnable($event)"
       (formValid)="setFormValid($event)"
+      [attachmentArray]="attachmentArray"
       (attchmentList)="setAttachmentArray($event)"
       [documentTypes]="(documentTypes$ | async) || []"
       [supportedMimeType]="(mimeTypes$ | async) || []"
       class="w-full"
     ></app-document-quick-upload-form>
   </ocx-page-header>
-  <div class="card mt-2 p-0">
+  <div class="card mt-2 p-0" *ngIf="attachmentArray.length">
     <div class="p-3 border-bottom-1 surface-border">
       <ocx-data-view-controls
         [supportedViews]="['list', 'grid']"

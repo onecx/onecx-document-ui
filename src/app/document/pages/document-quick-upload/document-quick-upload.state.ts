@@ -6,4 +6,7 @@ export interface DocumentQuickUploadState {
   documentTypesLoaded: boolean;
   availableDocumentTypes: DocumentType[];
   availableMimeTypes: SupportedMimeType[];
+  pendingAttachmentUploads: number;
+  successfulAttachmentIds: string[];
+  failedAttachmentIds: string[];
 }

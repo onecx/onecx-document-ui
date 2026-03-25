@@ -132,7 +132,7 @@ export class DocumentQuickUploadFormComponent implements OnInit {
   private loadDocumentStatus(): void {
     this.documentStatus = Object.keys(LifeCycleState).map((key) => ({
       label: key,
-      value: key,
+      value: LifeCycleState[key as keyof typeof LifeCycleState],
     }));
     // set "DRAFT" as default value for document status dropdown
     let docStatusDraft = this.documentStatus.filter(

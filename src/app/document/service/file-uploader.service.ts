@@ -2,7 +2,6 @@ import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +14,7 @@ export class FileUploaderService {
   }
 
   uploadAttachment(url: string, file: File): Observable<void> {
-    const resolvedUrl = environment.rewriteUploadUrl(url);
-    return this.httpClient.put<void>(resolvedUrl, file).pipe(
+    return this.httpClient.put<void>(url, file).pipe(
       retry(3),
       catchError((error) => throwError(() => error))
     );

@@ -29,15 +29,15 @@ export interface DocumentCreateUpdate {
     description?: string;
     lifeCycleState?: LifeCycleState;
     documentVersion?: string;
-    tags?: Set<string>;
+    tags?: Array<string>;
     typeId: string;
     specification?: DocumentSpecificationCreateUpdate;
     channel: ChannelCreateUpdate;
-    documentRelationships?: Set<DocumentRelationshipCreateUpdate>;
-    characteristics?: Set<DocumentCharacteristicCreateUpdate>;
-    relatedParties?: Set<RelatedPartyRefCreateUpdate>;
+    documentRelationships?: Array<DocumentRelationshipCreateUpdate>;
+    characteristics?: Array<DocumentCharacteristicCreateUpdate>;
+    relatedParties?: Array<RelatedPartyRefCreateUpdate>;
     relatedObject?: RelatedObjectRefCreateUpdate;
-    categories?: Set<CategoryCreateUpdate>;
+    categories?: Array<CategoryCreateUpdate>;
     attachments?: Array<AttachmentCreateUpdate>;
 }
 

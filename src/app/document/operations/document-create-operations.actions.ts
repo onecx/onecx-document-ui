@@ -45,5 +45,12 @@ export const DocumentCreateOperationsActions = createActionGroup({
       documentId: string;
       attachmentId: string;
     }>(),
+    'all attachments uploaded': props<{
+      documentId: string;
+      successfulIds: string[];
+      failedIds: string[];
+    }>(),
+    'document creation completed': emptyProps(),
+    'document creation final step failed': emptyProps(),
   },
 });

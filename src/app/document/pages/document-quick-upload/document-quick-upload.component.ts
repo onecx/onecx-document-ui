@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PrimeIcons, SelectItem } from 'primeng/api';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import {
   BreadcrumbService,
   PrimeIcon,
@@ -16,12 +16,17 @@ import {
   AttachmentCreateUpdate,
   DocumentCreateUpdate,
 } from 'src/app/shared/generated';
-import { AttachmentData } from '../../types/document-create.types';
+import {
+  AttachmentData,
+  AttachmentFile,
+} from '../../types/document-create.types';
 import { Store } from '@ngrx/store';
 import {
+  documentQuickUploadSelectors,
   selectQuickUploadDocumentTypes,
   selectQuickUploadMimeTypes,
 } from './document-quick-upload.selectors';
+import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions';
 
 enum SortOrder {
   ASCENDING,
@@ -33,7 +38,7 @@ enum SortOrder {
   templateUrl: './document-quick-upload.component.html',
   styleUrls: ['./document-quick-upload.component.scss'],
 })
-export class DocumentQuickUploadComponent implements OnInit {
+export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   sortOrder = -1;
   rowsPerPage = 10;
   rowsPerPageOptions = [10, 20, 50];
@@ -47,6 +52,8 @@ export class DocumentQuickUploadComponent implements OnInit {
   attachmentArray: AttachmentData[] = [];
   sortField = '';
   layout: 'list' | 'grid' = 'grid';
+
+  private subs = new Subscription();
 
   constructor(
     private readonly router: Router,
@@ -73,6 +80,17 @@ export class DocumentQuickUploadComponent implements OnInit {
         titleKey: 'DOCUMENT_QUICK_UPLOAD.HEADER',
       },
     ]);
+    this.subs.add(
+      this.store
+        .select(documentQuickUploadSelectors.selectOptionsLoading)
+        .subscribe((isLoading) => {
+          this.isSubmitted = isLoading;
+        })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   /**
@@ -133,11 +151,22 @@ export class DocumentQuickUploadComponent implements OnInit {
       channel: {
         name: this.documentQuickUploadForm.controls['channelname'].value,
       },
+      tags: [],
+      documentRelationships: [],
+      characteristics: [],
+      relatedParties: [],
+      categories: [],
       attachments: this.mapAttachments(),
     };
+    const fileToUpload = this.mapUploads();
     this.isSubmitted = true;
     this.documentQuickUploadForm.disable();
-    // this.callCreateDocumentApi(this.documentCreateUpdateDTO);
+    this.store.dispatch(
+      DocumentCreateOperationsActions.startDocumentCreation({
+        docRequest: createRequest,
+        files: fileToUpload,
+      })
+    );
   }
 
   /**
@@ -275,15 +304,11 @@ export class DocumentQuickUploadComponent implements OnInit {
   /**
    * Returns set of files array that user has uploaded
    */
-  private mapUploads(): { file: File }[] {
-    try {
-      return this.attachmentArray.map((element) => ({
-        file: element.fileData,
-      }));
-    } catch (err) {
-      console.error(err);
-      return [];
-    }
+  private mapUploads(): AttachmentFile[] {
+    return this.attachmentArray.map((element) => ({
+      file: element.fileData,
+      fileName: element.fileName!,
+    }));
   }
 
   /**

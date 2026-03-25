@@ -1202,7 +1202,6 @@ components:
         documentVersion:
           type: string
         tags:
-          uniqueItems: true
           type: array
           items:
             type: string
@@ -1213,24 +1212,20 @@ components:
         channel:
           $ref: '#/components/schemas/ChannelCreateUpdate'
         documentRelationships:
-          uniqueItems: true
           type: array
           items:
             $ref: '#/components/schemas/DocumentRelationshipCreateUpdate'
         characteristics:
-          uniqueItems: true
           type: array
           items:
             $ref: '#/components/schemas/DocumentCharacteristicCreateUpdate'
         relatedParties:
-          uniqueItems: true
           type: array
           items:
             $ref: '#/components/schemas/RelatedPartyRefCreateUpdate'
         relatedObject:
           $ref: '#/components/schemas/RelatedObjectRefCreateUpdate'
         categories:
-          uniqueItems: true
           type: array
           items:
             $ref: '#/components/schemas/CategoryCreateUpdate'

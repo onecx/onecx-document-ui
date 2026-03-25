@@ -4,16 +4,27 @@ import { concatLatestFrom } from '@ngrx/operators';
 import { routerNavigatedAction } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import {
+  Attachment,
   DocumentControllerV1,
   DocumentDetail,
   DocumentTypeControllerV1,
   SupportedMimeTypeControllerV1,
+  UpdateFileMetadataRequest,
   UploadAttachmentPresignedUrlRequest,
 } from 'src/app/shared/generated';
 import { DocumentCreateOperationsActions } from './document-create-operations.actions';
-import { EMPTY, catchError, filter, map, mergeMap, of, switchMap } from 'rxjs';
+import {
+  catchError,
+  filter,
+  forkJoin,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+} from 'rxjs';
 import { FileUploaderService } from '../service/file-uploader.service';
 import { documentQuickUploadSelectors } from '../pages/document-quick-upload/document-quick-upload.selectors';
+import { AttachmentFile } from '../types/document-create.types';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentCreateOperationsEffects {
@@ -111,10 +122,14 @@ export class DocumentCreateOperationsEffects {
       map((action) => {
         const { createdDocument, files } = action;
         const uploadRequests = this.buildPresignedUrlRequests(createdDocument);
+        const filesToUplad = this.assignAttachmentId(
+          createdDocument.attachments || [],
+          files
+        );
         return DocumentCreateOperationsActions.requestDocumentUploadUrls({
           createdDocument,
           uploadRequests,
-          files,
+          files: filesToUplad,
         });
       })
     );
@@ -150,7 +165,7 @@ export class DocumentCreateOperationsEffects {
   uploadAttachment$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(DocumentCreateOperationsActions.uploadAttachment),
-      switchMap((action) =>
+      mergeMap((action) =>
         this.uploaderService
           .uploadAttachment(action.presignedUrl, action.file)
           .pipe(
@@ -173,31 +188,70 @@ export class DocumentCreateOperationsEffects {
     );
   });
 
-  attachmentSuccess$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(DocumentCreateOperationsActions.uploadAttachmentSuccess),
-        switchMap((action) =>
-          this.documentService.updateAttachmentsMetadata(action.attachmentId)
-        )
-      );
-    },
-    { dispatch: false }
-  );
+  trackUploadCompletion$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(
+        DocumentCreateOperationsActions.uploadAttachmentSuccess,
+        DocumentCreateOperationsActions.attachmentUploadFailed
+      ),
+      concatLatestFrom(() => [
+        this.store.select(
+          documentQuickUploadSelectors.selectPendingAttachmentUploads
+        ),
+        this.store.select(
+          documentQuickUploadSelectors.selectSuccessfulAttachmentIds
+        ),
+        this.store.select(
+          documentQuickUploadSelectors.selectFailedAttachmentIds
+        ),
+      ]),
+      filter(([, pending]) => (pending as number) === 0),
+      map(([action, , successfulIds, failedIds]) => {
+        const documentId = (action as { documentId: string }).documentId;
+        return DocumentCreateOperationsActions.allAttachmentsUploaded({
+          documentId,
+          successfulIds: successfulIds as string[],
+          failedIds: failedIds as string[],
+        });
+      })
+    );
+  });
 
-  attachmentFailed$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(DocumentCreateOperationsActions.attachmentUploadFailed),
-        switchMap((action) =>
-          this.documentService.createFailedAttachmentsAuditLogs(
-            action.attachmentId
+  allAttachmentsUploaded$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DocumentCreateOperationsActions.allAttachmentsUploaded),
+      switchMap((action) => {
+        const metadata$ = action.successfulIds.length
+          ? this.documentService.updateAttachmentsMetadata(
+              action.documentId,
+              action.successfulIds.map(
+                (attachmentId) =>
+                  ({ attachmentId } as UpdateFileMetadataRequest)
+              )
+            )
+          : of(null);
+        const auditLog$ = action.failedIds.length
+          ? this.documentService.createFailedAttachmentsAuditLogs(
+              action.documentId,
+              action.failedIds.map(
+                (attachmentId) =>
+                  ({ attachmentId } as UpdateFileMetadataRequest)
+              )
+            )
+          : of(null);
+        return forkJoin([metadata$, auditLog$]).pipe(
+          map(() =>
+            DocumentCreateOperationsActions.documentCreationCompleted()
+          ),
+          catchError(() =>
+            of(
+              DocumentCreateOperationsActions.documentCreationFinalStepFailed()
+            )
           )
-        )
-      );
-    },
-    { dispatch: false }
-  );
+        );
+      })
+    );
+  });
 
   private buildPresignedUrlRequests(
     document: DocumentDetail
@@ -205,6 +259,23 @@ export class DocumentCreateOperationsEffects {
     return document.attachments!.map((attachment) => ({
       fileName: attachment.fileName,
       attachmentId: attachment.id,
+    }));
+  }
+
+  private assignAttachmentId(
+    attachments: Attachment[],
+    attachmentFiles: AttachmentFile[]
+  ): AttachmentFile[] {
+    const fileNames: Record<string, string> = attachments.reduce(
+      (prev, curr) => {
+        prev[curr.fileName!] = curr.id!;
+        return prev;
+      },
+      {} as Record<string, string>
+    );
+    return attachmentFiles.map((attFIle) => ({
+      ...attFIle,
+      attachmentId: fileNames[attFIle.fileName!],
     }));
   }
 }

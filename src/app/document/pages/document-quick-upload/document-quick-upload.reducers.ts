@@ -8,6 +8,9 @@ export const initialState: DocumentQuickUploadState = {
   documentTypesLoaded: false,
   availableDocumentTypes: [],
   availableMimeTypes: [],
+  pendingAttachmentUploads: 0,
+  successfulAttachmentIds: [],
+  failedAttachmentIds: [],
 };
 
 export const documentQuickUploadReducer = createReducer(
@@ -41,16 +44,42 @@ export const documentQuickUploadReducer = createReducer(
     DocumentCreateOperationsActions.startDocumentCreation,
     (state): DocumentQuickUploadState => ({
       ...state,
-      optionsLoading: true
+      optionsLoading: true,
+    })
+  ),
+  on(
+    DocumentCreateOperationsActions.requestDocumentUploadUrls,
+    (state, { files }): DocumentQuickUploadState => ({
+      ...state,
+      pendingAttachmentUploads: files.length,
+      successfulAttachmentIds: [],
+      failedAttachmentIds: [],
+    })
+  ),
+  on(
+    DocumentCreateOperationsActions.uploadAttachmentSuccess,
+    (state, { attachmentId }): DocumentQuickUploadState => ({
+      ...state,
+      successfulAttachmentIds: [...state.successfulAttachmentIds, attachmentId],
+      pendingAttachmentUploads: state.pendingAttachmentUploads - 1,
     })
   ),
   on(
     DocumentCreateOperationsActions.attachmentUploadFailed,
+    (state, { attachmentId }): DocumentQuickUploadState => ({
+      ...state,
+      failedAttachmentIds: [...state.failedAttachmentIds, attachmentId],
+      pendingAttachmentUploads: state.pendingAttachmentUploads - 1,
+    })
+  ),
+  on(
+    DocumentCreateOperationsActions.documentCreationCompleted,
+    DocumentCreateOperationsActions.documentCreationFinalStepFailed,
     DocumentCreateOperationsActions.documentCreationFailed,
     DocumentCreateOperationsActions.loadReferenceDataFailed,
     (state): DocumentQuickUploadState => ({
       ...state,
-      optionsLoading: true
+      optionsLoading: false,
     })
   )
 );
