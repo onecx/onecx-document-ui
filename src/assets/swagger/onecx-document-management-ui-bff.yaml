@@ -645,49 +645,15 @@ paths:
         permissions:
           document:
             - read
+      operationId: getDocumentDetailById
       tags:
         - DocumentControllerV1
-      description: Gets Document by Id
-      operationId: getDocumentById
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DocumentDetail'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
-    put:
-      x-onecx:
-        permissions:
-          document:
-            - write
-      tags:
-        - DocumentControllerV1
-      description: Update an document
-      operationId: updateDocument
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DocumentCreateUpdate'
       responses:
         '200':
           description: OK
@@ -695,21 +661,63 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DocumentDetail'
-        '404':
-          description: Not found
+        '400':
+          description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RFCProblem'
-    delete:
-      x-onecx:
-        permissions:
-          document:
-            - delete
+                $ref: '#/components/schemas/ProblemDetailResponse'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+    put:
+      operationId: updateDocumentDetail
       tags:
         - DocumentControllerV1
-      description: Delete Document by Id
-      operationId: deleteDocumentById
+      description: This operation performs an update.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentCreateUpdate'
+      responses:
+        '204':
+          description: DocumentDetail updated
+          headers:
+            Location:
+              required: true
+              schema:
+                type: string
+                format: url
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDetail'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+        '404':
+          description: DocumentDetail not found
+    delete:
+      tags:
+        - DocumentControllerV1
+      operationId: deleteDocumentDetail
+      description: Delete DocumentDetail by id
       parameters:
         - name: id
           in: path
@@ -718,13 +726,7 @@ paths:
             type: string
       responses:
         '204':
-          description: Deleted Document by id
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
+          description: DocumentDetail deleted
   /files/bucket/{name}:
     post:
       x-onecx:

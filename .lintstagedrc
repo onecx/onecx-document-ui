@@ -1,0 +1,4 @@
+{
+  "*.{ts,tsx,js,jsx,html}": ["npx eslint --cache"],
+  "*.{json,scss,css,md,yml,yaml}": ["npx prettier -c --cache"]
+}

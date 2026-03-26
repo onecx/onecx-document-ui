@@ -17,6 +17,7 @@ import {
   HAS_PERMISSION_CHECKER,
   PortalCoreModule,
   providePortalDialogService,
+  RowListGridData,
   UserService,
 } from '@onecx/portal-integration-angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
@@ -635,5 +636,13 @@ describe('DocumentSearchComponent', () => {
     });
   });
 
+  it('should dispatch detailsButtonClicked action on details', () => {
+    jest.spyOn(store, 'dispatch');
+    const row: RowListGridData = { id: 'test-id', imagePath: '' } as any;
+    component.details(row);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      DocumentSearchActions.detailsButtonClicked({ id: 'test-id' })
+    );
+  });
   // <<SPEC-EXTENSIONS-MARKER-!!!-DO-NOT-REMOVE-!!!>>
 });

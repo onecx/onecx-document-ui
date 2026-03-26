@@ -14,6 +14,10 @@ import { DocumentSearchCriteriaSchema } from './document-search.parameters';
 export const DocumentSearchActions = createActionGroup({
   source: 'DocumentSearch',
   events: {
+    'Details button clicked': props<{
+      id: number | string;
+    }>(),
+
     'Search button clicked': props<{
       searchCriteria: DocumentSearchCriteriaSchema;
     }>(),

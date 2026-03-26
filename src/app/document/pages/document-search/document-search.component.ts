@@ -1,20 +1,19 @@
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   Action,
   BreadcrumbService,
   buildSearchCriteria,
   DataSortDirection,
-  DataTableColumn,
-  DiagramComponentState,
-  DiagramType,
-  ExportDataService,
   InteractiveDataViewComponentState,
+  RowListGridData,
   SearchHeaderComponentState,
 } from '@onecx/portal-integration-angular';
 import { PrimeIcons, SelectItem } from 'primeng/api';
 import { map, Observable } from 'rxjs';
+import { LifeCycleState } from 'src/app/shared/generated';
 import { DocumentSearchCriteriaComponent } from './components/document-search-criteria/document-search-criteria.component';
 import { DocumentSearchActions } from './document-search.actions';
 import {
@@ -23,8 +22,6 @@ import {
 } from './document-search.parameters';
 import { selectDocumentSearchViewModel } from './document-search.selectors';
 import { DocumentSearchViewModel } from './document-search.viewmodel';
-import { LifeCycleState } from 'src/app/shared/generated';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-document-search',
@@ -92,6 +89,10 @@ export class DocumentSearchComponent implements OnInit {
     );
   }
 
+  details({ id }: RowListGridData) {
+    this.store.dispatch(DocumentSearchActions.detailsButtonClicked({ id }));
+  }
+
   resetSearch() {
     this.documentSearchFormGroup.reset();
     this.store.dispatch(DocumentSearchActions.resetButtonClicked());
@@ -101,7 +102,9 @@ export class DocumentSearchComponent implements OnInit {
     this.router.navigate(['quick-upload'], { relativeTo: this.route });
   }
 
-  createNewDocument() {}
+  createNewDocument() {
+    return;
+  }
 
   exportItems() {
     this.store.dispatch(DocumentSearchActions.exportButtonClicked());

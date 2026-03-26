@@ -1,0 +1,5 @@
+
+# lint
+echo "[Husky] Running lint check on staged files:"
+npx lint-staged
+

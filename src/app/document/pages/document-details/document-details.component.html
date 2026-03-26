@@ -1,0 +1,35 @@
+<ocx-portal-page
+  permission="DOCUMENT#READ"
+  [helpArticleId]="'DOCUMENT_DETAILS.HELP_ARTICLE_ID' | translate"
+  *ngrxLet="viewModel$; let vm"
+>
+  <ocx-loading-indicator *ngIf="vm.detailsLoadingIndicator">
+  </ocx-loading-indicator>
+  <ocx-data-loading-error
+    *ngIf="!vm.detailsLoaded && !vm.detailsLoadingIndicator"
+  >
+  </ocx-data-loading-error>
+  <div *ngIf="vm.detailsLoaded && !vm.detailsLoadingIndicator">
+    <ocx-page-header
+      [header]="'DOCUMENT_DETAILS.HEADER' | translate"
+      [subheader]="'DOCUMENT_DETAILS.SUB_HEADER' | translate"
+      [actions]="(headerActions$ | async) ?? []"
+      [disableDefaultActions]="true"
+      [manualBreadcrumbs]="true"
+      [attr.aria-label]="'DOCUMENT_DETAILS.FORM.NAME' | translate"
+    >
+    </ocx-page-header>
+    <ocx-page-content
+      role="main"
+      [attr.aria-label]="'DOCUMENT_DETAILS.ARIA-LABEL' | translate"
+    >
+      <div class="surface-section mt-3 mb-1 mx-3">
+        <app-document-details-form
+          [formGroup]="formGroup"
+          [availableTypes]="(documentTypes$ | async) || []"
+        >
+        </app-document-details-form>
+      </div>
+    </ocx-page-content>
+  </div>
+</ocx-portal-page>

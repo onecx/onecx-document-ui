@@ -1,4 +1,105 @@
 {
+  "DOCUMENT_DETAILS": {
+    "HELP_ARTICLE_ID": "Help Article",
+    "BREADCRUMB": "Details",
+    "HEADER": "Document Details",
+    "ARIA-LABEL": "Page Header with Details",
+    "SUB_HEADER": "Display of Document Details",
+    "ERROR_MESSAGES": {
+      "DETAILS_LOADING_FAILED": "Loading details failed."
+    },
+    "GENERAL": {
+      "BACK": "Back",
+      "MORE": "More",
+      "EDIT": " Edit",
+      "DELETE": "Delete",
+      "CANCEL": "Cancel",
+      "SAVE": "Save"
+    },
+    "FORM": {
+      "ID": {
+        "LABEL": "ID",
+        "ARIA-LABEL": "ID",
+        "TOOLTIP": "ID"
+      },
+      "NAME": {
+        "LABEL": "Name",
+        "ARIA-LABEL": "Name",
+        "TOOLTIP": "Name"
+      },
+      "TYPE": {
+        "LABEL": "Type",
+        "ARIA-LABEL": "Type",
+        "TOOLTIP": "Type"
+      },
+      "VERSION": {
+        "LABEL": "Version",
+        "ARIA-LABEL": "Version",
+        "TOOLTIP": "Version"
+      },
+      "CHANNEL": {
+        "LABEL": "Channel",
+        "ARIA-LABEL": "Channel",
+        "TOOLTIP": "Channel"
+      },
+      "SPECIFICATION": {
+        "LABEL": "Specification",
+        "ARIA-LABEL": "Specification",
+        "TOOLTIP": "Specification"
+      },
+      "STATUS": {
+        "LABEL": "Status",
+        "ARIA-LABEL": "Status",
+        "TOOLTIP": "Status"
+      },
+      "DESCRIPTION": {
+        "LABEL": "Description",
+        "ARIA-LABEL": "Description",
+        "TOOLTIP": "Description"
+      },
+      "INVOLVEMENT": {
+        "LABEL": "Involvement",
+        "ARIA-LABEL": "Involvement",
+        "TOOLTIP": "Involvement"
+      },
+      "OBJECT_REFERENCE_TYPE": {
+        "LABEL": "Reference Type",
+        "ARIA-LABEL": "Reference Type",
+        "TOOLTIP": "Reference Type"
+      },
+      "OBJECT_REFERENCE_ID": {
+        "LABEL": "Reference ID",
+        "ARIA-LABEL": "Reference ID",
+        "TOOLTIP": "Reference ID"
+      }
+    },
+    "SECTIONS": {
+      "DETAILS": "Details",
+      "RELATED_OBJECT": "Related Object"
+    },
+    "CANCEL": {
+      "HEADER": "Confirm cancel",
+      "MESSAGE": "Please confirm that you want to cancel editing and reset changes.",
+      "CONFIRM": "Confirm"
+    },
+    "UPDATE": {
+      "SUCCESS": "Update successful",
+      "ERROR": "Update failed",
+      "FORM": {
+        "SAVE": "Save",
+        "CANCEL": "Cancel"
+      },
+      "HEADER": "Update Document"
+    },
+    "DELETE": {
+      "HEADER": "Delete Document",
+      "MESSAGE": "Please confirm that you want to delete this Document.",
+      "CONFIRM": "Confirm",
+      "CANCEL": "Cancel",
+      "SUCCESS": "Document deleted successfully",
+      "ERROR": "Could not delete Document"
+    }
+  },
   "DOCUMENT_SEARCH": {
     "HEADER": "Document Search",
     "SUB_HEADER": "Searching and displaying of Document",

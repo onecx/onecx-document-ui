@@ -1,0 +1,212 @@
+<form [formGroup]="formGroup" class="grid p-fluid mt-3" errorTailor>
+  <div class="col-12">
+    <h3 class="mt-0 mb-3">
+      {{ 'DOCUMENT_DETAILS.SECTIONS.DETAILS' | translate }}
+    </h3>
+  </div>
+
+  <div class="col-12 md:col-6 xl:col-3">
+    <span class="p-float-label" controlErrorAnchor>
+      <input
+        pInputText
+        type="text"
+        id="id"
+        class="w-full"
+        formControlName="id"
+        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.ID.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.ID.ARIA-LABEL' | translate"
+      />
+      <label for="id">{{ 'DOCUMENT_DETAILS.FORM.ID.LABEL' | translate }}</label>
+    </span>
+  </div>
+
+  <div class="col-12 md:col-6 xl:col-3">
+    <span class="p-float-label" controlErrorAnchor>
+      <input
+        pInputText
+        type="text"
+        id="name"
+        class="w-full"
+        formControlName="name"
+        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.NAME.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.NAME.ARIA-LABEL' | translate"
+      />
+      <label for="name">{{
+        'DOCUMENT_DETAILS.FORM.NAME.LABEL' | translate
+      }}</label>
+    </span>
+  </div>
+
+  <div class="col-12 md:col-6 xl:col-3">
+    <span class="p-float-label" controlErrorAnchor>
+      <p-dropdown
+        id="type"
+        class="w-full"
+        formControlName="type"
+        [options]="availableTypes"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.TYPE.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.TYPE.ARIA-LABEL' | translate"
+      ></p-dropdown>
+      <label for="type">{{
+        'DOCUMENT_DETAILS.FORM.TYPE.LABEL' | translate
+      }}</label>
+    </span>
+  </div>
+
+  <div class="col-12 md:col-6 xl:col-3">
+    <span class="p-float-label" controlErrorAnchor>
+      <input
+        pInputText
+        type="text"
+        id="version"
+        class="w-full"
+        formControlName="version"
+        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.VERSION.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        [attr.aria-label]="
+          'DOCUMENT_DETAILS.FORM.VERSION.ARIA-LABEL' | translate
+        "
+      />
+      <label for="version">{{
+        'DOCUMENT_DETAILS.FORM.VERSION.LABEL' | translate
+      }}</label>
+    </span>
+  </div>
+
+  <div class="col-12 md:col-6 xl:col-3">
+    <span class="p-float-label" controlErrorAnchor>
+      <input
+        pInputText
+        id="channel"
+        class="w-full"
+        formControlName="channel"
+        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.CHANNEL.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        [attr.aria-label]="
+          'DOCUMENT_DETAILS.FORM.CHANNEL.ARIA-LABEL' | translate
+        "
+      />
+      <label for="channel">{{
+        'DOCUMENT_DETAILS.FORM.CHANNEL.LABEL' | translate
+      }}</label>
+    </span>
+  </div>
+
+  <div class="col-12 md:col-6 xl:col-3">
+    <span class="p-float-label" controlErrorAnchor>
+      <p-dropdown
+        id="status"
+        class="w-full"
+        formControlName="status"
+        [options]="documentStatuses"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.STATUS.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        [attr.aria-label]="
+          'DOCUMENT_DETAILS.FORM.STATUS.ARIA-LABEL' | translate
+        "
+      ></p-dropdown>
+      <label for="status">{{
+        'DOCUMENT_DETAILS.FORM.STATUS.LABEL' | translate
+      }}</label>
+    </span>
+  </div>
+
+  <div class="col-12">
+    <span class="p-float-label" controlErrorAnchor>
+      <textarea
+        pInputTextarea
+        id="description"
+        class="w-full"
+        rows="5"
+        formControlName="description"
+        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.DESCRIPTION.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        [attr.aria-label]="
+          'DOCUMENT_DETAILS.FORM.DESCRIPTION.ARIA-LABEL' | translate
+        "
+      ></textarea>
+      <label for="description">{{
+        'DOCUMENT_DETAILS.FORM.DESCRIPTION.LABEL' | translate
+      }}</label>
+    </span>
+  </div>
+
+  <div class="col-12 mt-2">
+    <h3 class="mt-0 mb-3">
+      {{ 'DOCUMENT_DETAILS.SECTIONS.RELATED_OBJECT' | translate }}
+    </h3>
+  </div>
+
+  <div class="col-12 md:col-6 xl:col-4">
+    <span class="p-float-label" controlErrorAnchor>
+      <input
+        pInputText
+        type="text"
+        id="involvement"
+        class="w-full"
+        formControlName="involvement"
+        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.INVOLVEMENT.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        [attr.aria-label]="
+          'DOCUMENT_DETAILS.FORM.INVOLVEMENT.ARIA-LABEL' | translate
+        "
+      />
+      <label for="involvement">{{
+        'DOCUMENT_DETAILS.FORM.INVOLVEMENT.LABEL' | translate
+      }}</label>
+    </span>
+  </div>
+
+  <div class="col-12 md:col-6 xl:col-4">
+    <span class="p-float-label" controlErrorAnchor>
+      <input
+        pInputText
+        type="text"
+        id="objectReferenceType"
+        class="w-full"
+        formControlName="objectReferenceType"
+        pTooltip="{{
+          'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_TYPE.TOOLTIP' | translate
+        }}"
+        tooltipPosition="top"
+        [attr.aria-label]="
+          'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_TYPE.ARIA-LABEL' | translate
+        "
+      />
+      <label for="objectReferenceType">{{
+        'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_TYPE.LABEL' | translate
+      }}</label>
+    </span>
+  </div>
+
+  <div class="col-12 md:col-6 xl:col-4">
+    <span class="p-float-label" controlErrorAnchor>
+      <input
+        pInputText
+        type="text"
+        id="objectReferenceId"
+        class="w-full"
+        formControlName="objectReferenceId"
+        pTooltip="{{
+          'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_ID.TOOLTIP' | translate
+        }}"
+        tooltipPosition="top"
+        [attr.aria-label]="
+          'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_ID.ARIA-LABEL' | translate
+        "
+      />
+      <label for="objectReferenceId">{{
+        'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_ID.LABEL' | translate
+      }}</label>
+    </span>
+  </div>
+</form>

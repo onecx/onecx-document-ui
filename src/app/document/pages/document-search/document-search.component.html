@@ -29,6 +29,8 @@
   <ocx-content-container layout="horizontal">
     <ocx-content class="w-full">
       <ocx-interactive-data-view
+        (viewItem)="details($event)"
+        viewPermission="DOCUMENT#READ"
         [data]="vm.results"
         [columns]="vm.columns"
         [emptyResultsMessage]="'DOCUMENT_SEARCH.EMPTY_RESULTS' | translate"

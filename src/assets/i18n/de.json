@@ -1,4 +1,100 @@
 {
+  "DOCUMENT_DETAILS": {
+    "HELP_ARTICLE_ID": "Hilfeartikel",
+    "BREADCRUMB": "Details",
+    "HEADER": "Document Details",
+    "ARIA-LABEL": "Seitenkopf mit Details",
+    "SUB_HEADER": "Anzeigen von Document Details",
+    "ERROR_MESSAGES": {
+      "DETAILS_LOADING_FAILED": "Details konnten nicht geladen werden."
+    },
+    "GENERAL": {
+      "BACK": "Zurück",
+      "MORE": "Mehr",
+      "EDIT": "Bearbeiten",
+      "DELETE": "Löschen",
+      "CANCEL": "Abbrechen",
+      "SAVE": "Speichern"
+    },
+    "FORM": {
+      "ID": {
+        "LABEL": "ID",
+        "ARIA-LABEL": "ID",
+        "TOOLTIP": "ID"
+      },
+      "NAME": {
+        "LABEL": "Name",
+        "ARIA-LABEL": "Name",
+        "TOOLTIP": "Name"
+      },
+      "TYPE": {
+        "LABEL": "Typ",
+        "ARIA-LABEL": "Typ",
+        "TOOLTIP": "Typ"
+      },
+      "VERSION": {
+        "LABEL": "Version",
+        "ARIA-LABEL": "Version",
+        "TOOLTIP": "Version"
+      },
+      "CHANNEL": {
+        "LABEL": "Kanal",
+        "ARIA-LABEL": "Kanal",
+        "TOOLTIP": "Kanal"
+      },
+      "SPECIFICATION": {
+        "LABEL": "Spezifikation",
+        "ARIA-LABEL": "Spezifikation",
+        "TOOLTIP": "Spezifikation"
+      },
+      "STATUS": {
+        "LABEL": "Status",
+        "ARIA-LABEL": "Status",
+        "TOOLTIP": "Status"
+      },
+      "DESCRIPTION": {
+        "LABEL": "Beschreibung",
+        "ARIA-LABEL": "Beschreibung",
+        "TOOLTIP": "Beschreibung"
+      },
+      "INVOLVEMENT": {
+        "LABEL": "Beteiligung",
+        "ARIA-LABEL": "Beteiligung",
+        "TOOLTIP": "Beteiligung"
+      },
+      "OBJECT_REFERENCE_TYPE": {
+        "LABEL": "Referenztyp",
+        "ARIA-LABEL": "Referenztyp",
+        "TOOLTIP": "Referenztyp"
+      },
+      "OBJECT_REFERENCE_ID": {
+        "LABEL": "Referenz-ID",
+        "ARIA-LABEL": "Referenz-ID",
+        "TOOLTIP": "Referenz-ID"
+      }
+    },
+    "SECTIONS": {
+      "DETAILS": "Details",
+      "RELATED_OBJECT": "Zugehoeriges Objekt"
+    },
+    "CANCEL": {
+      "HEADER": "Abbruch bestätigen",
+      "MESSAGE": "Bitte bestätigen Sie, dass Sie die Bearbeitung abbrechen und die Änderungen zurücksetzen möchten.",
+      "CONFIRM": "Bestätigen"
+    },
+    "UPDATE": {
+      "SUCCESS": "Speichern erfolgreich",
+      "ERROR": "Speichern fehlgeschlagen"
+    },
+    "DELETE": {
+      "HEADER": "Document löschen",
+      "MESSAGE": "Bitte bestätigen Sie, dass Sie dieses Document löschen möchten.",
+      "CONFIRM": "Bestätigen",
+      "CANCEL": "Abbrechen",
+      "SUCCESS": "Document erfolgreich gelöscht",
+      "ERROR": "Konnte Document nicht löschen"
+    }
+  },
   "DOCUMENT_SEARCH": {
     "HEADER": "Document Suche",
     "SUB_HEADER": "Suchen und Anzeigen von Document",

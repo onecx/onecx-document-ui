@@ -4,25 +4,14 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { routerNavigatedAction } from '@ngrx/router-store';
 import { Action, Store } from '@ngrx/store';
-import {
-  filterForNavigatedTo,
-  filterOutQueryParamsHaveNotChanged,
-} from '@onecx/ngrx-accelerator';
+import { filterForNavigatedTo } from '@onecx/ngrx-accelerator';
 import {
   ExportDataService,
   PortalMessageService,
 } from '@onecx/portal-integration-angular';
 import equal from 'fast-deep-equal';
-import {
-  catchError,
-  forkJoin,
-  map,
-  mergeMap,
-  Observable,
-  of,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { catchError, forkJoin, map, mergeMap, of, switchMap, tap } from 'rxjs';
+import { selectUrl } from 'src/app/shared/selectors/router.selectors';
 import {
   DocumentControllerV1,
   DocumentTypeControllerV1,
@@ -74,6 +63,22 @@ export class DocumentSearchEffects {
               onSameUrlNavigation: 'ignore',
             });
           }
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
+  navigateToOrderDetailsPage$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(DocumentSearchActions.detailsButtonClicked),
+        concatLatestFrom(() => this.store.select(selectUrl)),
+        tap(([action, currentUrl]) => {
+          const urlTree = this.router.parseUrl(currentUrl);
+          urlTree.queryParams = {};
+          urlTree.fragment = null;
+          this.router.navigate([urlTree.toString(), 'details', action.id]);
         })
       );
     },
@@ -177,7 +182,7 @@ export class DocumentSearchEffects {
     { dispatch: false }
   );
 
-  private performSearch(searchCriteria: Record<string, any>) {
+  private performSearch(searchCriteria: Record<string, unknown>) {
     return this.documentService
       .getDocumentByCriteria({
         ...Object.entries(searchCriteria).reduce(
@@ -185,7 +190,7 @@ export class DocumentSearchEffects {
             ...acc,
             [key]: value instanceof Date ? value.toISOString() : value,
           }),
-          {}
+          {} as Record<string, unknown>
         ),
       })
       .pipe(

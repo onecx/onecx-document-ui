@@ -383,5 +383,58 @@ describe('DocumentSearchEffects', () => {
     });
   });
 
+  describe('navigateToOrderDetailsPage$', () => {
+    it('should navigate to details page with correct URL structure', (done) => {
+      const testId = 'test-123';
+      const navigateSpy = router
+        ? jest.spyOn(router, 'navigate')
+        : { mock: { calls: [] }, toHaveBeenCalledWith: () => {} };
+
+      effects.navigateToOrderDetailsPage$.pipe(take(1)).subscribe(() => {
+        if (router) {
+          expect(navigateSpy).toHaveBeenCalledWith([
+            '/search',
+            'details',
+            testId,
+          ]);
+        }
+        done();
+      });
+
+      actions$.next(DocumentSearchActions.detailsButtonClicked({ id: testId }));
+    });
+
+    it('should dynamically clear query params and fragment from URL on navigateToOrderDetailsPage$', (done) => {
+      const testId = 'test-456';
+      const mockUrlTree: any = {
+        toString: jest.fn(() => '/search'),
+        queryParams: { a: 1 },
+        fragment: 'frag',
+      };
+      (router.parseUrl as jest.Mock).mockReturnValue(mockUrlTree);
+
+      const emissions: Array<{ queryParams: any; fragment: any }> = [];
+      emissions.push({
+        queryParams: { ...mockUrlTree.queryParams },
+        fragment: mockUrlTree.fragment,
+      });
+
+      effects.navigateToOrderDetailsPage$.pipe(take(1)).subscribe(() => {
+        emissions.push({
+          queryParams: { ...mockUrlTree.queryParams },
+          fragment: mockUrlTree.fragment,
+        });
+
+        expect(emissions).toEqual([
+          { queryParams: { a: 1 }, fragment: 'frag' },
+          { queryParams: {}, fragment: null },
+        ]);
+        done();
+      });
+
+      actions$.next(DocumentSearchActions.detailsButtonClicked({ id: testId }));
+    });
+  });
+
   // <<SPEC-EXTENSIONS-MARKER-!!!-DO-NOT-REMOVE-!!!>>
 });
