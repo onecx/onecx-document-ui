@@ -9,7 +9,10 @@
     *ngIf="!vm.detailsLoaded && !vm.detailsLoadingIndicator"
   >
   </ocx-data-loading-error>
-  <div *ngIf="vm.detailsLoaded && !vm.detailsLoadingIndicator">
+  <div
+    *ngIf="vm.detailsLoaded && !vm.detailsLoadingIndicator"
+    class="flex flex-column"
+  >
     <ocx-page-header
       [header]="'DOCUMENT_DETAILS.HEADER' | translate"
       [subheader]="'DOCUMENT_DETAILS.SUB_HEADER' | translate"
@@ -20,6 +23,7 @@
     >
     </ocx-page-header>
     <ocx-page-content
+      class="mb-4"
       role="main"
       [attr.aria-label]="'DOCUMENT_DETAILS.ARIA-LABEL' | translate"
     >
@@ -29,6 +33,22 @@
           [availableTypes]="(documentTypes$ | async) || []"
         >
         </app-document-details-form>
+      </div>
+    </ocx-page-content>
+    <ocx-page-content>
+      <div class="card p-4">
+        <p-tabView>
+          <p-tabPanel
+            [header]="'DOCUMENT_DETAILS.SECTIONS.ATTACHMENTS' | translate"
+          >
+            <app-document-details-attachment-list
+              [attachments]="attachmentsFormArray"
+              [editMode]="vm.editMode"
+              (download)="onAttachmentDownload($event)"
+            >
+            </app-document-details-attachment-list>
+          </p-tabPanel>
+        </p-tabView>
       </div>
     </ocx-page-content>
   </div>

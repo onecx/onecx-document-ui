@@ -75,7 +75,26 @@
     },
     "SECTIONS": {
       "DETAILS": "Details",
-      "RELATED_OBJECT": "Zugehoeriges Objekt"
+      "RELATED_OBJECT": "Zugehoeriges Objekt",
+      "ATTACHMENTS": "Anhaenge"
+    },
+    "ATTACHMENTS": {
+      "EMPTY": "Keine Anhaenge verfuegbar.",
+      "COLUMNS": {
+        "NAME": "Name",
+        "DESCRIPTION": "Beschreibung",
+        "SIZE": "Groesse",
+        "MIME_TYPE": "Mime-Typ",
+        "UPLOAD_STATUS": "Upload-Status",
+        "ACTIONS": "Aktionen"
+      },
+      "ACTIONS": {
+        "DOWNLOAD": "Herunterladen"
+      },
+      "STATUS": {
+        "UPLOADED": "Hochgeladen",
+        "FAILED": "Fehlgeschlagen"
+      }
     },
     "CANCEL": {
       "HEADER": "Abbruch bestätigen",

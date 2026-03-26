@@ -20,6 +20,7 @@ import {
   AttachmentData,
   AttachmentFile,
 } from '../../types/document-create.types';
+import { formatBytes } from '../../utils/attachment.utils';
 import { Store } from '@ngrx/store';
 import {
   documentQuickUploadSelectors,
@@ -54,6 +55,7 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   layout: 'list' | 'grid' = 'grid';
 
   private subs = new Subscription();
+  readonly formatBytes = formatBytes;
 
   constructor(
     private readonly router: Router,
@@ -123,11 +125,6 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Reload the view on choosing the attachments
-   */
-  refreshAttachmentList(_hasFiles: boolean): void {}
-
-  /**
    * Add the sort type
    */
   onSortOrderChange(sortOrder: boolean) {
@@ -173,9 +170,9 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
    * onCancel to cancel the quick upload dialog
    */
   onCancel() {
-    let documentQuickUploadform = this.documentQuickUploadForm.value;
+    const documentQuickUploadform = this.documentQuickUploadForm.value;
     let flagIsValid = false;
-    for (let detail in documentQuickUploadform) {
+    for (const detail in documentQuickUploadform) {
       if (detail != 'lifeCycleState' && documentQuickUploadform[detail]) {
         flagIsValid = true;
       }
@@ -206,33 +203,6 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * function to convert bytes to KB or MB according to bytes value
-   * @param bytes file size value
-   * @param decimal decimal places after decimal point. Default value is 2
-   */
-  formatBytes(bytes: number, decimals = 2) {
-    try {
-      bytes = +bytes;
-      if (isNaN(bytes)) return false;
-      if (bytes == 0) {
-        return '0 Bytes';
-      } else if (bytes > 0) {
-        const k = 1024;
-        const dm = decimals < 0 ? 0 : decimals;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${
-          sizes[i]
-        }`;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      return false;
-    }
-  }
-
-  /**
    * function to remove file from attachmentArray according to array index
    * @param index index of current file
    */
@@ -244,15 +214,12 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   }
 
   getAttachmentIcon(attachment: AttachmentData): PrimeIcon {
-    let fileName = attachment.fileName ?? '';
-    let fileExtension = fileName.split('.').reverse();
-    let fileTypeData = attachment?.fileData ? attachment.fileData.type : '';
-    let attachmentIcon = '';
+    const fileTypeData = attachment?.fileData ? attachment.fileData.type : '';
 
     if (fileTypeData) {
-      let fileType = fileTypeData.split('/');
+      const fileType = fileTypeData.split('/');
       if (fileType.length) {
-        let type = fileType[0].toLowerCase();
+        const type = fileType[0].toLowerCase();
         if (type === 'audio') {
           return PrimeIcons.MICROPHONE;
         }
@@ -336,7 +303,7 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
    */
   private validateAttachmentArray(): void {
     if (this.attachmentArray.length) {
-      let invalidAttachment = this.attachmentArray.filter(
+      const invalidAttachment = this.attachmentArray.filter(
         (attachment) => !attachment.isValid
       );
       if (invalidAttachment.length) {

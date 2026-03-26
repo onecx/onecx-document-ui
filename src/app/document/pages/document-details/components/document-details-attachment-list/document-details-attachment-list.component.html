@@ -1,0 +1,101 @@
+<div class="grid p-fluid mt-3">
+  <div class="col-12">
+    <p-table
+      [value]="attachments.controls"
+      [tableStyle]="{ 'min-width': '64rem' }"
+      [rowTrackBy]="trackByIndex"
+      responsiveLayout="scroll"
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate }}</th>
+          <th>
+            {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.DESCRIPTION' | translate }}
+          </th>
+          <th>{{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.SIZE' | translate }}</th>
+          <th>
+            {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.MIME_TYPE' | translate }}
+          </th>
+          <th>
+            {{
+              'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.UPLOAD_STATUS' | translate
+            }}
+          </th>
+          <th class="text-center">
+            {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.ACTIONS' | translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-attachmentFormGroup>
+        <tr [formGroup]="attachmentFormGroup">
+          <td>
+            <ng-container *ngIf="editMode; else nameText">
+              <input
+                pInputText
+                type="text"
+                formControlName="name"
+                class="w-full"
+                [attr.aria-label]="
+                  'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate
+                "
+              />
+            </ng-container>
+            <ng-template #nameText>
+              {{ attachmentFormGroup.get('name')?.value || '-' }}
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="editMode; else descriptionText">
+              <input
+                pInputText
+                type="text"
+                formControlName="description"
+                class="w-full"
+                [attr.aria-label]="
+                  'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.DESCRIPTION' | translate
+                "
+              />
+            </ng-container>
+            <ng-template #descriptionText>
+              {{ attachmentFormGroup.get('description')?.value || '-' }}
+            </ng-template>
+          </td>
+          <td>
+            {{ formatBytes(attachmentFormGroup.get('size')?.value) }}
+          </td>
+          <td>
+            {{ attachmentFormGroup.get('mimeTypeName')?.value || '-' }}
+          </td>
+          <td>
+            {{ getUploadStatusKey(attachmentFormGroup) | translate }}
+          </td>
+          <td class="text-center">
+            <p-button
+              type="button"
+              icon="pi pi-download"
+              [text]="true"
+              [rounded]="true"
+              [pTooltip]="
+                'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate
+              "
+              tooltipPosition="top"
+              [attr.aria-label]="
+                'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate
+              "
+              [disabled]="!attachmentFormGroup.get('id')?.value"
+              (onClick)="onDownloadClicked(attachmentFormGroup)"
+            ></p-button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6">
+            {{ 'DOCUMENT_DETAILS.ATTACHMENTS.EMPTY' | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

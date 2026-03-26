@@ -75,7 +75,26 @@
     },
     "SECTIONS": {
       "DETAILS": "Details",
-      "RELATED_OBJECT": "Related Object"
+      "RELATED_OBJECT": "Related Object",
+      "ATTACHMENTS": "Attachments"
+    },
+    "ATTACHMENTS": {
+      "EMPTY": "No attachments available.",
+      "COLUMNS": {
+        "NAME": "Name",
+        "DESCRIPTION": "Description",
+        "SIZE": "Size",
+        "MIME_TYPE": "Mime Type",
+        "UPLOAD_STATUS": "Upload Status",
+        "ACTIONS": "Actions"
+      },
+      "ACTIONS": {
+        "DOWNLOAD": "Download"
+      },
+      "STATUS": {
+        "UPLOADED": "Uploaded",
+        "FAILED": "Failed"
+      }
     },
     "CANCEL": {
       "HEADER": "Confirm cancel",

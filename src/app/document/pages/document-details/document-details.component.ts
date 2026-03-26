@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  Action,
-  BreadcrumbService,
-} from '@onecx/portal-integration-angular';
+import { Action, BreadcrumbService } from '@onecx/portal-integration-angular';
 import { map, Observable, Subscription } from 'rxjs';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { PrimeIcons, SelectItem } from 'primeng/api';
 import { DocumentDetailsActions } from './document-details.actions';
 import {
@@ -14,6 +11,12 @@ import {
   selectDocumentTypes,
 } from './document-details.selectors';
 import { DocumentDetailsViewModel } from './document-details.viewmodel';
+import {
+  createDocumentDetailsForm,
+  getAttachmentFormArray,
+  patchDocumentDetailsForm,
+} from './document-details-form.factory';
+import { DocumentAttachmentFormValue } from '../../types/document-create.types';
 
 @Component({
   selector: 'app-document-details',
@@ -82,19 +85,7 @@ export class DocumentDetailsComponent implements OnInit {
   }
 
   private setForm() {
-    this.formGroup = new FormGroup({
-      id: new FormControl(null, [Validators.maxLength(255)]),
-      name: new FormControl(null, [Validators.maxLength(255)]),
-      type: new FormControl(null),
-      version: new FormControl(null, [Validators.maxLength(255)]),
-      channel: new FormControl(null),
-      specification: new FormControl(null),
-      status: new FormControl(null),
-      description: new FormControl(null, [Validators.maxLength(4000)]),
-      involvement: new FormControl(null, [Validators.maxLength(255)]),
-      objectReferenceType: new FormControl(null, [Validators.maxLength(255)]),
-      objectReferenceId: new FormControl(null, [Validators.maxLength(255)]),
-    });
+    this.formGroup = createDocumentDetailsForm();
     this.formGroup.disable();
   }
 
@@ -179,30 +170,37 @@ export class DocumentDetailsComponent implements OnInit {
 
   private updateFormValue(vm: DocumentDetailsViewModel) {
     if (!vm.editMode) {
-      this.formGroup.patchValue({
-        id: vm.details?.id,
-        name: vm.details?.name,
-        type: vm.details?.type?.id,
-        version: vm.details?.documentVersion,
-        channel: vm.details?.channel?.name,
-        specification: vm.details?.specification?.id,
-        status: vm.details?.lifeCycleState,
-        description: vm.details?.description,
-        involvement: vm.details?.relatedObject?.involvement,
-        objectReferenceType: vm.details?.relatedObject?.objectReferenceType,
-        objectReferenceId: vm.details?.relatedObject?.objectReferenceId,
-      });
+      patchDocumentDetailsForm(this.formGroup, vm.details);
       this.formGroup.markAsPristine();
     }
 
-    if (vm.editMode) {
+    this.toggleFormState(vm.editMode);
+  }
+
+  onAttachmentDownload(attachment: DocumentAttachmentFormValue): void {
+    this.handleAttachmentDownload(attachment);
+  }
+
+  private handleAttachmentDownload(
+    attachment: DocumentAttachmentFormValue
+  ): void {
+    void attachment;
+  }
+
+  private toggleFormState(editMode: boolean): void {
+    if (editMode) {
       this.formGroup.enable();
-    } else {
-      this.formGroup.disable();
+      return;
     }
+
+    this.formGroup.disable();
   }
 
   get documentTypes$(): Observable<SelectItem[]> {
     return this.store.select(selectDocumentTypes);
+  }
+
+  get attachmentsFormArray(): FormArray<FormGroup> {
+    return getAttachmentFormArray(this.formGroup);
   }
 }
