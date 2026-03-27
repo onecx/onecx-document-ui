@@ -22,7 +22,7 @@ import {
   of,
   switchMap,
 } from 'rxjs';
-import { FileUploaderService } from '../service/file-uploader.service';
+import { ExternalFileHandlerService } from '../service/external-file-handler.service';
 import { documentQuickUploadSelectors } from '../pages/document-quick-upload/document-quick-upload.selectors';
 import { AttachmentFile } from '../types/document-create.types';
 
@@ -34,7 +34,7 @@ export class DocumentCreateOperationsEffects {
     private documentService: DocumentControllerV1,
     private readonly documentTypeService: DocumentTypeControllerV1,
     private readonly supportedMimeTypeService: SupportedMimeTypeControllerV1,
-    private uploaderService: FileUploaderService
+    private uploaderService: ExternalFileHandlerService
   ) {}
 
   private readonly referenceDataPaths = ['quick-upload', 'create-document'];

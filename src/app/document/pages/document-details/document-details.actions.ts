@@ -1,5 +1,8 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { DocumentDetail } from '../../../shared/generated';
+import {
+  AttachmentPresignedUrlResponse,
+  DocumentDetail,
+} from '../../../shared/generated';
 
 export const DocumentDetailsActions = createActionGroup({
   source: 'DocumentDetails',
@@ -38,5 +41,15 @@ export const DocumentDetailsActions = createActionGroup({
     'back navigation failed': emptyProps(),
     'navigation to search started': emptyProps(),
     'navigation to search not started': emptyProps(),
+    'start attachment download': props<{
+      attachmentId: string;
+      fileName: string;
+    }>(),
+    'download attachment blob': props<{
+      urlResponse: AttachmentPresignedUrlResponse;
+      fileName: string;
+    }>(),
+    'save downloaded attachment': props<{ file: Blob; fileName: string }>(),
+    'attachment download failed': emptyProps(),
   },
 });

@@ -25,6 +25,7 @@ import { DocumentDetailsActions } from './document-details.actions';
 import { DocumentDetailsComponent } from './document-details.component';
 import { documentDetailsSelectors } from './document-details.selectors';
 import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions';
+import { ExternalFileHandlerService } from '../../service/external-file-handler.service';
 
 @Injectable()
 export class DocumentDetailsEffects {
@@ -34,7 +35,8 @@ export class DocumentDetailsEffects {
     private router: Router,
     private store: Store,
     private messageService: PortalMessageService,
-    private portalDialogService: PortalDialogService
+    private portalDialogService: PortalDialogService,
+    private fileHandlerService: ExternalFileHandlerService
   ) {}
 
   navigatedToDetailsPage$ = createEffect(() => {
@@ -226,10 +228,62 @@ export class DocumentDetailsEffects {
     { dispatch: false }
   );
 
+  startAttachmentDownload$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DocumentDetailsActions.startAttachmentDownload),
+      switchMap((action) =>
+        this.documentService.getFile(action.attachmentId).pipe(
+          map((response) =>
+            DocumentDetailsActions.downloadAttachmentBlob({
+              urlResponse: response,
+              fileName: action.fileName,
+            })
+          ),
+          catchError(() =>
+            of(DocumentDetailsActions.attachmentDownloadFailed())
+          )
+        )
+      )
+    );
+  });
+
+  downloadAttachmentBlob$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DocumentDetailsActions.downloadAttachmentBlob),
+      switchMap((action) =>
+        this.fileHandlerService.downloadFile(action.urlResponse).pipe(
+          map((fileBlob) =>
+            DocumentDetailsActions.saveDownloadedAttachment({
+              file: fileBlob,
+              fileName: action.fileName,
+            })
+          ),
+          catchError(() =>
+            of(DocumentDetailsActions.attachmentDownloadFailed())
+          )
+        )
+      )
+    );
+  });
+
+  saveDownloadAttachment$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(DocumentDetailsActions.saveDownloadedAttachment),
+        tap(({ file, fileName }) => this.saveDownloadedFile(file, fileName))
+      );
+    },
+    { dispatch: false }
+  );
+
   errorMessages: { action: Action; key: string }[] = [
     {
       action: DocumentDetailsActions.documentDetailsLoadingFailed,
       key: 'DOCUMENT_DETAILS.ERROR_MESSAGES.DETAILS_LOADING_FAILED',
+    },
+    {
+      action: DocumentDetailsActions.attachmentDownloadFailed,
+      key: 'DOCUMENT_DETAILS.ERROR_MESSAGES.ATTACHMENT_DOWNLOAD_FAILED',
     },
   ];
 
@@ -262,4 +316,18 @@ export class DocumentDetailsEffects {
       })
     );
   });
+
+  private saveDownloadedFile(blob: Blob, fileName: string) {
+    const objectUrl = window.URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = objectUrl;
+    anchor.download = fileName;
+    anchor.rel = 'noopener';
+    anchor.style.display = 'none';
+
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    window.URL.revokeObjectURL(objectUrl);
+  }
 }

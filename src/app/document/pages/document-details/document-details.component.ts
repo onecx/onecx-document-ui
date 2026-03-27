@@ -80,6 +80,15 @@ export class DocumentDetailsComponent implements OnInit {
     this.store.dispatch(DocumentDetailsActions.deleteButtonClicked());
   }
 
+  onAttachmentDownload(attachment: DocumentAttachmentFormValue): void {
+    this.store.dispatch(
+      DocumentDetailsActions.startAttachmentDownload({
+        attachmentId: attachment.id!,
+        fileName: attachment.fileName!,
+      })
+    );
+  }
+
   private makeSubscriptions() {
     this.sub.add(this.viewModel$.subscribe((vm) => this.updateFormValue(vm)));
   }
@@ -175,16 +184,6 @@ export class DocumentDetailsComponent implements OnInit {
     }
 
     this.toggleFormState(vm.editMode);
-  }
-
-  onAttachmentDownload(attachment: DocumentAttachmentFormValue): void {
-    this.handleAttachmentDownload(attachment);
-  }
-
-  private handleAttachmentDownload(
-    attachment: DocumentAttachmentFormValue
-  ): void {
-    void attachment;
   }
 
   private toggleFormState(editMode: boolean): void {
