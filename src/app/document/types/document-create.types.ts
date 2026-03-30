@@ -24,6 +24,12 @@ export interface DocumentAttachmentFormValue {
   storageUploadStatus: boolean;
 }
 
+export interface DocumentCharacteristicFormValue {
+  id: string | null;
+  name: string | null;
+  value: string | null;
+}
+
 export interface DocumentDetailsFormValue {
   name: string | null;
   type: string | null;
@@ -36,6 +42,7 @@ export interface DocumentDetailsFormValue {
   objectReferenceType: string | null;
   objectReferenceId: string | null;
   attachments: DocumentAttachmentFormValue[];
+  characteristics: DocumentCharacteristicFormValue[];
 }
 
 export type FormControlsOf<T extends object> = {
@@ -48,12 +55,20 @@ export type DocumentAttachmentFormGroup = FormGroup<
   FormControlsOf<DocumentAttachmentFormValue>
 >;
 
+export type DocumentCharacteristicsFormGroup = FormGroup<
+  FormControlsOf<DocumentCharacteristicFormValue>
+>;
+
 export type DocumentDetailsFormGroup = FormGroup<
   FormControlsOf<DocumentDetailsFormValue>
 >;
 
 export type DocumentAttachmentFormRawValue = ReturnType<
   DocumentAttachmentFormGroup['getRawValue']
+>;
+
+export type DocumentCharacteristicsFormRawValue = ReturnType<
+  DocumentCharacteristicsFormGroup['getRawValue']
 >;
 
 export type DocumentDetailsFormRawValue = ReturnType<

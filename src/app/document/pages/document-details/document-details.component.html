@@ -48,6 +48,17 @@
             >
             </app-document-details-attachment-list>
           </p-tabPanel>
+          <p-tabPanel
+            [header]="'DOCUMENT_DETAILS.SECTIONS.CHARACTERISTICS' | translate"
+          >
+            <app-document-details-characteristics
+              [characteristics]="characteristicsFormArray"
+              [editMode]="vm.editMode"
+              (characteristicRemoved)="onCharacteristicRemove($event)"
+              (characteristicAdded)="onCharacteristicAdd()"
+            >
+            </app-document-details-characteristics>
+          </p-tabPanel>
         </p-tabView>
       </div>
     </ocx-page-content>

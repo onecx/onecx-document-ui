@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Action, BreadcrumbService } from '@onecx/portal-integration-angular';
 import { map, Observable, Subscription } from 'rxjs';
@@ -12,13 +12,17 @@ import {
 } from './document-details.selectors';
 import { DocumentDetailsViewModel } from './document-details.viewmodel';
 import {
+  addCharacteristic,
   createDocumentDetailsForm,
   getAttachmentFormArray,
+  getCharacteristicsFormArray,
   patchDocumentDetailsForm,
+  removeCharacteristic,
 } from './document-details-form.factory';
 import {
   DocumentAttachmentFormGroup,
   DocumentAttachmentFormValue,
+  DocumentCharacteristicsFormGroup,
   DocumentDetailsFormGroup,
 } from '../../types/document-create.types';
 
@@ -27,7 +31,7 @@ import {
   templateUrl: './document-details.component.html',
   styleUrls: ['./document-details.component.scss'],
 })
-export class DocumentDetailsComponent implements OnInit {
+export class DocumentDetailsComponent implements OnInit, OnDestroy {
   viewModel$: Observable<DocumentDetailsViewModel>;
 
   headerActions$!: Observable<Action[]>;
@@ -58,6 +62,10 @@ export class DocumentDetailsComponent implements OnInit {
         labelKey: 'DOCUMENT_DETAILS.BREADCRUMB',
       },
     ]);
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
   edit() {
@@ -91,6 +99,14 @@ export class DocumentDetailsComponent implements OnInit {
         fileName: attachment.fileName!,
       })
     );
+  }
+
+  onCharacteristicRemove(index: number) {
+    removeCharacteristic(this.formGroup, index);
+  }
+
+  onCharacteristicAdd() {
+    addCharacteristic(this.formGroup);
   }
 
   private makeSubscriptions() {
@@ -166,15 +182,6 @@ export class DocumentDetailsComponent implements OnInit {
               this.delete();
             },
           },
-          {
-            titleKey: 'DOCUMENT_DETAILS.GENERAL.MORE',
-            icon: PrimeIcons.ELLIPSIS_V,
-            show: 'always',
-            btnClass: '',
-            actionCallback: () => {
-              // TODO: add callback
-            },
-          },
         ];
         return actions;
       })
@@ -205,5 +212,9 @@ export class DocumentDetailsComponent implements OnInit {
 
   get attachmentsFormArray(): FormArray<DocumentAttachmentFormGroup> {
     return getAttachmentFormArray(this.formGroup);
+  }
+
+  get characteristicsFormArray(): FormArray<DocumentCharacteristicsFormGroup> {
+    return getCharacteristicsFormArray(this.formGroup);
   }
 }

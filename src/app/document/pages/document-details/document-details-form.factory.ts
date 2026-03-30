@@ -1,7 +1,12 @@
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Attachment, DocumentDetail } from 'src/app/shared/generated';
+import {
+  Attachment,
+  DocumentCharacteristic,
+  DocumentDetail,
+} from 'src/app/shared/generated';
 import {
   DocumentAttachmentFormGroup,
+  DocumentCharacteristicsFormGroup,
   DocumentDetailsFormGroup,
 } from '../../types/document-create.types';
 
@@ -29,6 +34,7 @@ export function createDocumentDetailsForm(): DocumentDetailsFormGroup {
       Validators.maxLength(255),
     ]),
     attachments: new FormArray<DocumentAttachmentFormGroup>([]),
+    characteristics: new FormArray<DocumentCharacteristicsFormGroup>([]),
   });
 }
 
@@ -50,6 +56,10 @@ export function patchDocumentDetailsForm(
   });
 
   setAttachmentsOnForm(formGroup, details?.attachments ?? []);
+  setCharacteristicsOnForm(
+    formGroup,
+    Array.from(details?.characteristics || [])
+  );
 }
 
 export function setAttachmentsOnForm(
@@ -64,10 +74,57 @@ export function setAttachmentsOnForm(
   });
 }
 
+export function setCharacteristicsOnForm(
+  formGroup: DocumentDetailsFormGroup,
+  characteristics: DocumentCharacteristic[]
+) {
+  const charsFormArray = getCharacteristicsFormArray(formGroup);
+  charsFormArray.clear();
+
+  characteristics.forEach((char) =>
+    charsFormArray.push(createCharacteristicFormGroup(char))
+  );
+}
+
 export function getAttachmentFormArray(
   formGroup: DocumentDetailsFormGroup
 ): FormArray<DocumentAttachmentFormGroup> {
   return formGroup.controls.attachments;
+}
+
+export function addCharacteristic(formGroup: DocumentDetailsFormGroup) {
+  const existingChars = getCharacteristicsFormArray(formGroup);
+  existingChars.push(createCharacteristicFormGroup());
+}
+
+export function removeCharacteristic(
+  formGroup: DocumentDetailsFormGroup,
+  index: number
+) {
+  const existingChars = getCharacteristicsFormArray(formGroup);
+  existingChars.removeAt(index);
+}
+
+export function getCharacteristicsFormArray(
+  formGroup: DocumentDetailsFormGroup
+): FormArray<DocumentCharacteristicsFormGroup> {
+  return formGroup.controls.characteristics;
+}
+
+export function createCharacteristicFormGroup(
+  characteristic?: DocumentCharacteristic
+): DocumentCharacteristicsFormGroup {
+  return new FormGroup({
+    id: new FormControl(characteristic?.id || null, []),
+    name: new FormControl(characteristic?.name || null, [
+      Validators.required,
+      Validators.maxLength(255),
+    ]),
+    value: new FormControl(characteristic?.value || null, [
+      Validators.required,
+      Validators.maxLength(255),
+    ]),
+  });
 }
 
 function createAttachmentFormGroup(

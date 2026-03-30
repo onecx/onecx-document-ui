@@ -76,7 +76,8 @@
     "SECTIONS": {
       "DETAILS": "Details",
       "RELATED_OBJECT": "Related Object",
-      "ATTACHMENTS": "Attachments"
+      "ATTACHMENTS": "Attachments",
+      "CHARACTERISTICS": "Characteristics"
     },
     "ATTACHMENTS": {
       "EMPTY": "No attachments available.",
@@ -94,6 +95,14 @@
       "STATUS": {
         "UPLOADED": "Uploaded",
         "FAILED": "Failed"
+      }
+    },
+    "CHARACTERISTICS": {
+      "EMPTY": "No characteristics defined",
+      "COLUMNS": {
+        "NAME": "Name",
+        "VALUE": "Value",
+        "ACTIONS": "Actions"
       }
     },
     "CANCEL": {

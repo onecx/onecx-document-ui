@@ -76,7 +76,8 @@
     "SECTIONS": {
       "DETAILS": "Details",
       "RELATED_OBJECT": "Zugehoeriges Objekt",
-      "ATTACHMENTS": "Anhaenge"
+      "ATTACHMENTS": "Anhaenge",
+      "CHARACTERISTICS": "Characteristics"
     },
     "ATTACHMENTS": {
       "EMPTY": "Keine Anhaenge verfuegbar.",
@@ -94,6 +95,14 @@
       "STATUS": {
         "UPLOADED": "Hochgeladen",
         "FAILED": "Fehlgeschlagen"
+      }
+    },
+    "CHARACTERISTICS": {
+      "EMPTY": "No characteristics defined",
+      "COLUMNS": {
+        "NAME": "Name",
+        "VALUE": "Value",
+        "ACTIONS": "Actions"
       }
     },
     "CANCEL": {

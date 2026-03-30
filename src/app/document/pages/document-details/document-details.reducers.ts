@@ -62,6 +62,7 @@ export const documentDetailsReducer = createReducer(
     (state: DocumentDetailsState): DocumentDetailsState => ({
       ...state,
       editMode: false,
+      isSubmitting: false,
     })
   ),
   on(

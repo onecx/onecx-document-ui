@@ -31,6 +31,7 @@ import { DocumentSearchComponent } from './pages/document-search/document-search
 import { DocumentSearchEffects } from './pages/document-search/document-search.effects';
 import { DocumentDetailsAttachmentListComponent } from './pages/document-details/components/document-details-attachment-list/document-details-attachment-list.component';
 import { DocumentDetailsFormComponent } from './pages/document-details/components/document-details-form/document-details-form.component';
+import { DocumentDetailsCharacteristicsComponent } from './pages/document-details/components/document-details-characteristics/document-details-characteristics.component';
 
 @NgModule({
   providers: [providePortalDialogService()],
@@ -42,6 +43,7 @@ import { DocumentDetailsFormComponent } from './pages/document-details/component
     DocumentQuickUploadFormComponent,
     DocumentDetailsFormComponent,
     DocumentDetailsAttachmentListComponent,
+    DocumentDetailsCharacteristicsComponent,
   ],
   imports: [
     CommonModule,

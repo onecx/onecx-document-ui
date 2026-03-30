@@ -20,6 +20,7 @@ import {
 import {
   Attachment,
   AttachmentCreateUpdate,
+  DocumentCharacteristicCreateUpdate,
   DocumentControllerV1,
   DocumentCreateUpdate,
   DocumentDetail,
@@ -32,6 +33,7 @@ import { DocumentCreateOperationsActions } from '../../operations/document-creat
 import { ExternalFileHandlerService } from '../../service/external-file-handler.service';
 import {
   DocumentAttachmentFormValue,
+  DocumentCharacteristicFormValue,
   DocumentDetailsFormValue,
 } from '../../types/document-create.types';
 
@@ -384,14 +386,7 @@ export class DocumentDetailsEffects {
         type: relationship.type,
         documentRefId: relationship.documentRefId,
       })),
-      characteristics: (prevState.characteristics
-        ? Array.from(prevState.characteristics)
-        : []
-      ).map((characteristic) => ({
-        id: characteristic.id,
-        name: characteristic.name,
-        value: characteristic.value,
-      })),
+      characteristics: this.mapCharacteristics(formValue.characteristics),
       relatedParties: (prevState.relatedParties
         ? Array.from(prevState.relatedParties)
         : []
@@ -444,5 +439,15 @@ export class DocumentDetailsEffects {
         fileName: attachment.fileName,
       };
     });
+  }
+
+  private mapCharacteristics(
+    formValue: DocumentCharacteristicFormValue[]
+  ): DocumentCharacteristicCreateUpdate[] {
+    return formValue.map((val) => ({
+      id: val.id || undefined,
+      name: val.name!,
+      value: val.value!,
+    }));
   }
 }

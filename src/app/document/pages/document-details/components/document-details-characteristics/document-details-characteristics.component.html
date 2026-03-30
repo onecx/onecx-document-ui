@@ -1,0 +1,82 @@
+<div class="grid p-fluid mt-3">
+  <div class="flex w-full justify-content-end" *ngIf="editMode">
+    <p-button icon="pi pi-plus" [text]="true" (onClick)="onAddRow()"></p-button>
+  </div>
+  <div class="col-12">
+    <p-table
+      [value]="characteristics.controls"
+      [tableStyle]="{ 'min-width': '64rem' }"
+      [rowTrackBy]="trackByIndex"
+      responsiveLayout="scroll"
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            {{ 'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.NAME' | translate }}
+          </th>
+          <th>
+            {{ 'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.VALUE' | translate }}
+          </th>
+          <th *ngIf="editMode">
+            {{ 'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.ACTIONS' | translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template
+        pTemplate="body"
+        let-characteristicsFormGroup
+        let-rowIndex="rowIndex"
+      >
+        <tr [formGroup]="characteristicsFormGroup">
+          <td>
+            <ng-container *ngIf="editMode; else nameText">
+              <input
+                pInputText
+                type="text"
+                formControlName="name"
+                class="w-full"
+                [attr.aria-label]="
+                  'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.NAME' | translate
+                "
+              />
+            </ng-container>
+            <ng-template #nameText>
+              {{ characteristicsFormGroup.get('name')?.value }}
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="editMode; else valueText">
+              <input
+                pInputText
+                type="text"
+                formControlName="value"
+                class="w-full"
+                [attr.aria-label]="
+                  'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.VALUE' | translate
+                "
+              />
+            </ng-container>
+            <ng-template #valueText>
+              {{ characteristicsFormGroup.get('value')?.value }}
+            </ng-template>
+          </td>
+          <td *ngIf="editMode">
+            <p-button
+              icon="pi pi-trash"
+              [text]="true"
+              (onClick)="onRowDelete(rowIndex)"
+            />
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="3">
+            {{ 'DOCUMENT_DETAILS.CHARACTERISTICS.EMPTY' | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
