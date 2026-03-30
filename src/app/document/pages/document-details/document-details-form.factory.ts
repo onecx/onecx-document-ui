@@ -1,29 +1,42 @@
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Attachment, DocumentDetail } from 'src/app/shared/generated';
+import {
+  DocumentAttachmentFormGroup,
+  DocumentDetailsFormGroup,
+} from '../../types/document-create.types';
 
-export function createDocumentDetailsForm(): FormGroup {
+export function createDocumentDetailsForm(): DocumentDetailsFormGroup {
   return new FormGroup({
-    id: new FormControl(null, [Validators.maxLength(255)]),
-    name: new FormControl(null, [Validators.maxLength(255)]),
-    type: new FormControl(null),
-    version: new FormControl(null, [Validators.maxLength(255)]),
-    channel: new FormControl(null),
-    specification: new FormControl(null),
-    status: new FormControl(null),
-    description: new FormControl(null, [Validators.maxLength(4000)]),
-    involvement: new FormControl(null, [Validators.maxLength(255)]),
-    objectReferenceType: new FormControl(null, [Validators.maxLength(255)]),
-    objectReferenceId: new FormControl(null, [Validators.maxLength(255)]),
-    attachments: new FormArray<FormGroup>([]),
+    name: new FormControl<string | null>(null, [
+      Validators.maxLength(255),
+      Validators.required,
+    ]),
+    type: new FormControl<string | null>(null),
+    version: new FormControl<string | null>(null, [Validators.maxLength(255)]),
+    channel: new FormControl<string | null>(null, [Validators.required]),
+    specification: new FormControl<string | null>(null),
+    status: new FormControl<string | null>(null),
+    description: new FormControl<string | null>(null, [
+      Validators.maxLength(4000),
+    ]),
+    involvement: new FormControl<string | null>(null, [
+      Validators.maxLength(255),
+    ]),
+    objectReferenceType: new FormControl<string | null>(null, [
+      Validators.maxLength(255),
+    ]),
+    objectReferenceId: new FormControl<string | null>(null, [
+      Validators.maxLength(255),
+    ]),
+    attachments: new FormArray<DocumentAttachmentFormGroup>([]),
   });
 }
 
 export function patchDocumentDetailsForm(
-  formGroup: FormGroup,
+  formGroup: DocumentDetailsFormGroup,
   details?: DocumentDetail
 ): void {
   formGroup.patchValue({
-    id: details?.id,
     name: details?.name,
     type: details?.type?.id,
     version: details?.documentVersion,
@@ -40,7 +53,7 @@ export function patchDocumentDetailsForm(
 }
 
 export function setAttachmentsOnForm(
-  formGroup: FormGroup,
+  formGroup: DocumentDetailsFormGroup,
   attachments: Attachment[]
 ): void {
   const attachmentsFormArray = getAttachmentFormArray(formGroup);
@@ -52,23 +65,28 @@ export function setAttachmentsOnForm(
 }
 
 export function getAttachmentFormArray(
-  formGroup: FormGroup
-): FormArray<FormGroup> {
-  return formGroup.get('attachments') as FormArray<FormGroup>;
+  formGroup: DocumentDetailsFormGroup
+): FormArray<DocumentAttachmentFormGroup> {
+  return formGroup.controls.attachments;
 }
 
-function createAttachmentFormGroup(attachment: Attachment): FormGroup {
+function createAttachmentFormGroup(
+  attachment: Attachment
+): DocumentAttachmentFormGroup {
   return new FormGroup({
-    id: new FormControl(attachment.id ?? null),
-    name: new FormControl(attachment.name ?? null),
-    description: new FormControl(attachment.description ?? null),
-    fileName: new FormControl(attachment.fileName ?? null),
-    type: new FormControl(attachment.type ?? null),
-    size: new FormControl(attachment.size ?? null),
-    sizeUnit: new FormControl(attachment.sizeUnit ?? null),
-    mimeTypeName: new FormControl(attachment.mimeType?.name ?? null),
-    storageUploadStatus: new FormControl(
-      attachment.storageUploadStatus ?? false
+    id: new FormControl<string | null>(attachment.id ?? null),
+    name: new FormControl<string | null>(attachment.name ?? null),
+    description: new FormControl<string | null>(attachment.description ?? null),
+    fileName: new FormControl<string | null>(attachment.fileName ?? null),
+    type: new FormControl<string | null>(attachment.type ?? null),
+    size: new FormControl<number | null>(attachment.size ?? null),
+    sizeUnit: new FormControl<string | null>(attachment.sizeUnit ?? null),
+    mimeTypeName: new FormControl<string | null>(
+      attachment.mimeType?.name ?? null
+    ),
+    storageUploadStatus: new FormControl<boolean>(
+      attachment.storageUploadStatus ?? false,
+      { nonNullable: true }
     ),
   });
 }

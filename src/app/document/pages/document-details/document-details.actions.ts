@@ -3,6 +3,7 @@ import {
   AttachmentPresignedUrlResponse,
   DocumentDetail,
 } from '../../../shared/generated';
+import { DocumentDetailsFormRawValue } from '../../types/document-create.types';
 
 export const DocumentDetailsActions = createActionGroup({
   source: 'DocumentDetails',
@@ -30,7 +31,7 @@ export const DocumentDetailsActions = createActionGroup({
     'cancel edit not dirty': emptyProps(),
     'edit button clicked': emptyProps(),
     'save button clicked': props<{
-      details: DocumentDetail;
+      details: DocumentDetailsFormRawValue;
     }>(),
     'cancel button clicked': props<{
       dirty: boolean;

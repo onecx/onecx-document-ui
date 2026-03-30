@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Action, BreadcrumbService } from '@onecx/portal-integration-angular';
 import { map, Observable, Subscription } from 'rxjs';
 
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import { PrimeIcons, SelectItem } from 'primeng/api';
 import { DocumentDetailsActions } from './document-details.actions';
 import {
@@ -16,7 +16,11 @@ import {
   getAttachmentFormArray,
   patchDocumentDetailsForm,
 } from './document-details-form.factory';
-import { DocumentAttachmentFormValue } from '../../types/document-create.types';
+import {
+  DocumentAttachmentFormGroup,
+  DocumentAttachmentFormValue,
+  DocumentDetailsFormGroup,
+} from '../../types/document-create.types';
 
 @Component({
   selector: 'app-document-details',
@@ -28,7 +32,7 @@ export class DocumentDetailsComponent implements OnInit {
 
   headerActions$!: Observable<Action[]>;
 
-  public formGroup!: FormGroup;
+  public formGroup!: DocumentDetailsFormGroup;
 
   private sub = new Subscription();
 
@@ -71,7 +75,7 @@ export class DocumentDetailsComponent implements OnInit {
   save() {
     this.store.dispatch(
       DocumentDetailsActions.saveButtonClicked({
-        details: this.formGroup.value,
+        details: this.formGroup.getRawValue(),
       })
     );
   }
@@ -199,7 +203,7 @@ export class DocumentDetailsComponent implements OnInit {
     return this.store.select(selectDocumentTypes);
   }
 
-  get attachmentsFormArray(): FormArray<FormGroup> {
+  get attachmentsFormArray(): FormArray<DocumentAttachmentFormGroup> {
     return getAttachmentFormArray(this.formGroup);
   }
 }

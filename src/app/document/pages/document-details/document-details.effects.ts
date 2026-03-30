@@ -18,14 +18,22 @@ import {
   selectUrl,
 } from 'src/app/shared/selectors/router.selectors';
 import {
+  Attachment,
+  AttachmentCreateUpdate,
   DocumentControllerV1,
+  DocumentCreateUpdate,
   DocumentDetail,
+  LifeCycleState,
 } from '../../../shared/generated';
 import { DocumentDetailsActions } from './document-details.actions';
 import { DocumentDetailsComponent } from './document-details.component';
 import { documentDetailsSelectors } from './document-details.selectors';
 import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions';
 import { ExternalFileHandlerService } from '../../service/external-file-handler.service';
+import {
+  DocumentAttachmentFormValue,
+  DocumentDetailsFormValue,
+} from '../../types/document-create.types';
 
 @Injectable()
 export class DocumentDetailsEffects {
@@ -107,48 +115,56 @@ export class DocumentDetailsEffects {
     );
   });
 
-  // saveButtonClicked$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(DocumentDetailsActions.saveButtonClicked),
-  //     concatLatestFrom(() =>
-  //       this.store.select(documentDetailsSelectors.selectDetails)
-  //     ),
-  //     switchMap(([action, details]) => {
-  //       const itemToEditId = details?.id;
-  //       const updatedItem: DocumentCreateUpdate = {
-  //         ...details,
-  //         ...action.details,
-  //       };
+  saveButtonClicked$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DocumentDetailsActions.saveButtonClicked),
+      concatLatestFrom(() =>
+        this.store.select(documentDetailsSelectors.selectDetails)
+      ),
+      switchMap(([{ details }, prevDetails]) => {
+        const itemToEditId = prevDetails?.id;
 
-  //       if (!itemToEditId) {
-  //         return of(DocumentDetailsActions.updateDocumentCancelled());
-  //       }
-  //       const itemToEdit = {
-  //         dataObject: updatedItem,
-  //       } as DocumentCreateUpdate;
-  //       return this.documentService
-  //         .updateDocumentDetail(itemToEditId, itemToEdit)
-  //         .pipe(
-  //           map(() => {
-  //             this.messageService.success({
-  //               summaryKey: 'DOCUMENT_DETAILS.UPDATE.SUCCESS',
-  //             });
-  //             return DocumentDetailsActions.updateDocumentSucceeded();
-  //           }),
-  //           catchError((error) => {
-  //             this.messageService.error({
-  //               summaryKey: 'DOCUMENT_DETAILS.UPDATE.ERROR',
-  //             });
-  //             return of(
-  //               DocumentDetailsActions.updateDocumentFailed({
-  //                 error,
-  //               })
-  //             );
-  //           })
-  //         );
-  //     })
-  //   );
-  // });
+        if (!itemToEditId) {
+          return of(DocumentDetailsActions.updateDocumentCancelled());
+        }
+        const itemToEdit = this.getUpdateRequest(prevDetails, details);
+        return this.documentService
+          .updateDocumentDetail(itemToEditId, itemToEdit)
+          .pipe(
+            mergeMap((response) => [
+              DocumentDetailsActions.updateDocumentSucceeded(),
+              DocumentDetailsActions.documentDetailsReceived({
+                details: response,
+              }),
+            ]),
+            catchError((error) => {
+              this.messageService.error({
+                summaryKey: 'DOCUMENT_DETAILS.UPDATE.ERROR',
+              });
+              return of(
+                DocumentDetailsActions.updateDocumentFailed({
+                  error,
+                })
+              );
+            })
+          );
+      })
+    );
+  });
+
+  updateSuccess$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(DocumentDetailsActions.updateDocumentSucceeded),
+        tap(() =>
+          this.messageService.success({
+            summaryKey: 'DOCUMENT_DETAILS.UPDATE.SUCCESS',
+          })
+        )
+      );
+    },
+    { dispatch: false }
+  );
 
   deleteButtonClicked$ = createEffect(() => {
     return this.actions$.pipe(
@@ -329,5 +345,104 @@ export class DocumentDetailsEffects {
     anchor.click();
     anchor.remove();
     window.URL.revokeObjectURL(objectUrl);
+  }
+
+  private getUpdateRequest(
+    prevState: DocumentDetail,
+    formValue: DocumentDetailsFormValue
+  ): DocumentCreateUpdate {
+    void formValue;
+
+    return {
+      modificationCount: prevState.modificationCount,
+      creationDate: prevState.creationDate,
+      creationUser: prevState.creationUser,
+      modificationDate: prevState.modificationDate,
+      modificationUser: prevState.modificationUser,
+      id: prevState.id,
+      name: formValue.name!,
+      description: prevState.description,
+      lifeCycleState: formValue.status as LifeCycleState,
+      documentVersion: formValue.version || undefined,
+      tags: [],
+      typeId: formValue.type!,
+      specification: prevState.specification
+        ? {
+            name: formValue.specification || undefined,
+            specificationVersion: prevState.specification.specificationVersion,
+          }
+        : undefined,
+      channel: {
+        id: prevState.channel?.id,
+        name: formValue.channel!,
+      },
+      documentRelationships: (prevState.documentRelationships
+        ? Array.from(prevState.documentRelationships)
+        : []
+      ).map((relationship) => ({
+        id: relationship.id,
+        type: relationship.type,
+        documentRefId: relationship.documentRefId,
+      })),
+      characteristics: (prevState.characteristics
+        ? Array.from(prevState.characteristics)
+        : []
+      ).map((characteristic) => ({
+        id: characteristic.id,
+        name: characteristic.name,
+        value: characteristic.value,
+      })),
+      relatedParties: (prevState.relatedParties
+        ? Array.from(prevState.relatedParties)
+        : []
+      ).map((relatedParty) => ({
+        id: relatedParty.id,
+        name: relatedParty.name,
+        role: relatedParty.role,
+        validFor: relatedParty.validFor,
+      })),
+      relatedObject: prevState.relatedObject
+        ? {
+            id: prevState.relatedObject.id,
+            involvement: formValue.involvement || undefined,
+            objectReferenceType: formValue.objectReferenceType || undefined,
+            objectReferenceId: formValue.objectReferenceId || undefined,
+          }
+        : undefined,
+      categories: (prevState.categories
+        ? Array.from(prevState.categories)
+        : []
+      ).map((category) => ({
+        id: category.id,
+        name: category.name,
+        categoryVersion: category.categoryVersion,
+      })),
+      attachments: this.mapAttachments(
+        prevState.attachments || [],
+        formValue.attachments
+      ),
+    };
+  }
+
+  private mapAttachments(
+    prevAttachments: Attachment[],
+    formValue: DocumentAttachmentFormValue[]
+  ): AttachmentCreateUpdate[] {
+    const attachmentMap = formValue.reduce((prev, curr) => {
+      prev[curr.id!] = curr;
+      return prev;
+    }, {} as Record<string, DocumentAttachmentFormValue>);
+    return prevAttachments.map((attachment) => {
+      const attachmentFormValue = attachmentMap[attachment.id!];
+      return {
+        id: attachment.id,
+        name: attachmentFormValue.name!,
+        description: attachmentFormValue.description!,
+        type: attachment.type,
+        validFor: attachment.validFor,
+        mimeTypeId: attachment.mimeType?.id,
+        fileName: attachment.fileName,
+      };
+    });
   }
 }
