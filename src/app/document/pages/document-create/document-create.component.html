@@ -12,6 +12,7 @@
       <app-document-create-details-form
         *ngSwitchCase="steps.Details"
         [details]="vm.details"
+        [availableTypes]="(documentTypes$ | async) || []"
         (next)="onDetailsNext(vm, $event)"
       ></app-document-create-details-form>
 

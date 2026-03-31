@@ -12,12 +12,16 @@
         type="text"
         id="name"
         class="w-full"
+        [ngClass]="{
+          'ng-invalid': isInvalid('name'),
+          'ng-dirty': isInvalid('name')
+        }"
         formControlName="name"
         pTooltip="{{ 'DOCUMENT_DETAILS.FORM.NAME.TOOLTIP' | translate }}"
         tooltipPosition="top"
         [attr.aria-label]="'DOCUMENT_DETAILS.FORM.NAME.ARIA-LABEL' | translate"
       />
-      <label for="name">{{
+      <label for="name" class="required-label">{{
         'DOCUMENT_DETAILS.FORM.NAME.LABEL' | translate
       }}</label>
     </span>
@@ -28,6 +32,10 @@
       <p-dropdown
         id="type"
         class="w-full"
+        [ngClass]="{
+          'ng-invalid': isInvalid('type'),
+          'ng-dirty': isInvalid('type')
+        }"
         formControlName="type"
         [options]="availableTypes"
         optionLabel="label"
@@ -69,6 +77,10 @@
         pInputText
         id="channel"
         class="w-full"
+        [ngClass]="{
+          'ng-invalid': isInvalid('channel'),
+          'ng-dirty': isInvalid('channel')
+        }"
         formControlName="channel"
         pTooltip="{{ 'DOCUMENT_DETAILS.FORM.CHANNEL.TOOLTIP' | translate }}"
         tooltipPosition="top"
@@ -76,7 +88,7 @@
           'DOCUMENT_DETAILS.FORM.CHANNEL.ARIA-LABEL' | translate
         "
       />
-      <label for="channel">{{
+      <label for="channel" class="required-label">{{
         'DOCUMENT_DETAILS.FORM.CHANNEL.LABEL' | translate
       }}</label>
     </span>
@@ -92,6 +104,10 @@
         optionLabel="label"
         optionValue="value"
         appendTo="body"
+        [ngClass]="{
+          'ng-invalid': isInvalid('status'),
+          'ng-dirty': isInvalid('status')
+        }"
         pTooltip="{{ 'DOCUMENT_DETAILS.FORM.STATUS.TOOLTIP' | translate }}"
         tooltipPosition="top"
         [attr.aria-label]="

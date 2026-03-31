@@ -5,22 +5,23 @@ import {
   DocumentDetail,
 } from 'src/app/shared/generated';
 import {
+  DocumentCreateDetailsFormGroup,
   DocumentAttachmentFormGroup,
   DocumentCharacteristicsFormGroup,
   DocumentDetailsFormGroup,
-} from '../../types/document-create.types';
+} from '../types/document-create.types';
 
-export function createDocumentDetailsForm(): DocumentDetailsFormGroup {
+export function createDocumentDetailsSectionForm(): DocumentCreateDetailsFormGroup {
   return new FormGroup({
     name: new FormControl<string | null>(null, [
       Validators.maxLength(255),
       Validators.required,
     ]),
-    type: new FormControl<string | null>(null),
+    type: new FormControl<string | null>(null, [Validators.required]),
     version: new FormControl<string | null>(null, [Validators.maxLength(255)]),
     channel: new FormControl<string | null>(null, [Validators.required]),
     specification: new FormControl<string | null>(null),
-    status: new FormControl<string | null>(null),
+    status: new FormControl<string | null>(null, [Validators.required]),
     description: new FormControl<string | null>(null, [
       Validators.maxLength(4000),
     ]),
@@ -33,8 +34,24 @@ export function createDocumentDetailsForm(): DocumentDetailsFormGroup {
     objectReferenceId: new FormControl<string | null>(null, [
       Validators.maxLength(255),
     ]),
-    attachments: new FormArray<DocumentAttachmentFormGroup>([]),
-    characteristics: new FormArray<DocumentCharacteristicsFormGroup>([]),
+  });
+}
+
+export function createDocumentAttachmentsFormArray(): FormArray<DocumentAttachmentFormGroup> {
+  return new FormArray<DocumentAttachmentFormGroup>([]);
+}
+
+export function createDocumentCharacteristicsFormArray(): FormArray<DocumentCharacteristicsFormGroup> {
+  return new FormArray<DocumentCharacteristicsFormGroup>([]);
+}
+
+export function createDocumentDetailsForm(): DocumentDetailsFormGroup {
+  const detailsSectionForm = createDocumentDetailsSectionForm();
+
+  return new FormGroup({
+    ...detailsSectionForm.controls,
+    attachments: createDocumentAttachmentsFormArray(),
+    characteristics: createDocumentCharacteristicsFormArray(),
   });
 }
 

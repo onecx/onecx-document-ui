@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BreadcrumbService } from '@onecx/portal-integration-angular';
+import { SelectItem } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { DocumentCreateStep } from '../../types/document-create-step.enum';
 import {
@@ -10,7 +11,10 @@ import {
 } from '../../types/document-create.types';
 import { DocumentCreateActions } from './document-create.actions';
 import { DocumentCreateViewModel } from './document-create.viewmodel';
-import { selectDocumentCreateViewModel } from './document-create.selectors';
+import {
+  selectCreateDocumentTypes,
+  selectDocumentCreateViewModel,
+} from './document-create.selectors';
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -22,12 +26,14 @@ export class DocumentCreateComponent implements OnInit {
   readonly steps = DocumentCreateStep;
   stepsModel: MenuItem[] = [];
   viewModel$: Observable<DocumentCreateViewModel>;
+  documentTypes$: Observable<SelectItem[]>;
 
   constructor(
     private readonly store: Store,
     private readonly breadcrumbService: BreadcrumbService
   ) {
     this.viewModel$ = this.store.select(selectDocumentCreateViewModel);
+    this.documentTypes$ = this.store.select(selectCreateDocumentTypes);
   }
 
   ngOnInit(): void {

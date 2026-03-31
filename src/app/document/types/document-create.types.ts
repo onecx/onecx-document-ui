@@ -63,6 +63,10 @@ export type DocumentDetailsFormGroup = FormGroup<
   FormControlsOf<DocumentDetailsFormValue>
 >;
 
+export type DocumentCreateDetailsFormGroup = FormGroup<
+  FormControlsOf<DocumentCreateDetailsStepData>
+>;
+
 export type DocumentAttachmentFormRawValue = ReturnType<
   DocumentAttachmentFormGroup['getRawValue']
 >;

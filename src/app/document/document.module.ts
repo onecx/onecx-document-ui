@@ -36,7 +36,7 @@ import { DocumentSearchCriteriaComponent } from './pages/document-search/compone
 import { DocumentSearchComponent } from './pages/document-search/document-search.component';
 import { DocumentSearchEffects } from './pages/document-search/document-search.effects';
 import { DocumentDetailsAttachmentListComponent } from './pages/document-details/components/document-details-attachment-list/document-details-attachment-list.component';
-import { DocumentDetailsFormComponent } from './pages/document-details/components/document-details-form/document-details-form.component';
+import { DocumentDetailsFormComponent } from './components/document-details-form/document-details-form.component';
 import { DocumentDetailsCharacteristicsComponent } from './pages/document-details/components/document-details-characteristics/document-details-characteristics.component';
 
 @NgModule({

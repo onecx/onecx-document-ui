@@ -1,5 +1,8 @@
 <div class="card p-3">
-  <div class="mb-3">Step 1: Document details</div>
+  <app-document-details-form
+    [formGroup]="formGroup"
+    [availableTypes]="availableTypes"
+  ></app-document-details-form>
 
   <div class="flex justify-content-end">
     <button pButton type="button" (click)="onNextClick()">

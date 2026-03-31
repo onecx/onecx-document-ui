@@ -1,7 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { LifeCycleState } from 'src/app/shared/generated/model/lifeCycleState';
-import { DocumentDetailsFormGroup } from '../../../../types/document-create.types';
+import {
+  DocumentCreateDetailsFormGroup,
+  DocumentDetailsFormGroup,
+} from '../../types/document-create.types';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-document-details-form',
@@ -9,7 +13,9 @@ import { DocumentDetailsFormGroup } from '../../../../types/document-create.type
   styleUrl: './document-details-form.component.scss',
 })
 export class DocumentDetailsFormComponent implements OnInit {
-  @Input() formGroup!: DocumentDetailsFormGroup;
+  @Input() formGroup!:
+    | DocumentDetailsFormGroup
+    | DocumentCreateDetailsFormGroup;
   @Input() availableTypes: SelectItem[] = [];
   @Input() availableStatuses: SelectItem[] = [];
 
@@ -17,6 +23,11 @@ export class DocumentDetailsFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDocumentStatus();
+  }
+
+  isInvalid(controlName: string): boolean {
+    const control = (this.formGroup as FormGroup).get(controlName);
+    return !!control && control.invalid && (control.touched || control.dirty);
   }
 
   private loadDocumentStatus(): void {

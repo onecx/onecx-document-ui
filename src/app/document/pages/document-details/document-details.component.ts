@@ -18,7 +18,7 @@ import {
   getCharacteristicsFormArray,
   patchDocumentDetailsForm,
   removeCharacteristic,
-} from './document-details-form.factory';
+} from '../../utils/document-details-form.factory';
 import {
   DocumentAttachmentFormGroup,
   DocumentAttachmentFormValue,
