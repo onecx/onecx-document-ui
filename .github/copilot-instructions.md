@@ -159,7 +159,50 @@ actions$.next(SomeActions.triggerAction());
 
 Use `concatLatestFrom` selectors with `store.overrideSelector(...)` before triggering the action.
 
-#### Selector projectors — testing pattern
+#### TestBed setup — preferred approach
+
+Use the modern provider API instead of legacy testing modules:
+
+```typescript
+// ❌ legacy
+imports: [HttpClientTestingModule];
+
+// ✅ preferred
+providers: [provideHttpClient(), provideHttpClientTesting()];
+```
+
+Always include `provideAppStateServiceMock()` from `@onecx/angular-integration-interface/mocks` — `PortalCoreModule` and many portal services depend on `AppStateService` at initialization.
+
+#### Component TestBed — no NO_ERRORS_SCHEMA
+
+**Do not use `NO_ERRORS_SCHEMA`** in component tests. Even when testing business logic only (not UI), the component must compile and instantiate correctly with its real template. `NO_ERRORS_SCHEMA` silently stubs child components and custom elements, which can mask real setup errors and break harness-based queries.
+
+Instead, declare all child components used in the template, or import the real PrimeNG / OneCX modules they need:
+
+```typescript
+// ❌ hides real template errors
+schemas: [NO_ERRORS_SCHEMA]
+
+// ✅ declare real child components and import required modules
+declarations: [SearchComponent, SearchCriteriaComponent],
+imports: [PortalCoreModule, ReactiveFormsModule, CalendarModule, DropdownModule, ...]
+```
+
+If a child component brings in too many transitive dependencies, extract the problematic child into its own spec file and test it in isolation.
+
+#### Tests must reflect actual component state
+
+Before writing a test for a feature (action, UI element, method, observable), **verify it exists in the current source**:
+
+- Check the component's `.ts` file for public methods and dispatched actions before writing dispatch tests.
+- Check the component's `.html` template for elements before writing template or harness-based tests.
+- Check the NgRx actions file before testing action types or payloads.
+
+This prevents tests for removed or never-implemented features (e.g., a diagram that was removed from the template, or methods that were renamed).
+
+#### Inline Pipe mocks are forbidden
+
+Do not mock `TranslatePipe` or any other pipe inline with a `@Pipe` decorator stub. Use `TranslateTestingModule.withTranslations('en', require(...))` instead — it provides real translation behavior without leaking mock state between tests.
 
 Test selectors as pure functions using `.projector(...)` — no store setup required:
 
