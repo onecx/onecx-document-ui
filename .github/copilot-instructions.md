@@ -92,6 +92,84 @@ Reactive forms (`FormBuilder`, `FormGroup`). URL parameter state is validated wi
 - Services accessed via `TestBed.inject()`
 - Generated files in `src/app/shared/generated/` are excluded from lint rules
 
+#### Test scope — what to test
+
+Test **business logic only**. Do not test UI/DOM rendering, CSS classes, or template structure.
+
+- **Components** — dispatched actions, method outputs, form state transitions, Observable wiring
+- **Effects** — dispatched actions for each branch (success, failure, guard conditions), side-effect calls (navigate, messageService, exportService)
+- **Reducers** — every `on()` handler: state shape before → state shape after
+- **Selectors** — every `projector` function in isolation (pure function, no store needed)
+- **Services** — HTTP calls (method, URL, body), retry logic, error propagation
+- **Utils / factories** — every exported function and every branch within it
+
+#### Test naming
+
+Every test name must follow `should <behavior> when <condition>`:
+
+```typescript
+// ❌ vague
+it('works correctly');
+it('handles error');
+
+// ✅ self-documenting
+it('should dispatch documentSearchResultsLoadingFailed when API returns error');
+it('should set searchLoadingIndicator to false when results are received');
+```
+
+#### Test structure — one assertion per test
+
+Each test verifies a single, clearly scoped behavior. Avoid combining multiple unrelated assertions in one `it` block.
+
+#### Edge cases
+
+Test only edge cases that can realistically occur in production:
+
+- Empty arrays / `undefined` / `null` values coming from the API
+- Missing required IDs (`id` is `undefined`)
+- HTTP error responses (400, 500)
+- Pending count reaching zero (upload tracking)
+
+Do **not** invent theoretical edge cases that the application code will never encounter.
+
+#### Mock strategy
+
+| Subject                                                         | Tool                                                                |
+| --------------------------------------------------------------- | ------------------------------------------------------------------- |
+| NgRx Store                                                      | `MockStore` + `provideMockActions`                                  |
+| HTTP services                                                   | `jest.fn()` returning `of(...)` or `throwError(...)`                |
+| HTTP client directly                                            | `HttpClientTestingModule` (required when `HttpBackend` is injected) |
+| Router                                                          | `jest.fn()` mock with `navigate`, `parseUrl`                        |
+| Portal services (`PortalMessageService`, `PortalDialogService`) | `jest.fn()` mock                                                    |
+| Selectors                                                       | `store.overrideSelector(...)`                                       |
+
+#### Private methods
+
+Do **not** access private methods via `(component as any).method()`. Test them indirectly through the public API (actions, outputs, public method calls) that exercises the private code path.
+
+#### NgRx Effects — testing pattern
+
+```typescript
+effects.someEffect$.pipe(take(1)).subscribe((action) => {
+  expect(action).toEqual(SomeActions.expectedAction({ ... }));
+  done();
+});
+actions$.next(SomeActions.triggerAction());
+```
+
+Use `concatLatestFrom` selectors with `store.overrideSelector(...)` before triggering the action.
+
+#### Selector projectors — testing pattern
+
+Test selectors as pure functions using `.projector(...)` — no store setup required:
+
+```typescript
+it('should map DocumentType[] to SelectItem[]', () => {
+  const types = [{ id: '1', name: 'Invoice' }];
+  expect(selectDocumentTypes.projector(types)).toEqual([{ label: 'Invoice', value: '1' }]);
+});
+```
+
 ### Portal Integration
 
 Heavy dependency on `@onecx/*` packages:
