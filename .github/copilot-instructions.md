@@ -88,7 +88,6 @@ Reactive forms (`FormBuilder`, `FormGroup`). URL parameter state is validated wi
 ### Testing
 
 - Uses Jest + `jest-preset-angular`
-- Imports: `HttpClientTestingModule`, `RouterTestingModule`, `TranslateTestingModule.withTranslations({})`, `MockAuthModule` from portal integration
 - Services accessed via `TestBed.inject()`
 - Generated files in `src/app/shared/generated/` are excluded from lint rules
 
@@ -164,11 +163,13 @@ Use `concatLatestFrom` selectors with `store.overrideSelector(...)` before trigg
 Use the modern provider API instead of legacy testing modules:
 
 ```typescript
-// ❌ legacy
+// ❌ legacy — forbidden
 imports: [HttpClientTestingModule];
+imports: [RouterTestingModule];
 
 // ✅ preferred
 providers: [provideHttpClient(), provideHttpClientTesting()];
+providers: [provideRouter([])];
 ```
 
 Always include `provideAppStateServiceMock()` from `@onecx/angular-integration-interface/mocks` — `PortalCoreModule` and many portal services depend on `AppStateService` at initialization.
