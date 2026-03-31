@@ -1,13 +1,17 @@
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { LetDirective } from '@ngrx/component';
-import { ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks';
+import {
+  provideAppStateServiceMock,
+  provideUserServiceMock,
+} from '@onecx/angular-integration-interface/mocks';
 import {
   BreadcrumbService,
   HAS_PERMISSION_CHECKER,
@@ -15,60 +19,27 @@ import {
   UserService,
 } from '@onecx/portal-integration-angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
-import { PrimeIcons } from 'primeng/api';
-import { of } from 'rxjs';
 import { DocumentDetailsActions } from './document-details.actions';
 import { DocumentDetailsComponent } from './document-details.component';
-import { DocumentDetailsHarness } from './document-details.harness';
 import { initialState } from './document-details.reducers';
 import { selectDocumentDetailsViewModel } from './document-details.selectors';
 import { DocumentDetailsViewModel } from './document-details.viewmodel';
 
 describe('DocumentDetailsComponent', () => {
-  const origAddEventListener = window.addEventListener;
-  const origPostMessage = window.postMessage;
-
-  let listeners: any[] = [];
-  window.addEventListener = (_type: any, listener: any) => {
-    listeners.push(listener);
-  };
-
-  window.removeEventListener = (_type: any, listener: any) => {
-    listeners = listeners.filter((l) => l !== listener);
-  };
-
-  window.postMessage = (m: any) => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    listeners.forEach((l) =>
-      l({
-        data: m,
-        stopImmediatePropagation: () => {},
-        stopPropagation: () => {},
-      })
-    );
-  };
-
-  afterAll(() => {
-    window.addEventListener = origAddEventListener;
-    window.postMessage = origPostMessage;
-  });
-
   let component: DocumentDetailsComponent;
   let fixture: ComponentFixture<DocumentDetailsComponent>;
   let store: MockStore<Store>;
   let breadcrumbService: BreadcrumbService;
-  let documentDetails: DocumentDetailsHarness;
 
-  const mockActivatedRoute = {
-    snapshot: {
-      data: {},
-    },
-  };
+  const mockActivatedRoute = { snapshot: { data: {} } };
+
   const baseDocumentDetailsViewModel: DocumentDetailsViewModel = {
     details: undefined,
     detailsLoadingIndicator: false,
     detailsLoaded: true,
     backNavigationPossible: true,
+    editMode: false,
+    isSubmitting: false,
   };
 
   beforeEach(async () => {
@@ -77,39 +48,30 @@ describe('DocumentDetailsComponent', () => {
       imports: [
         PortalCoreModule,
         LetDirective,
+        ReactiveFormsModule,
+        NoopAnimationsModule,
         TranslateTestingModule.withTranslations(
           'en',
           require('./../../../../assets/i18n/en.json')
         ).withTranslations('de', require('./../../../../assets/i18n/de.json')),
-        HttpClientTestingModule,
       ],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         provideMockStore({
           initialState: { document: { details: initialState } },
         }),
         BreadcrumbService,
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         provideUserServiceMock(),
+        provideAppStateServiceMock(),
         {
           provide: HAS_PERMISSION_CHECKER,
           useExisting: UserService,
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-
-    const userService = TestBed.inject(UserService);
-    userService.permissions$.next([
-      'DOCUMENT#CREATE',
-      'DOCUMENT#EDIT',
-      'DOCUMENT#DELETE',
-      'DOCUMENT#IMPORT',
-      'DOCUMENT#EXPORT',
-      'DOCUMENT#VIEW',
-      'DOCUMENT#SEARCH',
-      'DOCUMENT#BACK',
-    ]);
-    const translateService = TestBed.inject(TranslateService);
-    translateService.use('en');
 
     store = TestBed.inject(MockStore);
     store.overrideSelector(
@@ -122,121 +84,103 @@ describe('DocumentDetailsComponent', () => {
     component = fixture.componentInstance;
     breadcrumbService = TestBed.inject(BreadcrumbService);
     fixture.detectChanges();
-    documentDetails = await TestbedHarnessEnvironment.harnessForFixture(
-      fixture,
-      DocumentDetailsHarness
-    );
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display correct breadcrumbs', async () => {
+  it('should set breadcrumbs on init', () => {
     jest.spyOn(breadcrumbService, 'setItems');
-
     component.ngOnInit();
-    fixture.detectChanges();
-
-    expect(breadcrumbService.setItems).toHaveBeenCalledTimes(1);
-    const pageHeader = await documentDetails.getHeader();
-    const searchBreadcrumbItem = await pageHeader.getBreadcrumbItem('Details');
-    expect(await searchBreadcrumbItem!.getText()).toEqual('Details');
-  });
-
-  it('should display translated headers', async () => {
-    const pageHeader = await documentDetails.getHeader();
-    expect(await pageHeader.getHeaderText()).toEqual('Document Details');
-    expect(await pageHeader.getSubheaderText()).toEqual(
-      'Display of Document Details'
-    );
-  });
-
-  it('should have 2 inline actions', async () => {
-    const pageHeader = await documentDetails.getHeader();
-    const inlineActions = await pageHeader.getInlineActionButtons();
-    expect(inlineActions.length).toBe(2);
-
-    const backAction = await pageHeader.getInlineActionButtonByLabel('Back');
-    expect(backAction).toBeTruthy();
-
-    const moreAction = await pageHeader.getInlineActionButtonByIcon(
-      PrimeIcons.ELLIPSIS_V
-    );
-    expect(moreAction).toBeTruthy();
-  });
-
-  it('should dispatch navigateBackButtonClicked action on back button click', async () => {
-    jest.spyOn(window.history, 'back');
-    const doneFn = jest.fn();
-
-    const pageHeader = await documentDetails.getHeader();
-    const backAction = await pageHeader.getInlineActionButtonByLabel('Back');
-    store.scannedActions$
-      .pipe(ofType(DocumentDetailsActions.navigateBackButtonClicked))
-      .subscribe(() => {
-        doneFn();
-      });
-    await backAction?.click();
-    expect(doneFn).toHaveBeenCalledTimes(1);
-  });
-
-  it('should display item details in page header', async () => {
-    component.headerLabels$ = of([
-      {
-        label: 'DOCUMENT_DETAILS.FORM.ID',
-        labelPipe: TranslatePipe,
-        value: 'test id',
-      },
-      {
-        label: 'first',
-        value: 'first value',
-      },
-      {
-        label: 'second',
-        value: 'second value',
-      },
-      {
-        label: 'third',
-        icon: PrimeIcons.PLUS,
-      },
-      {
-        label: 'fourth',
-        value: 'fourth value',
-        icon: PrimeIcons.QUESTION,
-      },
+    expect(breadcrumbService.setItems).toHaveBeenCalledWith([
+      expect.objectContaining({ labelKey: 'DOCUMENT_SEARCH.HEADER' }),
+      expect.objectContaining({ labelKey: 'DOCUMENT_DETAILS.BREADCRUMB' }),
     ]);
-
-    const pageHeader = await documentDetails.getHeader();
-    const objectDetails = await pageHeader.getObjectInfos();
-    expect(objectDetails.length).toBe(5);
-
-    const idLabel = TestBed.inject(TranslateService).instant(
-      'DOCUMENT_DETAILS.FORM.ID'
-    );
-    const testDetailItem = await pageHeader.getObjectInfoByLabel(idLabel);
-    expect(await testDetailItem?.getLabel()).toEqual(idLabel);
-    expect(await testDetailItem?.getValue()).toEqual('test id');
-    expect(await testDetailItem?.getIcon()).toBeUndefined();
-
-    const firstDetailItem = await pageHeader.getObjectInfoByLabel('first');
-    expect(await firstDetailItem?.getLabel()).toEqual('first');
-    expect(await firstDetailItem?.getValue()).toEqual('first value');
-    expect(await firstDetailItem?.getIcon()).toBeUndefined();
-
-    const secondDetailItem = await pageHeader.getObjectInfoByLabel('second');
-    expect(await secondDetailItem?.getLabel()).toEqual('second');
-    expect(await secondDetailItem?.getValue()).toEqual('second value');
-    expect(await secondDetailItem?.getIcon()).toBeUndefined();
-
-    const thirdDetailItem = await pageHeader.getObjectInfoByLabel('third');
-    expect(await thirdDetailItem?.getLabel()).toEqual('third');
-    expect(await thirdDetailItem?.getValue()).toEqual('');
-    expect(await thirdDetailItem?.getIcon()).toEqual(PrimeIcons.PLUS);
-
-    const fourthDetailItem = await pageHeader.getObjectInfoByLabel('fourth');
-    expect(await fourthDetailItem?.getLabel()).toEqual('fourth');
-    expect(await fourthDetailItem?.getValue()).toEqual('fourth value');
-    expect(await fourthDetailItem?.getIcon()).toEqual(PrimeIcons.QUESTION);
   });
+
+  it('should dispatch editButtonClicked when edit() is called', () => {
+    jest.spyOn(store, 'dispatch');
+    component.edit();
+    expect(store.dispatch).toHaveBeenCalledWith(
+      DocumentDetailsActions.editButtonClicked()
+    );
+  });
+
+  it('should dispatch saveButtonClicked with form raw value when save() is called', () => {
+    jest.spyOn(store, 'dispatch');
+    component.save();
+    expect(store.dispatch).toHaveBeenCalledWith(
+      DocumentDetailsActions.saveButtonClicked({
+        details: component.formGroup.getRawValue(),
+      })
+    );
+  });
+
+  it('should dispatch cancelButtonClicked with dirty=false when form is pristine', () => {
+    jest.spyOn(store, 'dispatch');
+    component.cancel();
+    expect(store.dispatch).toHaveBeenCalledWith(
+      DocumentDetailsActions.cancelButtonClicked({ dirty: false })
+    );
+  });
+
+  it('should dispatch deleteButtonClicked when delete() is called', () => {
+    jest.spyOn(store, 'dispatch');
+    component.delete();
+    expect(store.dispatch).toHaveBeenCalledWith(
+      DocumentDetailsActions.deleteButtonClicked()
+    );
+  });
+
+  it('should dispatch navigateBackButtonClicked when back action callback is invoked', (done) => {
+    component.headerActions$.subscribe((actions) => {
+      const backAction = actions.find((a) => a.labelKey?.includes('BACK'));
+      jest.spyOn(store, 'dispatch');
+      backAction?.actionCallback();
+      expect(store.dispatch).toHaveBeenCalledWith(
+        DocumentDetailsActions.navigateBackButtonClicked()
+      );
+      done();
+    });
+  });
+
+  it('should disable form when editMode is false', () => {
+    store.overrideSelector(selectDocumentDetailsViewModel, {
+      ...baseDocumentDetailsViewModel,
+      editMode: false,
+    });
+    store.refreshState();
+    expect(component.formGroup.disabled).toBe(true);
+  });
+
+  it('should enable form when editMode is true', () => {
+    store.overrideSelector(selectDocumentDetailsViewModel, {
+      ...baseDocumentDetailsViewModel,
+      editMode: true,
+    });
+    store.refreshState();
+    expect(component.formGroup.enabled).toBe(true);
+  });
+
+  it('should dispatch startAttachmentDownload when onAttachmentDownload is called', () => {
+    jest.spyOn(store, 'dispatch');
+    component.onAttachmentDownload({
+      id: 'att-1',
+      fileName: 'file.pdf',
+    } as any);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      DocumentDetailsActions.startAttachmentDownload({
+        attachmentId: 'att-1',
+        fileName: 'file.pdf',
+      })
+    );
+  });
+
+  it('should unsubscribe on destroy', () => {
+    const spy = jest.spyOn((component as any).sub, 'unsubscribe');
+    component.ngOnDestroy();
+    expect(spy).toHaveBeenCalled();
+  });
+  // <<SPEC-EXTENSIONS-MARKER-!!!-DO-NOT-REMOVE-!!!>>
 });

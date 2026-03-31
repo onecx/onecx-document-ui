@@ -12,7 +12,7 @@ describe('DocumentSearchReducer', () => {
     const preState = {
       ...reducers.initialState,
       results: [{ id: '1' }],
-      criteria: { changeMe: 'val' },
+      criteria: { name: 'old-value' },
     };
     const action = DocumentSearchActions.resetButtonClicked();
     const state = reducers.documentSearchReducer(preState, action);
@@ -21,7 +21,7 @@ describe('DocumentSearchReducer', () => {
   });
 
   it('should set searchLoadingIndicator and criteria on searchButtonClicked', () => {
-    const searchCriteria = { changeMe: 'foo' };
+    const searchCriteria = { name: 'foo' };
     const action = DocumentSearchActions.searchButtonClicked({
       searchCriteria,
     });
@@ -145,7 +145,7 @@ describe('DocumentSearchReducer', () => {
       });
     const preState = {
       ...reducers.initialState,
-      criteria: { changeMe: 'bar' },
+      criteria: { name: 'bar' },
       searchLoadingIndicator: true,
     };
     const action = routerNavigatedAction({

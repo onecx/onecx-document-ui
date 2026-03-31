@@ -3,86 +3,58 @@ import * as selectors from './document-search.selectors';
 
 describe('DocumentSearch selectors', () => {
   describe('selectResults projector', () => {
-    const cases = [
-      {
-        desc: 'should map results to RowListGridData[]',
-        input: [
-          {
-            id: '1',
-            name: 'A',
-            description: 'desc',
-            vdb: 'vdb1',
-            vdbCollection: 'c1',
-          },
-          {
-            id: '2',
-            name: 'B',
-            description: 'desc2',
-            vdb: 'vdb2',
-            vdbCollection: 'c2',
-          },
-        ],
-        expected: [
-          {
-            imagePath: '',
-            id: '1',
-            name: 'A',
-            description: 'desc',
-            vdb: 'vdb1',
-            vdbCollection: 'c1',
-          },
-          {
-            imagePath: '',
-            id: '2',
-            name: 'B',
-            description: 'desc2',
-            vdb: 'vdb2',
-            vdbCollection: 'c2',
-          },
-        ],
-      },
-      {
-        desc: 'should use empty string fallback when item.id is falsy',
-        input: [
-          { id: '', name: 'A', description: 'desc' },
-          { id: '', name: 'B', description: 'desc2' },
-          { id: '', name: 'C', description: 'desc3' },
-        ],
-        expected: [
-          { imagePath: '', id: '', name: 'A', description: 'desc' },
-          { imagePath: '', id: '', name: 'B', description: 'desc2' },
-          { imagePath: '', id: '', name: 'C', description: 'desc3' },
-        ],
-      },
-    ];
-    cases.forEach(({ desc, input, expected }) => {
-      it(desc, () => {
-        expect(selectors.selectResults.projector(input)).toEqual(expected);
-      });
+    it('should map results to RowListGridData[] with imagePath and typeName', () => {
+      const input = [
+        { id: '1', name: 'A', type: { name: 'Invoice', id: 't1' } },
+        { id: '2', name: 'B', type: { name: 'Contract', id: 't2' } },
+      ] as any;
+
+      const result = selectors.selectResults.projector(input);
+
+      expect(result).toEqual([
+        {
+          imagePath: '',
+          id: '1',
+          name: 'A',
+          type: { name: 'Invoice', id: 't1' },
+          typeName: 'Invoice',
+        },
+        {
+          imagePath: '',
+          id: '2',
+          name: 'B',
+          type: { name: 'Contract', id: 't2' },
+          typeName: 'Contract',
+        },
+      ]);
+    });
+
+    it('should use item.id directly when id is an empty string', () => {
+      const input = [{ id: '', name: 'A' }] as any;
+
+      const result = selectors.selectResults.projector(input);
+
+      expect(result[0].id).toBe('');
+    });
+
+    it('should set typeName to undefined when type is not present', () => {
+      const input = [{ id: '1', name: 'A' }] as any;
+
+      const result = selectors.selectResults.projector(input);
+
+      expect(result[0]['typeName']).toBeUndefined();
     });
   });
 
-  it('selectDocumentSearchViewModel should combine all selector results', () => {
+  it('should combine all 12 selector results into DocumentSearchViewModel', () => {
     const columns = [
       { id: 'col1', nameKey: 'Col 1', columnType: ColumnType.STRING },
     ];
-    const searchCriteria = {
-      id: 1,
-      pageNumber: 1,
-      pageSize: 10,
-      changeMe: 'test',
-    };
-    const results = [
-      {
-        imagePath: '',
-        id: '1',
-        name: 'A',
-        description: 'desc',
-        vdb: 'vdb1',
-        vdbCollection: 'c1',
-      },
-    ];
+    const searchCriteria = { name: 'test' };
+    const results = [{ imagePath: '', id: '1', name: 'A' }] as any;
     const chartVisible = true;
+    const availableDocumentTypes = [{ label: 'Invoice', value: 't1' }];
+    const availableChannels = [{ label: 'Email', value: 'c1' }];
 
     const result = selectors.selectDocumentSearchViewModel.projector(
       columns,
@@ -93,8 +65,12 @@ describe('DocumentSearch selectors', () => {
       null,
       chartVisible,
       false,
-      true
+      true,
+      true,
+      availableDocumentTypes,
+      availableChannels
     );
+
     expect(result).toEqual({
       columns,
       searchCriteria,
@@ -105,6 +81,9 @@ describe('DocumentSearch selectors', () => {
       chartVisible,
       searchLoadingIndicator: false,
       searchExecuted: true,
+      criteriaOptionsLoaded: true,
+      availableDocumentTypes,
+      avilableChannels: availableChannels,
     });
   });
 });

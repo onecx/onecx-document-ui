@@ -1,5 +1,6 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,7 +11,10 @@ import { ofType } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { TranslateService } from '@ngx-translate/core';
-import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks';
+import {
+  provideAppStateServiceMock,
+  provideUserServiceMock,
+} from '@onecx/angular-integration-interface/mocks';
 import {
   BreadcrumbService,
   ColumnType,
@@ -21,7 +25,13 @@ import {
   UserService,
 } from '@onecx/portal-integration-angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { CalendarModule } from 'primeng/calendar';
 import { DialogService } from 'primeng/dynamicdialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TooltipModule } from 'primeng/tooltip';
+import { DocumentSearchCriteriaComponent } from './components/document-search-criteria/document-search-criteria.component';
 import { DocumentSearchActions } from './document-search.actions';
 import { documentSearchColumns } from './document-search.columns';
 import { DocumentSearchComponent } from './document-search.component';
@@ -73,7 +83,7 @@ describe('DocumentSearchComponent', () => {
   };
   const baseDocumentSearchViewModel: DocumentSearchViewModel = {
     columns: documentSearchColumns,
-    searchCriteria: { changeMe: '0' },
+    searchCriteria: { name: 'test' },
     searchExecuted: true,
     results: [],
     searchLoadingIndicator: false,
@@ -81,6 +91,9 @@ describe('DocumentSearchComponent', () => {
     resultComponentState: null,
     searchHeaderComponentState: null,
     chartVisible: false,
+    criteriaOptionsLoaded: false,
+    availableDocumentTypes: [],
+    avilableChannels: [],
   };
 
   beforeAll(() => {
@@ -101,7 +114,7 @@ describe('DocumentSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentSearchComponent],
+      declarations: [DocumentSearchComponent, DocumentSearchCriteriaComponent],
       imports: [
         PortalCoreModule,
         LetDirective,
@@ -111,11 +124,17 @@ describe('DocumentSearchComponent', () => {
           'en',
           require('./../../../../assets/i18n/en.json')
         ).withTranslations('de', require('./../../../../assets/i18n/de.json')),
-        HttpClientTestingModule,
         NoopAnimationsModule,
+        CalendarModule,
+        DropdownModule,
+        InputTextModule,
+        MultiSelectModule,
+        TooltipModule,
       ],
       providers: [
         DialogService,
+        provideHttpClient(),
+        provideHttpClientTesting(),
         provideMockStore({
           initialState: { document: { search: initialState } },
         }),
@@ -123,6 +142,7 @@ describe('DocumentSearchComponent', () => {
         providePortalDialogService(),
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         provideUserServiceMock(),
+        provideAppStateServiceMock(),
         {
           provide: HAS_PERMISSION_CHECKER,
           useExisting: UserService,
@@ -208,90 +228,19 @@ describe('DocumentSearchComponent', () => {
     expect(doneFn).toHaveBeenCalledTimes(1);
   });
 
-  it('should have 2 overFlow header actions when search config is disabled', async () => {
+  it('should have 1 overFlow header action', async () => {
     const searchHeader = await documentSearch.getHeader();
     const pageHeader = await searchHeader.getPageHeader();
     const overflowActionButton = await pageHeader.getOverflowActionMenuButton();
     await overflowActionButton?.click();
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems();
-    expect(overflowMenuItems.length).toBe(2);
+    expect(overflowMenuItems.length).toBe(1);
 
     const exportAllActionItem = await pageHeader.getOverFlowMenuItem(
       'Export all'
     );
     expect(await exportAllActionItem!.getText()).toBe('Export all');
-
-    const showHideChartActionItem = await pageHeader.getOverFlowMenuItem(
-      'Show chart'
-    );
-    expect(await showHideChartActionItem!.getText()).toBe('Show chart');
-  });
-
-  it('should display hide chart action if chart is visible', async () => {
-    store.overrideSelector(selectDocumentSearchViewModel, {
-      ...baseDocumentSearchViewModel,
-      chartVisible: true,
-    });
-    store.refreshState();
-
-    const searchHeader = await documentSearch.getHeader();
-    const pageHeader = await searchHeader.getPageHeader();
-    const overflowActionButton = await pageHeader.getOverflowActionMenuButton();
-    await overflowActionButton?.click();
-
-    const overflowMenuItems = await pageHeader.getOverFlowMenuItems();
-    expect(overflowMenuItems.length).toBe(2);
-
-    const showHideChartActionItem = await pageHeader.getOverFlowMenuItem(
-      'Hide chart'
-    );
-    expect(await showHideChartActionItem!.getText()).toEqual('Hide chart');
-  });
-
-  it('should display chosen column in the diagram', async () => {
-    component.diagramColumnId = 'changeMe';
-    store.overrideSelector(selectDocumentSearchViewModel, {
-      ...baseDocumentSearchViewModel,
-      chartVisible: true,
-      results: [
-        {
-          id: '1',
-          imagePath: '',
-          changeMe: 'val_1',
-        },
-        {
-          id: '2',
-          imagePath: '',
-          changeMe: 'val_2',
-        },
-        {
-          id: '3',
-          imagePath: '',
-          changeMe: 'val_2',
-        },
-      ],
-      columns: [
-        {
-          columnType: ColumnType.STRING,
-          id: 'changeMe',
-          nameKey: 'DOCUMENT_SEARCH.RESULTS.CHANGE_ME',
-          filterable: true,
-          sortable: true,
-          predefinedGroupKeys: [
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.DEFAULT',
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.EXTENDED',
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.FULL',
-          ],
-        },
-      ],
-    });
-    store.refreshState();
-
-    const diagram = await (await documentSearch.getDiagram())!.getDiagram();
-
-    expect(await diagram.getTotalNumberOfResults()).toBe(3);
-    expect(await diagram.getSumLabel()).toEqual('Total');
   });
 
   it('should display correct breadcrumbs', async () => {
@@ -364,159 +313,6 @@ describe('DocumentSearchComponent', () => {
     );
   });
 
-  it('should dispatch chartVisibilityToggled on show/hide chart header', async () => {
-    jest.spyOn(store, 'dispatch');
-
-    store.overrideSelector(selectDocumentSearchViewModel, {
-      ...baseDocumentSearchViewModel,
-      chartVisible: false,
-    });
-    store.refreshState();
-
-    const searchHeader = await documentSearch.getHeader();
-    const pageHeader = await searchHeader.getPageHeader();
-    const overflowActionButton = await pageHeader.getOverflowActionMenuButton();
-    await overflowActionButton?.click();
-
-    const showChartActionItem = await pageHeader.getOverFlowMenuItem(
-      'Show chart'
-    );
-    await showChartActionItem!.selectItem();
-    expect(store.dispatch).toHaveBeenCalledWith(
-      DocumentSearchActions.chartVisibilityToggled()
-    );
-  });
-
-  it('should display translated headers', async () => {
-    const searchHeader = await documentSearch.getHeader();
-    const pageHeader = await searchHeader.getPageHeader();
-    expect(await pageHeader.getHeaderText()).toEqual('Document Search');
-    expect(await pageHeader.getSubheaderText()).toEqual(
-      'Searching and displaying of Document'
-    );
-  });
-
-  it('should display translated empty message when no search results', async () => {
-    const columns = [
-      {
-        columnType: ColumnType.STRING,
-        id: 'changeMe',
-        nameKey: 'DOCUMENT_SEARCH.RESULTS.CHANGE_ME',
-        filterable: true,
-        sortable: true,
-        predefinedGroupKeys: [
-          'DOCUMENT_SEARCH.PREDEFINED_GROUP.DEFAULT',
-          'DOCUMENT_SEARCH.PREDEFINED_GROUP.EXTENDED',
-          'DOCUMENT_SEARCH.PREDEFINED_GROUP.FULL',
-        ],
-      },
-    ];
-    store.overrideSelector(selectDocumentSearchViewModel, {
-      ...baseDocumentSearchViewModel,
-      results: [],
-      columns: columns,
-      displayedColumns: columns,
-    });
-    store.refreshState();
-
-    const interactiveDataView = await documentSearch.getSearchResults();
-    const dataView = await interactiveDataView.getDataView();
-    const dataTable = await dataView.getDataListGrid();
-    const rows = await dataTable!.getActionButtons('list');
-    expect(rows.length).toBe(0);
-    expect(
-      fixture.debugElement.query(By.css('.p-dataview-emptymessage'))
-    ).toBeDefined();
-  });
-
-  it('should not display chart when no results or toggled to not visible', async () => {
-    component.diagramColumnId = 'changeMe';
-
-    store.overrideSelector(selectDocumentSearchViewModel, {
-      ...baseDocumentSearchViewModel,
-      results: [],
-      chartVisible: true,
-      columns: [
-        {
-          columnType: ColumnType.STRING,
-          id: 'changeMe',
-          nameKey: 'DOCUMENT_SEARCH.RESULTS.CHANGE_ME',
-          filterable: true,
-          sortable: true,
-          predefinedGroupKeys: [
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.DEFAULT',
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.EXTENDED',
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.FULL',
-          ],
-        },
-      ],
-    });
-    store.refreshState();
-
-    let diagram = await documentSearch.getDiagram();
-    expect(diagram).toBeNull();
-
-    store.overrideSelector(selectDocumentSearchViewModel, {
-      ...baseDocumentSearchViewModel,
-      results: [
-        {
-          id: '1',
-          imagePath: '',
-          changeMe: 'val_1',
-        },
-      ],
-      chartVisible: false,
-      columns: [
-        {
-          columnType: ColumnType.STRING,
-          id: 'changeMe',
-          nameKey: 'DOCUMENT_SEARCH.RESULTS.CHANGE_ME',
-          filterable: true,
-          sortable: true,
-          predefinedGroupKeys: [
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.DEFAULT',
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.EXTENDED',
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.FULL',
-          ],
-        },
-      ],
-    });
-    store.refreshState();
-
-    diagram = await documentSearch.getDiagram();
-    expect(diagram).toBeNull();
-
-    store.overrideSelector(selectDocumentSearchViewModel, {
-      ...baseDocumentSearchViewModel,
-      results: [
-        {
-          id: '1',
-          imagePath: '',
-          changeMe: 'val_1',
-        },
-      ],
-      chartVisible: true,
-      columns: [
-        {
-          columnType: ColumnType.STRING,
-          id: 'changeMe',
-          nameKey: 'DOCUMENT_SEARCH.RESULTS.CHANGE_ME',
-          filterable: true,
-          sortable: true,
-          predefinedGroupKeys: [
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.DEFAULT',
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.EXTENDED',
-            'DOCUMENT_SEARCH.PREDEFINED_GROUP.FULL',
-          ],
-        },
-      ],
-    });
-    store.refreshState();
-
-    diagram = await documentSearch.getDiagram();
-    expect(diagram).toBeTruthy();
-  });
-
   it('should export csv data on export action click', async () => {
     jest.spyOn(store, 'dispatch');
 
@@ -567,19 +363,14 @@ describe('DocumentSearchComponent', () => {
   describe('searchCriteria mapping', () => {
     const cases = [
       {
-        desc: 'should convert Date values to UTC and dispatch searchButtonClicked',
-        formValue: { changeMe: new Date(2024, 4, 15) },
-        expected: { changeMe: new Date(Date.UTC(2024, 4, 15)) },
+        desc: 'should pass through non-null string values unchanged',
+        formValue: { name: 'testName' },
+        expected: { name: 'testName' },
       },
       {
-        desc: 'should pass through non-date, non-empty values unchanged',
-        formValue: { changeMe: 'testName' },
-        expected: { changeMe: 'testName' },
-      },
-      {
-        desc: 'should set searchCriteria property to undefined for null values',
-        formValue: { changeMe: null },
-        expected: { changeMe: undefined },
+        desc: 'should strip null values from dispatched searchCriteria',
+        formValue: { name: null },
+        expected: { name: undefined },
       },
     ];
 
@@ -587,6 +378,9 @@ describe('DocumentSearchComponent', () => {
       it(desc, () => {
         jest.spyOn(store, 'dispatch');
 
+        component.criteriaComponent = {
+          calendars: { toArray: () => [] },
+        } as any;
         component.documentSearchFormGroup = {
           value: formValue,
           getRawValue: () => formValue,
@@ -619,11 +413,6 @@ describe('DocumentSearchComponent', () => {
           activeViewMode: 'basic' as 'basic',
           selectedSearchConfig: 'config1',
         },
-      },
-      {
-        method: 'diagramComponentStateChanged',
-        action: DocumentSearchActions.diagramComponentStateChanged,
-        payload: { label: 'Test Diagram' },
       },
     ];
 

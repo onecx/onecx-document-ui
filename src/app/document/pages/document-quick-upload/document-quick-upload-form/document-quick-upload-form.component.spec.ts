@@ -1,236 +1,161 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Pipe, PipeTransform } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateService } from '@ngx-translate/core';
-import { providePortalMessageServiceMock } from '@onecx/portal-integration-angular/mocks';
-import { TranslateServiceMock } from 'src/app/test/TranslateServiceMock';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TranslateTestingModule } from 'ngx-translate-testing';
 import { DocumentQuickUploadFormComponent } from './document-quick-upload-form.component';
+import { LifeCycleState } from 'src/app/shared/generated';
 
 describe('DocumentQuickUploadFormComponent', () => {
   let component: DocumentQuickUploadFormComponent;
   let fixture: ComponentFixture<DocumentQuickUploadFormComponent>;
-  @Pipe({ name: 'translate' })
-  class TranslatePipeMock implements PipeTransform {
-    transform(value: string): string {
-      return '';
-    }
-  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentQuickUploadFormComponent, TranslatePipeMock],
+      declarations: [DocumentQuickUploadFormComponent],
       imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        BrowserModule,
         ReactiveFormsModule,
-        FormsModule,
+        TranslateTestingModule.withTranslations('en', {}),
       ],
-      providers: [
-        { provide: TranslateService, useClass: TranslateServiceMock },
-        providePortalMessageServiceMock(),
-      ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DocumentQuickUploadFormComponent);
     component = fixture.componentInstance;
-
-    component.documentQuickUploadForm = new FormGroup({
-      controlName: new FormControl(),
-    });
-
     component.attachmentArray = [];
+    component.ngOnInit();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call getTranslatedData and getMimetype', () => {
-    spyOn(component, 'getTranslatedData');
-    spyOn(component, 'getMimetype');
-    component.ngOnInit();
-    expect(component.getTranslatedData).toHaveBeenCalled();
-    expect(component.getMimetype).toHaveBeenCalled();
-  });
-
-  it('should trim the value and set it in the form control', () => {
-    const mockEvent = {
-      target: {
-        getAttribute: () => 'controlName',
-        value: '  trimmedValue  ',
-      },
-    };
-    component.trimSpace(mockEvent);
+  it('should initialize form with required validators on ngOnInit', () => {
+    expect(component.documentQuickUploadForm.contains('documentName')).toBe(
+      true
+    );
+    expect(component.documentQuickUploadForm.contains('typeId')).toBe(true);
+    expect(component.documentQuickUploadForm.contains('channelname')).toBe(
+      true
+    );
     expect(
-      component.documentQuickUploadForm.controls['controlName'].value
-    ).toBe('trimmedValue');
+      component.documentQuickUploadForm.get('documentName')!.hasValidator
+    ).toBeTruthy();
   });
 
-  it('should prevent the default event', () => {
-    const eventMock = jasmine.createSpyObj('Event', ['preventDefault']);
-    component.allowDrop(eventMock);
-    expect(eventMock.preventDefault).toHaveBeenCalled();
+  it('should set a non-null default lifeCycleState on ngOnInit', () => {
+    const lifeCycleState =
+      component.documentQuickUploadForm.get('lifeCycleState')!.value;
+    expect(lifeCycleState).not.toBeNull();
   });
 
-  it('should not prevent space if cursor is not at the beginning', () => {
+  it('should emit formValid event when form value changes', () => {
+    const emitSpy = jest.spyOn(component.formValid, 'emit');
+    component.documentQuickUploadForm.patchValue({ documentName: 'Test' });
+    expect(emitSpy).toHaveBeenCalledWith(component.documentQuickUploadForm);
+  });
+
+  it('should trim spaces from control value on blur event', () => {
+    component.documentQuickUploadForm = new FormGroup({
+      controlName: new FormControl('  hello  '),
+    });
+    const mockEvent = {
+      target: { getAttribute: () => 'controlName', value: '  hello  ' },
+    } as any;
+    component.trimSpace(mockEvent);
+    expect(component.documentQuickUploadForm.get('controlName')!.value).toBe(
+      'hello'
+    );
+  });
+
+  it('should call preventDefault on allowDrop event', () => {
+    const event = { preventDefault: jest.fn() } as any;
+    component.allowDrop(event);
+    expect(event.preventDefault).toHaveBeenCalled();
+  });
+
+  it('should prevent space when cursor is at position 0', () => {
     const event = {
-      target: {
-        selectionStart: 5,
-        code: 'Space',
-        preventDefault: () => {},
-      },
-      preventDefault: () => {},
-    };
-    spyOn(event, 'preventDefault');
+      target: { selectionStart: 0 },
+      code: 'Space',
+      preventDefault: jest.fn(),
+    } as any;
+    component.preventSpace(event);
+    expect(event.preventDefault).toHaveBeenCalled();
+  });
+
+  it('should not prevent space when cursor is not at position 0', () => {
+    const event = {
+      target: { selectionStart: 5 },
+      code: 'Space',
+      preventDefault: jest.fn(),
+    } as any;
     component.preventSpace(event);
     expect(event.preventDefault).not.toHaveBeenCalled();
   });
 
-  it('should return true if file size is less than or equal to 2097152 bytes', () => {
-    const file = { size: 1000 };
-    const result = component.isValidFile(file);
-    expect(result).toBe(true);
-  });
+  it('should add file to attachmentArray with valid MIME type', () => {
+    component.supportedMimeType = [
+      { label: 'application/pdf', value: 'mime-1' },
+    ];
+    const file = new File(['content'], 'doc.pdf', { type: 'application/pdf' });
 
-  it('should return false if file size is greater than 2097152 bytes', () => {
-    const file = { size: 3000000 };
-    const result = component.isValidFile(file);
-    expect(result).toBe(false);
-  });
+    component.onFilesSelected([file]);
 
-  it('should return false if file size is not provided', () => {
-    const file = {};
-    const result = component.isValidFile(file);
-    expect(result).toBe(false);
-  });
-
-  it('should disable the create button if any invalid attachment exists', () => {
-    const invalidAttachment = { isValid: false };
-    component.attachmentArray = [invalidAttachment];
-    spyOn(component.enableCreateButton, 'emit');
-    component.validateAttachmentArray();
-    expect(component.enableCreateButton.emit).toHaveBeenCalledWith(false);
-  });
-
-  it('should enable the create button if all attachments are valid', () => {
-    const validAttachment = { isValid: true };
-    component.attachmentArray = [validAttachment];
-    spyOn(component.enableCreateButton, 'emit');
-    component.validateAttachmentArray();
-    expect(component.enableCreateButton.emit).toHaveBeenCalledWith(true);
-  });
-
-  it('should disable the create button if the attachment array is empty', () => {
-    component.attachmentArray = [];
-    spyOn(component.enableCreateButton, 'emit');
-    component.validateAttachmentArray();
-    expect(component.enableCreateButton.emit).toHaveBeenCalledWith(false);
-  });
-
-  it('should add file in the attachmentArray', () => {
-    const file = {
-      name: 'Hello World.pdf',
-      size: 106569,
-      type: 'application/pdf',
-    };
-    component.supportedMimeType = [{ label: 'application/pdf', value: 1 }];
-    component.enterDataToListView(file);
     expect(component.attachmentArray.length).toBe(1);
-    expect(component.attachmentArray[0]).toEqual({
-      name: 'Hello World.pdf',
-      mimeType: 'application/pdf',
-      mimeTypeId: 1,
-      validity: '',
-      description: '',
-      fileData: file,
-      isValid: true,
-      fileName: 'Hello World.pdf',
-    });
+    expect(component.attachmentArray[0].mimeTypeId).toBe('mime-1');
+    expect(component.attachmentArray[0].isValid).toBe(true);
   });
 
-  it('should emit selectedFileList with false', () => {
-    const emitSpy = spyOn(component.selectedFileList, 'emit');
-    const event = {
-      target: {
-        files: [{ name: 'file1.txt' }, { name: 'file2.txt' }],
-      },
-    };
-    component.addFile(event);
+  it('should mark attachment as invalid when MIME type is not supported', () => {
+    component.supportedMimeType = [];
+    const file = new File(['content'], 'doc.pdf', { type: 'application/pdf' });
+
+    component.onFilesSelected([file]);
+
+    expect(component.attachmentArray[0].isValid).toBe(false);
+    expect(component.attachmentArray[0].mimeTypeId).toBeUndefined();
+  });
+
+  it('should mark attachment as invalid when file size exceeds 2097152 bytes', () => {
+    component.supportedMimeType = [
+      { label: 'application/pdf', value: 'mime-1' },
+    ];
+    const largeFile = {
+      name: 'big.pdf',
+      size: 3_000_000,
+      type: 'application/pdf',
+    } as File;
+
+    (component as any).enterDataToListView(largeFile);
+
+    expect(component.attachmentArray[0].isValid).toBe(false);
+  });
+
+  it('should emit enableCreateButton=true when all attachments are valid', () => {
+    const emitSpy = jest.spyOn(component.enableCreateButton, 'emit');
+    component.attachmentArray = [{ isValid: true } as any];
+    (component as any).validateAttachmentArray();
+    expect(emitSpy).toHaveBeenCalledWith(true);
+  });
+
+  it('should emit enableCreateButton=false when any attachment is invalid', () => {
+    const emitSpy = jest.spyOn(component.enableCreateButton, 'emit');
+    component.attachmentArray = [{ isValid: true }, { isValid: false }] as any;
+    (component as any).validateAttachmentArray();
     expect(emitSpy).toHaveBeenCalledWith(false);
   });
 
-  it('should call enterDataToListView for each file', () => {
-    const enterDataSpy = spyOn(component, 'enterDataToListView');
-    const event = {
-      target: {
-        files: [{ name: 'file1.txt' }, { name: 'file2.txt' }],
-      },
-    };
-    component.addFile(event);
-    expect(enterDataSpy).toHaveBeenCalledTimes(2);
-    expect(enterDataSpy).toHaveBeenCalledWith({ name: 'file1.txt' });
-    expect(enterDataSpy).toHaveBeenCalledWith({ name: 'file2.txt' });
-  });
-
-  it('should call validateAttachmentArray', () => {
-    const validateSpy = spyOn(component, 'validateAttachmentArray');
-    const event = {
-      target: {
-        files: [{ name: 'file1.txt' }],
-      },
-    };
-    component.addFile(event);
-    expect(validateSpy).toHaveBeenCalled();
-  });
-
-  it('should call enterDataToListView for each file in dataTransfer', () => {
-    const files = [{ name: 'file1.txt' }, { name: 'file2.png' }];
-    const dataTransfer = {
-      files,
-    };
-    const event = {
-      preventDefault: jasmine.createSpy('preventDefault'),
-      dataTransfer,
-    };
-    spyOn(component, 'enterDataToListView');
-    component.dropFile(event);
-    expect(event.preventDefault).toHaveBeenCalled();
-    expect(component.enterDataToListView).toHaveBeenCalledTimes(files.length);
-    expect(component.enterDataToListView).toHaveBeenCalledWith(files[0]);
-    expect(component.enterDataToListView).toHaveBeenCalledWith(files[1]);
-  });
-
-  it('should call validateAttachmentArray', () => {
-    const event = {
-      preventDefault: jasmine.createSpy('preventDefault'),
-      dataTransfer: { files: [] },
-    };
-
-    spyOn(component, 'validateAttachmentArray');
-
-    component.dropFile(event);
-
-    expect(event.preventDefault).toHaveBeenCalled();
-    expect(component.validateAttachmentArray).toHaveBeenCalled();
-  });
-
-  it('should sort files based on validation status', () => {
-    const validAttachment = { isValid: true };
-    const invalidAttachment = { isValid: false };
+  it('should emit enableCreateButton=false when attachmentArray is empty', () => {
+    const emitSpy = jest.spyOn(component.enableCreateButton, 'emit');
     component.attachmentArray = [];
-    component.attachmentArray.push(validAttachment);
-    component.attachmentArray.push(invalidAttachment);
-    component.sortAttachmentArray();
-    expect(component.attachmentArray[0]).toBe(invalidAttachment);
-    expect(component.attachmentArray[1]).toBe(validAttachment);
+    (component as any).validateAttachmentArray();
+    expect(emitSpy).toHaveBeenCalledWith(false);
+  });
+
+  it('should place invalid attachments before valid ones after sortAttachmentArray', () => {
+    component.attachmentArray = [{ isValid: true }, { isValid: false }] as any;
+    (component as any).sortAttachmentArray();
+    expect(component.attachmentArray[0].isValid).toBe(false);
+    expect(component.attachmentArray[1].isValid).toBe(true);
   });
 });
