@@ -66,6 +66,23 @@ describe('FileUploadComponent', () => {
       expect(emittedSingle).toHaveLength(0);
       expect(emittedMultiple).toHaveLength(0);
     });
+
+    it('should not emit when dataTransfer is null on drop event', () => {
+      const emittedSingle: File[] = [];
+      const emittedMultiple: File[][] = [];
+      component.fileSelected.subscribe((f) => emittedSingle.push(f));
+      component.filesSelected.subscribe((f) => emittedMultiple.push(f));
+
+      const event = {
+        preventDefault: jest.fn(),
+        dataTransfer: null,
+      } as any;
+
+      component.onDrop(event);
+
+      expect(emittedSingle).toHaveLength(0);
+      expect(emittedMultiple).toHaveLength(0);
+    });
   });
 
   describe('onFileInputChange', () => {

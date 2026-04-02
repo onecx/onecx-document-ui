@@ -15,7 +15,9 @@ describe('DocumentCreateAttachmentsComponent', () => {
 
   describe('ngOnInit', () => {
     it('should initialize attachmentForms from input attachments', () => {
-      const file = new File(['content'], 'doc.pdf', { type: 'application/pdf' });
+      const file = new File(['content'], 'doc.pdf', {
+        type: 'application/pdf',
+      });
       component.attachments = [
         {
           name: 'doc.pdf',
@@ -30,11 +32,15 @@ describe('DocumentCreateAttachmentsComponent', () => {
       component.ngOnInit();
 
       expect(component.attachmentForms.length).toBe(1);
-      expect(component.attachmentForms.at(0).controls.name.value).toBe('doc.pdf');
+      expect(component.attachmentForms.at(0).controls.name.value).toBe(
+        'doc.pdf'
+      );
     });
 
     it('should add files to the files array during init', () => {
-      const file = new File(['content'], 'doc.pdf', { type: 'application/pdf' });
+      const file = new File(['content'], 'doc.pdf', {
+        type: 'application/pdf',
+      });
       component.attachments = [
         {
           name: 'doc.pdf',
@@ -61,7 +67,9 @@ describe('DocumentCreateAttachmentsComponent', () => {
 
       expect(component.attachmentForms.length).toBe(1);
       expect(component.files).toHaveLength(1);
-      expect(component.attachmentForms.at(0).controls.mimeTypeId.value).toBe('mime-png');
+      expect(component.attachmentForms.at(0).controls.mimeTypeId.value).toBe(
+        'mime-png'
+      );
     });
 
     it('should emit attachmentMimeTypeNotSupported when MIME type is not found', () => {
@@ -94,9 +102,7 @@ describe('DocumentCreateAttachmentsComponent', () => {
       component.onFileSelected(
         new File(['c'], 'a.pdf', { type: 'application/pdf' })
       );
-      component.onFileSelected(
-        new File(['c'], 'b.png', { type: 'image/png' })
-      );
+      component.onFileSelected(new File(['c'], 'b.png', { type: 'image/png' }));
     });
 
     it('should remove form entry and file at given index', () => {
@@ -127,7 +133,9 @@ describe('DocumentCreateAttachmentsComponent', () => {
     it('should emit back with current attachment drafts', () => {
       const emitted: any[] = [];
       component.back.subscribe((v) => emitted.push(v));
-      const file = new File(['content'], 'doc.pdf', { type: 'application/pdf' });
+      const file = new File(['content'], 'doc.pdf', {
+        type: 'application/pdf',
+      });
       component.onFileSelected(file);
 
       component.onBack();
@@ -141,7 +149,9 @@ describe('DocumentCreateAttachmentsComponent', () => {
     it('should emit next with drafts when form is valid and has attachments', () => {
       const emitted: any[] = [];
       component.next.subscribe((v) => emitted.push(v));
-      const file = new File(['content'], 'doc.pdf', { type: 'application/pdf' });
+      const file = new File(['content'], 'doc.pdf', {
+        type: 'application/pdf',
+      });
       component.onFileSelected(file);
 
       component.onNext();
@@ -165,7 +175,9 @@ describe('DocumentCreateAttachmentsComponent', () => {
     });
 
     it('should return true when all forms are valid and non-empty', () => {
-      const file = new File(['content'], 'doc.pdf', { type: 'application/pdf' });
+      const file = new File(['content'], 'doc.pdf', {
+        type: 'application/pdf',
+      });
       component.onFileSelected(file);
       component.attachmentForms.at(0).controls.name.setValue('Test Doc');
 
@@ -183,6 +195,26 @@ describe('DocumentCreateAttachmentsComponent', () => {
 
     it('should return null when attachmentForms is empty', () => {
       expect(component.selectedForm).toBeNull();
+    });
+  });
+
+  describe('isFieldInvalid', () => {
+    it('should return false when control is valid', () => {
+      const file = new File(['c'], 'a.pdf', { type: 'application/pdf' });
+      component.onFileSelected(file);
+      const form = component.attachmentForms.at(0);
+      form.controls.name.setValue('Some Name');
+      form.controls.name.markAsTouched();
+
+      expect(component.isFieldInvalid(form, 'name')).toBe(false);
+    });
+
+    it('should return false when control does not exist', () => {
+      const file = new File(['c'], 'a.pdf', { type: 'application/pdf' });
+      component.onFileSelected(file);
+      const form = component.attachmentForms.at(0);
+
+      expect(component.isFieldInvalid(form, 'nonExistentField')).toBe(false);
     });
   });
 });

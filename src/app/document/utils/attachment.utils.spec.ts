@@ -1,5 +1,9 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { formatBytes, noSpecialCharacters, trimSpaces } from './attachment.utils';
+import {
+  formatBytes,
+  noSpecialCharacters,
+  trimSpaces,
+} from './attachment.utils';
 
 describe('attachment.utils', () => {
   describe('trimSpaces', () => {
@@ -156,5 +160,18 @@ describe('attachment.utils', () => {
       const control = new FormControl('bad|name');
       expect(noSpecialCharacters(control)).toEqual({ hasSpecialChars: true });
     });
+  });
+});
+
+describe('trimSpaces – clipboardData null branch', () => {
+  it('should return form unchanged when clipboardData is null', () => {
+    const form = new FormGroup({ documentName: new FormControl('existing') });
+    const event = { clipboardData: null, preventDefault: jest.fn() } as any;
+
+    const result = trimSpaces(event, 'documentName', form);
+
+    expect(result).toBe(form);
+    expect(form.controls['documentName'].value).toBe('existing');
+    expect(event.preventDefault).not.toHaveBeenCalled();
   });
 });

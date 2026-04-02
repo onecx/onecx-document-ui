@@ -1,5 +1,10 @@
 import { ColumnType } from '@onecx/angular-accelerator';
+import { TestBed } from '@angular/core/testing';
+import { Store, StoreModule } from '@ngrx/store';
+import { take } from 'rxjs/operators';
+import { documentFeature } from '../../document.reducers';
 import * as selectors from './document-search.selectors';
+import { initialState } from './document-search.reducers';
 
 describe('DocumentSearch selectors', () => {
   describe('selectResults projector', () => {
@@ -149,6 +154,29 @@ describe('DocumentSearch selectors', () => {
 
       expect(result.availableDocumentTypes).toEqual([]);
       expect(result.avilableChannels).toEqual([]);
+    });
+  });
+
+  describe('internal selectDocumentTypes and selectChannels via full store chain', () => {
+    it('should execute internal type and channel mapping projectors via real store', (done) => {
+      TestBed.configureTestingModule({
+        imports: [
+          StoreModule.forRoot({}),
+          StoreModule.forFeature(documentFeature),
+        ],
+      });
+      const store = TestBed.inject(Store);
+
+      // Running store.select(selectDocumentSearchViewModel) chains through
+      // selectDocumentTypes and selectChannels internal selectors
+      store
+        .select(selectors.selectDocumentSearchViewModel)
+        .pipe(take(1))
+        .subscribe((vm) => {
+          expect(Array.isArray(vm.availableDocumentTypes)).toBe(true);
+          expect(Array.isArray(vm.avilableChannels)).toBe(true);
+          done();
+        });
     });
   });
 });

@@ -5,9 +5,7 @@ import { routerNavigatedAction } from '@ngrx/router-store';
 import { Action, Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { AppStateService } from '@onecx/angular-integration-interface';
-import {
-  provideAppStateServiceMock,
-} from '@onecx/angular-integration-interface/mocks';
+import { provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks';
 import { of, ReplaySubject, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
 import {
@@ -76,12 +74,14 @@ describe('DocumentCreateOperationsEffects', () => {
 
   describe('loadReferenceDataOnRouteEnter$', () => {
     it('should dispatch ensureReferenceDataLoaded when navigating to quick-upload', (done) => {
-      effects.loadReferenceDataOnRouteEnter$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(
-          DocumentCreateOperationsActions.ensureReferenceDataLoaded()
-        );
-        done();
-      });
+      effects.loadReferenceDataOnRouteEnter$
+        .pipe(take(1))
+        .subscribe((action) => {
+          expect(action).toEqual(
+            DocumentCreateOperationsActions.ensureReferenceDataLoaded()
+          );
+          done();
+        });
 
       actions$.next({
         type: routerNavigatedAction.type,
@@ -90,16 +90,20 @@ describe('DocumentCreateOperationsEffects', () => {
     });
 
     it('should dispatch ensureReferenceDataLoaded when navigating to create-document', (done) => {
-      effects.loadReferenceDataOnRouteEnter$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(
-          DocumentCreateOperationsActions.ensureReferenceDataLoaded()
-        );
-        done();
-      });
+      effects.loadReferenceDataOnRouteEnter$
+        .pipe(take(1))
+        .subscribe((action) => {
+          expect(action).toEqual(
+            DocumentCreateOperationsActions.ensureReferenceDataLoaded()
+          );
+          done();
+        });
 
       actions$.next({
         type: routerNavigatedAction.type,
-        payload: { routerState: { url: '/document-management/create-document' } },
+        payload: {
+          routerState: { url: '/document-management/create-document' },
+        },
       } as any);
     });
 
@@ -128,8 +132,14 @@ describe('DocumentCreateOperationsEffects', () => {
       documentTypeService.getAllTypesOfDocument.mockReturnValue(of(types));
       mimeTypeService.getAllSupportedMimeTypes.mockReturnValue(of(mimeTypes));
 
-      store.overrideSelector(documentQuickUploadSelectors.selectAvailableDocumentTypes, []);
-      store.overrideSelector(documentQuickUploadSelectors.selectAvailableMimeTypes, []);
+      store.overrideSelector(
+        documentQuickUploadSelectors.selectAvailableDocumentTypes,
+        []
+      );
+      store.overrideSelector(
+        documentQuickUploadSelectors.selectAvailableMimeTypes,
+        []
+      );
       store.refreshState();
 
       const dispatched: Action[] = [];
@@ -137,16 +147,22 @@ describe('DocumentCreateOperationsEffects', () => {
         next: (a) => dispatched.push(a),
         complete: () => {
           expect(dispatched).toContainEqual(
-            DocumentCreateOperationsActions.availableDocumentTypesReceived({ types })
+            DocumentCreateOperationsActions.availableDocumentTypesReceived({
+              types,
+            })
           );
           expect(dispatched).toContainEqual(
-            DocumentCreateOperationsActions.availableMimeTypesReceived({ mimeTypes })
+            DocumentCreateOperationsActions.availableMimeTypesReceived({
+              mimeTypes,
+            })
           );
           done();
         },
       });
 
-      actions$.next(DocumentCreateOperationsActions.ensureReferenceDataLoaded());
+      actions$.next(
+        DocumentCreateOperationsActions.ensureReferenceDataLoaded()
+      );
     });
 
     it('should use cached types from store and only fetch mimeTypes', (done) => {
@@ -154,32 +170,52 @@ describe('DocumentCreateOperationsEffects', () => {
       const mimeTypes = [{ id: 'm1' }] as any;
       mimeTypeService.getAllSupportedMimeTypes.mockReturnValue(of(mimeTypes));
 
-      store.overrideSelector(documentQuickUploadSelectors.selectAvailableDocumentTypes, cachedTypes);
-      store.overrideSelector(documentQuickUploadSelectors.selectAvailableMimeTypes, []);
+      store.overrideSelector(
+        documentQuickUploadSelectors.selectAvailableDocumentTypes,
+        cachedTypes
+      );
+      store.overrideSelector(
+        documentQuickUploadSelectors.selectAvailableMimeTypes,
+        []
+      );
       store.refreshState();
 
       const dispatched: Action[] = [];
       effects.ensureReferenceDataLoaded$.pipe(take(2)).subscribe({
         next: (a) => dispatched.push(a),
         complete: () => {
-          expect(documentTypeService.getAllTypesOfDocument).not.toHaveBeenCalled();
+          expect(
+            documentTypeService.getAllTypesOfDocument
+          ).not.toHaveBeenCalled();
           expect(dispatched).toContainEqual(
-            DocumentCreateOperationsActions.availableDocumentTypesReceived({ types: cachedTypes })
+            DocumentCreateOperationsActions.availableDocumentTypesReceived({
+              types: cachedTypes,
+            })
           );
           done();
         },
       });
 
-      actions$.next(DocumentCreateOperationsActions.ensureReferenceDataLoaded());
+      actions$.next(
+        DocumentCreateOperationsActions.ensureReferenceDataLoaded()
+      );
     });
 
     it('should dispatch loadReferenceDataFailed on API error', (done) => {
       const error = new Error('Network failure');
-      documentTypeService.getAllTypesOfDocument.mockReturnValue(throwError(() => error));
+      documentTypeService.getAllTypesOfDocument.mockReturnValue(
+        throwError(() => error)
+      );
       mimeTypeService.getAllSupportedMimeTypes.mockReturnValue(of([]) as any);
 
-      store.overrideSelector(documentQuickUploadSelectors.selectAvailableDocumentTypes, []);
-      store.overrideSelector(documentQuickUploadSelectors.selectAvailableMimeTypes, []);
+      store.overrideSelector(
+        documentQuickUploadSelectors.selectAvailableDocumentTypes,
+        []
+      );
+      store.overrideSelector(
+        documentQuickUploadSelectors.selectAvailableMimeTypes,
+        []
+      );
       store.refreshState();
 
       effects.ensureReferenceDataLoaded$.pipe(take(1)).subscribe((action) => {
@@ -191,7 +227,45 @@ describe('DocumentCreateOperationsEffects', () => {
         done();
       });
 
-      actions$.next(DocumentCreateOperationsActions.ensureReferenceDataLoaded());
+      actions$.next(
+        DocumentCreateOperationsActions.ensureReferenceDataLoaded()
+      );
+    });
+
+    it('should use cached mimeTypes from store and only fetch documentTypes', (done) => {
+      const types = [{ id: 't1' }] as any;
+      const cachedMimeTypes = [{ id: 'm1' }] as any;
+      documentTypeService.getAllTypesOfDocument.mockReturnValue(of(types));
+
+      store.overrideSelector(
+        documentQuickUploadSelectors.selectAvailableDocumentTypes,
+        []
+      );
+      store.overrideSelector(
+        documentQuickUploadSelectors.selectAvailableMimeTypes,
+        cachedMimeTypes
+      );
+      store.refreshState();
+
+      const dispatched: Action[] = [];
+      effects.ensureReferenceDataLoaded$.pipe(take(2)).subscribe({
+        next: (a) => dispatched.push(a),
+        complete: () => {
+          expect(
+            mimeTypeService.getAllSupportedMimeTypes
+          ).not.toHaveBeenCalled();
+          expect(dispatched).toContainEqual(
+            DocumentCreateOperationsActions.availableMimeTypesReceived({
+              mimeTypes: cachedMimeTypes,
+            })
+          );
+          done();
+        },
+      });
+
+      actions$.next(
+        DocumentCreateOperationsActions.ensureReferenceDataLoaded()
+      );
     });
   });
 
@@ -220,7 +294,9 @@ describe('DocumentCreateOperationsEffects', () => {
     });
 
     it('should dispatch documentCreationFailed when createDocument fails', (done) => {
-      documentService.createDocument.mockReturnValue(throwError(() => new Error('API error')));
+      documentService.createDocument.mockReturnValue(
+        throwError(() => new Error('API error'))
+      );
 
       effects.startDocumentCreation$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
@@ -246,13 +322,15 @@ describe('DocumentCreateOperationsEffects', () => {
       } as any;
       const files = [{ file: new File([], 'file.pdf'), fileName: 'file.pdf' }];
 
-      effects.documentCreatedSuccesfully$.pipe(take(1)).subscribe((action: any) => {
-        expect(action.type).toBe(
-          DocumentCreateOperationsActions.requestDocumentUploadUrls.type
-        );
-        expect(action.files[0].attachmentId).toBe('att-1');
-        done();
-      });
+      effects.documentCreatedSuccesfully$
+        .pipe(take(1))
+        .subscribe((action: any) => {
+          expect(action.type).toBe(
+            DocumentCreateOperationsActions.requestDocumentUploadUrls.type
+          );
+          expect(action.files[0].attachmentId).toBe('att-1');
+          done();
+        });
 
       actions$.next(
         DocumentCreateOperationsActions.documentCreatedSuccesfully({
@@ -266,17 +344,23 @@ describe('DocumentCreateOperationsEffects', () => {
   describe('requestDocumentUploadUrls$', () => {
     it('should dispatch uploadAttachment for each presigned URL response', (done) => {
       const file = new File(['content'], 'file.pdf');
-      const presignedResponses = [{ attachmentId: 'att-1', url: 'https://upload.url/1' }];
-      documentService.uploadAllFiles.mockReturnValue(of(presignedResponses) as any);
+      const presignedResponses = [
+        { attachmentId: 'att-1', url: 'https://upload.url/1' },
+      ];
+      documentService.uploadAllFiles.mockReturnValue(
+        of(presignedResponses) as any
+      );
 
-      effects.requestDocumentUploadUrls$.pipe(take(1)).subscribe((action: any) => {
-        expect(action.type).toBe(
-          DocumentCreateOperationsActions.uploadAttachment.type
-        );
-        expect(action.attachmentId).toBe('att-1');
-        expect(action.presignedUrl).toBe('https://upload.url/1');
-        done();
-      });
+      effects.requestDocumentUploadUrls$
+        .pipe(take(1))
+        .subscribe((action: any) => {
+          expect(action.type).toBe(
+            DocumentCreateOperationsActions.uploadAttachment.type
+          );
+          expect(action.attachmentId).toBe('att-1');
+          expect(action.presignedUrl).toBe('https://upload.url/1');
+          done();
+        });
 
       actions$.next(
         DocumentCreateOperationsActions.requestDocumentUploadUrls({
@@ -401,7 +485,9 @@ describe('DocumentCreateOperationsEffects', () => {
 
   describe('allAttachmentsUploaded$', () => {
     it('should dispatch documentCreationCompleted when metadata update succeeds', (done) => {
-      documentService.updateAttachmentsMetadata.mockReturnValue(of(null as any));
+      documentService.updateAttachmentsMetadata.mockReturnValue(
+        of(null as any)
+      );
 
       effects.allAttachmentsUploaded$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
@@ -422,14 +508,17 @@ describe('DocumentCreateOperationsEffects', () => {
     });
 
     it('should call createFailedAttachmentsAuditLogs when there are failed IDs', (done) => {
-      documentService.updateAttachmentsMetadata.mockReturnValue(of(null as any));
-      documentService.createFailedAttachmentsAuditLogs.mockReturnValue(of(null as any));
+      documentService.updateAttachmentsMetadata.mockReturnValue(
+        of(null as any)
+      );
+      documentService.createFailedAttachmentsAuditLogs.mockReturnValue(
+        of(null as any)
+      );
 
       effects.allAttachmentsUploaded$.pipe(take(1)).subscribe(() => {
-        expect(documentService.createFailedAttachmentsAuditLogs).toHaveBeenCalledWith(
-          'doc-1',
-          [{ attachmentId: 'att-fail' }]
-        );
+        expect(
+          documentService.createFailedAttachmentsAuditLogs
+        ).toHaveBeenCalledWith('doc-1', [{ attachmentId: 'att-fail' }]);
         done();
       });
 
@@ -443,10 +532,14 @@ describe('DocumentCreateOperationsEffects', () => {
     });
 
     it('should skip metadata update when no successful IDs and dispatch completed', (done) => {
-      documentService.createFailedAttachmentsAuditLogs.mockReturnValue(of(null as any));
+      documentService.createFailedAttachmentsAuditLogs.mockReturnValue(
+        of(null as any)
+      );
 
       effects.allAttachmentsUploaded$.pipe(take(1)).subscribe((action) => {
-        expect(documentService.updateAttachmentsMetadata).not.toHaveBeenCalled();
+        expect(
+          documentService.updateAttachmentsMetadata
+        ).not.toHaveBeenCalled();
         expect(action.type).toBe(
           DocumentCreateOperationsActions.documentCreationCompleted.type
         );
@@ -489,7 +582,9 @@ describe('DocumentCreateOperationsEffects', () => {
   describe('navigateToDetails$', () => {
     it('should navigate to document details after documentCreationCompleted', (done) => {
       const router = TestBed.inject(Router);
-      const navigateSpy = jest.spyOn(router, 'navigate').mockResolvedValue(true);
+      const navigateSpy = jest
+        .spyOn(router, 'navigate')
+        .mockResolvedValue(true);
 
       (appStateService.currentMfe$ as any).publish({ baseHref: '/app' });
 
@@ -501,7 +596,9 @@ describe('DocumentCreateOperationsEffects', () => {
       });
 
       actions$.next(
-        DocumentCreateOperationsActions.documentCreationCompleted({ documentId: 'doc-1' })
+        DocumentCreateOperationsActions.documentCreationCompleted({
+          documentId: 'doc-1',
+        })
       );
     });
   });

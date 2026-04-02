@@ -111,7 +111,9 @@ describe('DocumentCreateReducer', () => {
 
   describe('attachmentsStepPatched', () => {
     it('should replace attachments array', () => {
-      const attachments = [{ fileName: 'a.pdf', file: new File([], 'a.pdf') }] as any;
+      const attachments = [
+        { fileName: 'a.pdf', file: new File([], 'a.pdf') },
+      ] as any;
       const state = reducers.documentCreateReducer(
         reducers.initialState,
         DocumentCreateActions.attachmentsStepPatched({ attachments })
@@ -156,7 +158,9 @@ describe('DocumentCreateReducer', () => {
     it('should set error message', () => {
       const state = reducers.documentCreateReducer(
         reducers.initialState,
-        DocumentCreateActions.stepValidationFailed({ error: 'VALIDATION_ERROR' })
+        DocumentCreateActions.stepValidationFailed({
+          error: 'VALIDATION_ERROR',
+        })
       );
       expect(state.error).toBe('VALIDATION_ERROR');
     });
@@ -198,7 +202,9 @@ describe('DocumentCreateReducer', () => {
       const types = [{ id: 't1', name: 'Invoice' }] as any;
       const state = reducers.documentCreateReducer(
         preState,
-        DocumentCreateOperationsActions.availableDocumentTypesReceived({ types })
+        DocumentCreateOperationsActions.availableDocumentTypesReceived({
+          types,
+        })
       );
       expect(state.availableDocumentTypes).toEqual(types);
       expect(state.referenceDataLoaded).toBe(true);
@@ -209,7 +215,9 @@ describe('DocumentCreateReducer', () => {
       const types = [{ id: 't1' }] as any;
       const state = reducers.documentCreateReducer(
         reducers.initialState,
-        DocumentCreateOperationsActions.availableDocumentTypesReceived({ types })
+        DocumentCreateOperationsActions.availableDocumentTypesReceived({
+          types,
+        })
       );
       expect(state.referenceDataLoading).toBe(true);
       expect(state.referenceDataLoaded).toBe(false);
@@ -225,7 +233,9 @@ describe('DocumentCreateReducer', () => {
       const mimeTypes = [{ id: 'm1', name: 'application/pdf' }] as any;
       const state = reducers.documentCreateReducer(
         preState,
-        DocumentCreateOperationsActions.availableMimeTypesReceived({ mimeTypes })
+        DocumentCreateOperationsActions.availableMimeTypesReceived({
+          mimeTypes,
+        })
       );
       expect(state.availableMimeTypes).toEqual(mimeTypes);
       expect(state.referenceDataLoaded).toBe(true);
@@ -249,9 +259,13 @@ describe('DocumentCreateReducer', () => {
 
   describe('documentCreationCompleted / documentCreationFailed / documentCreationFinalStepFailed', () => {
     const actions = [
-      DocumentCreateOperationsActions.documentCreationCompleted({ documentId: '1' }),
+      DocumentCreateOperationsActions.documentCreationCompleted({
+        documentId: '1',
+      }),
       DocumentCreateOperationsActions.documentCreationFailed(),
-      DocumentCreateOperationsActions.documentCreationFinalStepFailed({ documentId: '1' }),
+      DocumentCreateOperationsActions.documentCreationFinalStepFailed({
+        documentId: '1',
+      }),
     ];
 
     actions.forEach((action) => {
@@ -260,6 +274,17 @@ describe('DocumentCreateReducer', () => {
         const state = reducers.documentCreateReducer(preState, action);
         expect(state.submitting).toBe(false);
       });
+    });
+  });
+
+  describe('ensureReferenceDataLoaded', () => {
+    it('should set referenceDataLoading=false when referenceDataLoaded is already true', () => {
+      const preState = { ...reducers.initialState, referenceDataLoaded: true };
+      const state = reducers.documentCreateReducer(
+        preState,
+        DocumentCreateOperationsActions.ensureReferenceDataLoaded()
+      );
+      expect(state.referenceDataLoading).toBe(false);
     });
   });
 });

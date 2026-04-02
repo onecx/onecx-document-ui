@@ -310,4 +310,60 @@ describe('DocumentDetailsComponent', () => {
     });
   });
   // <<SPEC-EXTENSIONS-MARKER-!!!-DO-NOT-REMOVE-!!!>>
+
+  describe('headerActions$ callbacks', () => {
+    it('should call edit() when edit action callback is invoked', (done) => {
+      jest.spyOn(store, 'dispatch');
+      component.headerActions$.subscribe((actions) => {
+        const editAction = actions.find((a) => a.labelKey?.includes('EDIT'));
+        editAction?.actionCallback!();
+        expect(store.dispatch).toHaveBeenCalledWith(
+          DocumentDetailsActions.editButtonClicked()
+        );
+        done();
+      });
+    });
+
+    it('should call cancel() when cancel action callback is invoked', (done) => {
+      jest.spyOn(store, 'dispatch');
+      component.headerActions$.subscribe((actions) => {
+        const cancelAction = actions.find((a) =>
+          a.labelKey?.includes('CANCEL')
+        );
+        cancelAction?.actionCallback!();
+        expect(store.dispatch).toHaveBeenCalledWith(
+          DocumentDetailsActions.cancelButtonClicked({ dirty: false })
+        );
+        done();
+      });
+    });
+
+    it('should call save() when save action callback is invoked', (done) => {
+      jest.spyOn(store, 'dispatch');
+      component.headerActions$.subscribe((actions) => {
+        const saveAction = actions.find((a) => a.labelKey?.includes('SAVE'));
+        saveAction?.actionCallback!();
+        expect(store.dispatch).toHaveBeenCalledWith(
+          DocumentDetailsActions.saveButtonClicked({
+            details: component.formGroup.getRawValue() as any,
+          })
+        );
+        done();
+      });
+    });
+
+    it('should call delete() when delete action callback is invoked', (done) => {
+      jest.spyOn(store, 'dispatch');
+      component.headerActions$.subscribe((actions) => {
+        const deleteAction = actions.find((a) =>
+          a.labelKey?.includes('DELETE')
+        );
+        deleteAction?.actionCallback!();
+        expect(store.dispatch).toHaveBeenCalledWith(
+          DocumentDetailsActions.deleteButtonClicked()
+        );
+        done();
+      });
+    });
+  });
 });

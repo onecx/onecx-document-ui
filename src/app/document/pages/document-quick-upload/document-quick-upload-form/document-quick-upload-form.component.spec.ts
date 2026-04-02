@@ -159,4 +159,61 @@ describe('DocumentQuickUploadFormComponent', () => {
     expect(component.attachmentArray[0].isValid).toBe(false);
     expect(component.attachmentArray[1].isValid).toBe(true);
   });
+
+  it('should call trimSpaces with correct args when trimSpaceOnPaste is called', () => {
+    const event = {
+      clipboardData: { getData: () => ' pasted text' },
+      preventDefault: jest.fn(),
+    } as any;
+
+    component.trimSpaceOnPaste(event, 'documentName', 255);
+
+    expect(
+      component.documentQuickUploadForm.controls['documentName'].value
+    ).toBe('pasted text');
+  });
+
+  it('should process files from input element when addFile is called with files', () => {
+    const emitSpy = jest.spyOn(component.attchmentList, 'emit');
+    const file = new File(['content'], 'test.pdf', { type: 'application/pdf' });
+    const event = { target: { files: [file] } } as any;
+
+    component.addFile(event);
+
+    expect(emitSpy).toHaveBeenCalled();
+  });
+
+  it('should not process files when addFile is called with no files', () => {
+    const emitSpy = jest.spyOn(component.attchmentList, 'emit');
+    const event = { target: { files: null } } as any;
+
+    component.addFile(event);
+
+    expect(emitSpy).not.toHaveBeenCalled();
+  });
+
+  it('should process files from dataTransfer when dropFile is called with files', () => {
+    const emitSpy = jest.spyOn(component.attchmentList, 'emit');
+    const file = new File(['content'], 'drop.pdf', { type: 'application/pdf' });
+    const event = {
+      preventDefault: jest.fn(),
+      dataTransfer: { files: [file] },
+    } as any;
+
+    component.dropFile(event);
+
+    expect(emitSpy).toHaveBeenCalled();
+  });
+
+  it('should not process files when dropFile is called with no dataTransfer files', () => {
+    const emitSpy = jest.spyOn(component.attchmentList, 'emit');
+    const event = {
+      preventDefault: jest.fn(),
+      dataTransfer: { files: [] },
+    } as any;
+
+    component.dropFile(event);
+
+    expect(emitSpy).not.toHaveBeenCalled();
+  });
 });

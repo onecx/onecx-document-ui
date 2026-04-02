@@ -542,4 +542,34 @@ describe('DocumentSearchComponent', () => {
     });
   });
   // <<SPEC-EXTENSIONS-MARKER-!!!-DO-NOT-REMOVE-!!!>>
+
+  describe('headerActions$ callbacks', () => {
+    it('should navigate to quick-upload when quickUpload action callback is invoked', (done) => {
+      const router = TestBed.inject(Router);
+      jest.spyOn(router, 'navigate');
+
+      component.headerActions$.subscribe((actions) => {
+        actions[0].actionCallback!();
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['quick-upload'],
+          expect.objectContaining({ relativeTo: expect.anything() })
+        );
+        done();
+      });
+    });
+
+    it('should navigate to create-document when createNewDocument action callback is invoked', (done) => {
+      const router = TestBed.inject(Router);
+      jest.spyOn(router, 'navigate');
+
+      component.headerActions$.subscribe((actions) => {
+        actions[1].actionCallback!();
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['create-document'],
+          expect.objectContaining({ relativeTo: expect.anything() })
+        );
+        done();
+      });
+    });
+  });
 });

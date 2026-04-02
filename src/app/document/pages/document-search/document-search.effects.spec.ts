@@ -310,6 +310,32 @@ describe('DocumentSearchEffects', () => {
       );
     });
 
+    it('should convert actual Date object values to ISO strings', (done) => {
+      const dateValue = new Date('2024-06-15T10:00:00.000Z');
+      documentService.getDocumentByCriteria.mockReturnValue(
+        of({
+          stream: [],
+          size: 0,
+          number: 0,
+          totalElements: 0,
+          totalPages: 0,
+        }) as any
+      );
+
+      effects.performSearch$.pipe(take(1)).subscribe(() => {
+        expect(documentService.getDocumentByCriteria).toHaveBeenCalledWith(
+          expect.objectContaining({ startDate: dateValue.toISOString() })
+        );
+        done();
+      });
+
+      actions$.next(
+        DocumentSearchActions.performSearch({
+          searchCriteria: { startDate: dateValue as any },
+        })
+      );
+    });
+
     it('should dispatch documentSearchResultsLoadingFailed on API error', (done) => {
       const error = 'API failure';
       documentService.getDocumentByCriteria.mockReturnValue(

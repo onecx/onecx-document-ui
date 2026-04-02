@@ -77,7 +77,9 @@ describe('DocumentDetailsEffects', () => {
       providers: [
         DocumentDetailsEffects,
         provideRouter([]),
-        provideMockStore({ initialState: { document: { details: initialState } } }),
+        provideMockStore({
+          initialState: { document: { details: initialState } },
+        }),
         provideMockActions(() => actions$),
         { provide: Router, useValue: router },
         { provide: DocumentControllerV1, useValue: documentService },
@@ -98,7 +100,18 @@ describe('DocumentDetailsEffects', () => {
         document: { details: initialState },
         router: {
           state: {
-            root: { params: { id: 'doc-123' }, queryParams: {}, data: {}, url: [], outlet: 'primary', component: null, routeConfig: null, firstChild: null, children: [], pathFromRoot: [] },
+            root: {
+              params: { id: 'doc-123' },
+              queryParams: {},
+              data: {},
+              url: [],
+              outlet: 'primary',
+              component: null,
+              routeConfig: null,
+              firstChild: null,
+              children: [],
+              pathFromRoot: [],
+            },
             url: '/document/details/doc-123',
           },
         },
@@ -112,7 +125,12 @@ describe('DocumentDetailsEffects', () => {
           expect(dispatched).toContainEqual(
             DocumentCreateOperationsActions.ensureReferenceDataLoaded()
           );
-          expect(dispatched.some((a) => a.type === DocumentDetailsActions.navigatedToDetailsPage.type)).toBe(true);
+          expect(
+            dispatched.some(
+              (a) =>
+                a.type === DocumentDetailsActions.navigatedToDetailsPage.type
+            )
+          ).toBe(true);
           done();
         },
       });
@@ -151,6 +169,20 @@ describe('DocumentDetailsEffects', () => {
 
       actions$.next(DocumentDetailsActions.navigatedToDetailsPage({ id: '1' }));
     });
+
+    it('should use empty string when id is undefined in navigatedToDetailsPage', (done) => {
+      const details = { id: '', name: 'Doc' } as any;
+      documentService.getDocumentDetailById.mockReturnValue(of(details));
+
+      effects.loadDocumentById$.pipe(take(1)).subscribe(() => {
+        expect(documentService.getDocumentDetailById).toHaveBeenCalledWith('');
+        done();
+      });
+
+      actions$.next(
+        DocumentDetailsActions.navigatedToDetailsPage({ id: undefined as any })
+      );
+    });
   });
 
   describe('cancelButtonNotDirty$', () => {
@@ -160,7 +192,9 @@ describe('DocumentDetailsEffects', () => {
         done();
       });
 
-      actions$.next(DocumentDetailsActions.cancelButtonClicked({ dirty: false }));
+      actions$.next(
+        DocumentDetailsActions.cancelButtonClicked({ dirty: false })
+      );
     });
 
     it('should not emit when form is dirty', (done) => {
@@ -169,7 +203,9 @@ describe('DocumentDetailsEffects', () => {
         emitted = true;
       });
 
-      actions$.next(DocumentDetailsActions.cancelButtonClicked({ dirty: true }));
+      actions$.next(
+        DocumentDetailsActions.cancelButtonClicked({ dirty: true })
+      );
 
       setTimeout(() => {
         expect(emitted).toBe(false);
@@ -185,11 +221,15 @@ describe('DocumentDetailsEffects', () => {
       );
 
       effects.cancelButtonClickedDirty$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentDetailsActions.cancelEditConfirmClicked());
+        expect(action).toEqual(
+          DocumentDetailsActions.cancelEditConfirmClicked()
+        );
         done();
       });
 
-      actions$.next(DocumentDetailsActions.cancelButtonClicked({ dirty: true }));
+      actions$.next(
+        DocumentDetailsActions.cancelButtonClicked({ dirty: true })
+      );
     });
 
     it('should dispatch cancelEditBackClicked when user cancels dialog', (done) => {
@@ -202,7 +242,9 @@ describe('DocumentDetailsEffects', () => {
         done();
       });
 
-      actions$.next(DocumentDetailsActions.cancelButtonClicked({ dirty: true }));
+      actions$.next(
+        DocumentDetailsActions.cancelButtonClicked({ dirty: true })
+      );
     });
   });
 
@@ -212,7 +254,9 @@ describe('DocumentDetailsEffects', () => {
       store.refreshState();
 
       effects.saveButtonClicked$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentDetailsActions.updateDocumentCancelled());
+        expect(action).toEqual(
+          DocumentDetailsActions.updateDocumentCancelled()
+        );
         done();
       });
 
@@ -231,7 +275,10 @@ describe('DocumentDetailsEffects', () => {
         categories: [],
       } as any;
       const updatedDetails = { id: 'doc-1', name: 'Updated' } as any;
-      store.overrideSelector(documentDetailsSelectors.selectDetails, prevDetails);
+      store.overrideSelector(
+        documentDetailsSelectors.selectDetails,
+        prevDetails
+      );
       store.refreshState();
       documentService.updateDocumentDetail.mockReturnValue(of(updatedDetails));
 
@@ -253,7 +300,11 @@ describe('DocumentDetailsEffects', () => {
 
       actions$.next(
         DocumentDetailsActions.saveButtonClicked({
-          details: { name: 'Updated', characteristics: [], attachments: [] } as any,
+          details: {
+            name: 'Updated',
+            characteristics: [],
+            attachments: [],
+          } as any,
         })
       );
     });
@@ -268,7 +319,10 @@ describe('DocumentDetailsEffects', () => {
         categories: [],
       } as any;
       const error = 'update error';
-      store.overrideSelector(documentDetailsSelectors.selectDetails, prevDetails);
+      store.overrideSelector(
+        documentDetailsSelectors.selectDetails,
+        prevDetails
+      );
       store.refreshState();
       documentService.updateDocumentDetail.mockReturnValue(
         throwError(() => error)
@@ -279,7 +333,9 @@ describe('DocumentDetailsEffects', () => {
           DocumentDetailsActions.updateDocumentFailed({ error })
         );
         expect(messageService.error).toHaveBeenCalledWith(
-          expect.objectContaining({ summaryKey: 'DOCUMENT_DETAILS.UPDATE.ERROR' })
+          expect.objectContaining({
+            summaryKey: 'DOCUMENT_DETAILS.UPDATE.ERROR',
+          })
         );
         done();
       });
@@ -296,7 +352,9 @@ describe('DocumentDetailsEffects', () => {
     it('should call messageService.success when updateDocumentSucceeded', (done) => {
       effects.updateSuccess$.pipe(take(1)).subscribe(() => {
         expect(messageService.success).toHaveBeenCalledWith(
-          expect.objectContaining({ summaryKey: 'DOCUMENT_DETAILS.UPDATE.SUCCESS' })
+          expect.objectContaining({
+            summaryKey: 'DOCUMENT_DETAILS.UPDATE.SUCCESS',
+          })
         );
         done();
       });
@@ -319,7 +377,9 @@ describe('DocumentDetailsEffects', () => {
       );
 
       effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentDetailsActions.deleteDocumentCancelled());
+        expect(action).toEqual(
+          DocumentDetailsActions.deleteDocumentCancelled()
+        );
         done();
       });
 
@@ -333,9 +393,13 @@ describe('DocumentDetailsEffects', () => {
       documentService.deleteDocumentDetail.mockReturnValue(of({} as any));
 
       effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentDetailsActions.deleteDocumentSucceeded());
+        expect(action).toEqual(
+          DocumentDetailsActions.deleteDocumentSucceeded()
+        );
         expect(messageService.success).toHaveBeenCalledWith(
-          expect.objectContaining({ summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS' })
+          expect.objectContaining({
+            summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS',
+          })
         );
         done();
       });
@@ -357,9 +421,33 @@ describe('DocumentDetailsEffects', () => {
           DocumentDetailsActions.deleteDocumentFailed({ error })
         );
         expect(messageService.error).toHaveBeenCalledWith(
-          expect.objectContaining({ summaryKey: 'DOCUMENT_DETAILS.DELETE.ERROR' })
+          expect.objectContaining({
+            summaryKey: 'DOCUMENT_DETAILS.DELETE.ERROR',
+          })
         );
         done();
+      });
+
+      actions$.next(DocumentDetailsActions.deleteButtonClicked());
+    });
+  });
+
+  describe('deleteButtonClicked$ with null itemToDelete and confirmed dialog', () => {
+    it('should throw error when itemToDelete is null and dialog is confirmed', (done) => {
+      store.overrideSelector(
+        documentDetailsSelectors.selectDetails,
+        null as any
+      );
+      store.refreshState();
+      portalDialogService.openDialog.mockReturnValue(
+        of({ button: 'primary' } as DialogState<any>)
+      );
+
+      effects.deleteButtonClicked$.pipe(take(1)).subscribe({
+        error: (err) => {
+          expect(err.message).toBe('Item to delete not found!');
+          done();
+        },
       });
 
       actions$.next(DocumentDetailsActions.deleteButtonClicked());
@@ -416,7 +504,9 @@ describe('DocumentDetailsEffects', () => {
       documentService.getFile.mockReturnValue(throwError(() => 'error'));
 
       effects.startAttachmentDownload$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentDetailsActions.attachmentDownloadFailed());
+        expect(action).toEqual(
+          DocumentDetailsActions.attachmentDownloadFailed()
+        );
         done();
       });
 
@@ -459,7 +549,9 @@ describe('DocumentDetailsEffects', () => {
       );
 
       effects.downloadAttachmentBlob$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentDetailsActions.attachmentDownloadFailed());
+        expect(action).toEqual(
+          DocumentDetailsActions.attachmentDownloadFailed()
+        );
         done();
       });
 
@@ -548,7 +640,9 @@ describe('DocumentDetailsEffects', () => {
     it('should dispatch backNavigationStarted and call window.history.back when navigation is possible', (done) => {
       store.overrideSelector(selectBackNavigationPossible, true);
       store.refreshState();
-      const historyBackSpy = jest.spyOn(window.history, 'back').mockImplementation(() => {});
+      const historyBackSpy = jest
+        .spyOn(window.history, 'back')
+        .mockImplementation(() => {});
 
       effects.navigateBack$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(DocumentDetailsActions.backNavigationStarted());
@@ -570,6 +664,313 @@ describe('DocumentDetailsEffects', () => {
       });
 
       actions$.next(DocumentDetailsActions.navigateBackButtonClicked());
+    });
+  });
+
+  describe('buildDocumentUpdate null branches (via saveButtonClicked$)', () => {
+    it('should build update with empty arrays when documentRelationships, relatedParties, categories are null', (done) => {
+      const prevDetails = {
+        id: 'doc-1',
+        modificationCount: 0,
+        attachments: [],
+        documentRelationships: null,
+        relatedParties: null,
+        categories: null,
+        relatedObject: null,
+      } as any;
+      store.overrideSelector(
+        documentDetailsSelectors.selectDetails,
+        prevDetails
+      );
+      store.refreshState();
+      documentService.updateDocumentDetail.mockReturnValue(
+        of({ id: 'doc-1' } as any)
+      );
+
+      effects.saveButtonClicked$.pipe(take(2)).subscribe({
+        next: () => {},
+        complete: () => {
+          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+            'doc-1',
+            expect.objectContaining({
+              documentRelationships: [],
+              relatedParties: [],
+              categories: [],
+              relatedObject: undefined,
+            })
+          );
+          done();
+        },
+      });
+
+      actions$.next(
+        DocumentDetailsActions.saveButtonClicked({
+          details: { name: 'X', characteristics: [], attachments: [] } as any,
+        })
+      );
+    });
+
+    it('should map relatedObject fields when relatedObject is present in prevState', (done) => {
+      const prevDetails = {
+        id: 'doc-1',
+        modificationCount: 0,
+        attachments: [],
+        documentRelationships: [
+          { id: 'rel-1', type: 'RELATED', documentRefId: 'ref-1' },
+        ],
+        relatedParties: [
+          { id: 'p1', name: 'Party', role: 'OWNER', validFor: null },
+        ],
+        categories: [{ id: 'cat-1', name: 'Cat', categoryVersion: 1 }],
+        relatedObject: { id: 'obj-1' },
+      } as any;
+      store.overrideSelector(
+        documentDetailsSelectors.selectDetails,
+        prevDetails
+      );
+      store.refreshState();
+      documentService.updateDocumentDetail.mockReturnValue(
+        of({ id: 'doc-1' } as any)
+      );
+
+      effects.saveButtonClicked$.pipe(take(2)).subscribe({
+        next: () => {},
+        complete: () => {
+          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+            'doc-1',
+            expect.objectContaining({
+              documentRelationships: [
+                { id: 'rel-1', type: 'RELATED', documentRefId: 'ref-1' },
+              ],
+              relatedParties: [
+                { id: 'p1', name: 'Party', role: 'OWNER', validFor: null },
+              ],
+              categories: [{ id: 'cat-1', name: 'Cat', categoryVersion: 1 }],
+              relatedObject: expect.objectContaining({ id: 'obj-1' }),
+            })
+          );
+          done();
+        },
+      });
+
+      actions$.next(
+        DocumentDetailsActions.saveButtonClicked({
+          details: { name: 'X', characteristics: [], attachments: [] } as any,
+        })
+      );
+    });
+
+    it('should map attachment fields via mapAttachments when prevState has attachments', (done) => {
+      const prevDetails = {
+        id: 'doc-1',
+        modificationCount: 0,
+        attachments: [
+          {
+            id: 'att-1',
+            type: 'pdf',
+            validFor: null,
+            mimeType: { id: 'mime-1' },
+            fileName: 'doc.pdf',
+          },
+        ],
+        documentRelationships: [],
+        relatedParties: [],
+        categories: [],
+      } as any;
+      store.overrideSelector(
+        documentDetailsSelectors.selectDetails,
+        prevDetails
+      );
+      store.refreshState();
+      documentService.updateDocumentDetail.mockReturnValue(
+        of({ id: 'doc-1' } as any)
+      );
+
+      effects.saveButtonClicked$.pipe(take(2)).subscribe({
+        next: () => {},
+        complete: () => {
+          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+            'doc-1',
+            expect.objectContaining({
+              attachments: [
+                expect.objectContaining({
+                  id: 'att-1',
+                  name: 'Attachment Name',
+                  description: 'A description',
+                  mimeTypeId: 'mime-1',
+                  fileName: 'doc.pdf',
+                }),
+              ],
+            })
+          );
+          done();
+        },
+      });
+
+      actions$.next(
+        DocumentDetailsActions.saveButtonClicked({
+          details: {
+            name: 'X',
+            characteristics: [],
+            attachments: [
+              {
+                id: 'att-1',
+                name: 'Attachment Name',
+                description: 'A description',
+              },
+            ],
+          } as any,
+        })
+      );
+    });
+
+    it('should include specification fields when prevState has specification', (done) => {
+      const prevDetails = {
+        id: 'doc-1',
+        modificationCount: 0,
+        attachments: [],
+        documentRelationships: [],
+        relatedParties: [],
+        categories: [],
+        specification: { name: 'spec-1', specificationVersion: '2.0' },
+      } as any;
+      store.overrideSelector(
+        documentDetailsSelectors.selectDetails,
+        prevDetails
+      );
+      store.refreshState();
+      documentService.updateDocumentDetail.mockReturnValue(
+        of({ id: 'doc-1' } as any)
+      );
+
+      effects.saveButtonClicked$.pipe(take(2)).subscribe({
+        next: () => {},
+        complete: () => {
+          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+            'doc-1',
+            expect.objectContaining({
+              specification: expect.objectContaining({
+                specificationVersion: '2.0',
+              }),
+            })
+          );
+          done();
+        },
+      });
+
+      actions$.next(
+        DocumentDetailsActions.saveButtonClicked({
+          details: {
+            name: 'X',
+            characteristics: [],
+            attachments: [],
+            specification: 'new-spec',
+          } as any,
+        })
+      );
+    });
+
+    it('should use empty array for attachments when prevState has undefined attachments', (done) => {
+      const prevDetails = {
+        id: 'doc-1',
+        modificationCount: 0,
+        attachments: undefined,
+        documentRelationships: [],
+        relatedParties: [],
+        categories: [],
+      } as any;
+      store.overrideSelector(
+        documentDetailsSelectors.selectDetails,
+        prevDetails
+      );
+      store.refreshState();
+      documentService.updateDocumentDetail.mockReturnValue(
+        of({ id: 'doc-1' } as any)
+      );
+
+      effects.saveButtonClicked$.pipe(take(2)).subscribe({
+        next: () => {},
+        complete: () => {
+          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+            'doc-1',
+            expect.objectContaining({ attachments: [] })
+          );
+          done();
+        },
+      });
+
+      actions$.next(
+        DocumentDetailsActions.saveButtonClicked({
+          details: { name: 'X', characteristics: [], attachments: [] } as any,
+        })
+      );
+    });
+
+    it('should map characteristics with non-null id via mapCharacteristics', (done) => {
+      const prevDetails = {
+        id: 'doc-1',
+        modificationCount: 0,
+        attachments: [],
+        documentRelationships: [],
+        relatedParties: [],
+        categories: [],
+      } as any;
+      store.overrideSelector(
+        documentDetailsSelectors.selectDetails,
+        prevDetails
+      );
+      store.refreshState();
+      documentService.updateDocumentDetail.mockReturnValue(
+        of({ id: 'doc-1' } as any)
+      );
+
+      effects.saveButtonClicked$.pipe(take(2)).subscribe({
+        next: () => {},
+        complete: () => {
+          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+            'doc-1',
+            expect.objectContaining({
+              characteristics: [
+                expect.objectContaining({
+                  id: 'char-1',
+                  name: 'color',
+                  value: 'red',
+                }),
+              ],
+            })
+          );
+          done();
+        },
+      });
+
+      actions$.next(
+        DocumentDetailsActions.saveButtonClicked({
+          details: {
+            name: 'X',
+            attachments: [],
+            characteristics: [{ id: 'char-1', name: 'color', value: 'red' }],
+          } as any,
+        })
+      );
+    });
+  });
+
+  describe('deleteButtonClicked$ null dialogResult branch', () => {
+    it('should dispatch deleteDocumentCancelled when dialogResult is null', (done) => {
+      store.overrideSelector(documentDetailsSelectors.selectDetails, {
+        id: 'doc-1',
+      } as any);
+      store.refreshState();
+      portalDialogService.openDialog.mockReturnValue(of(null as any));
+
+      effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
+        expect(action).toEqual(
+          DocumentDetailsActions.deleteDocumentCancelled()
+        );
+        done();
+      });
+
+      actions$.next(DocumentDetailsActions.deleteButtonClicked());
     });
   });
 });

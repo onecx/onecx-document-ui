@@ -17,14 +17,34 @@ describe('DocumentCreateCharacteristicsComponent', () => {
       component.ngOnInit();
 
       expect(component.characteristicsForm.length).toBe(2);
-      expect(component.characteristicsForm.at(0).controls.name.value).toBe('color');
-      expect(component.characteristicsForm.at(1).controls.value.value).toBe('large');
+      expect(component.characteristicsForm.at(0).controls.name.value).toBe(
+        'color'
+      );
+      expect(component.characteristicsForm.at(1).controls.value.value).toBe(
+        'large'
+      );
     });
 
     it('should initialize empty form when characteristics input is empty', () => {
       component.characteristics = [];
       component.ngOnInit();
       expect(component.characteristicsForm.length).toBe(0);
+    });
+
+    it('should use undefined for null id, name, and value in characteristic form group', () => {
+      component.characteristics = [
+        { id: null, name: null, value: null },
+      ] as any;
+
+      component.ngOnInit();
+
+      expect(component.characteristicsForm.at(0).controls.id.value).toBeNull();
+      expect(
+        component.characteristicsForm.at(0).controls.name.value
+      ).toBeNull();
+      expect(
+        component.characteristicsForm.at(0).controls.value.value
+      ).toBeNull();
     });
   });
 
@@ -45,7 +65,9 @@ describe('DocumentCreateCharacteristicsComponent', () => {
       component.onAddCharacteristic();
 
       expect(component.characteristicsForm.length).toBe(1);
-      expect(component.characteristicsForm.at(0).controls.name.value).toBeNull();
+      expect(
+        component.characteristicsForm.at(0).controls.name.value
+      ).toBeNull();
     });
   });
 
@@ -60,7 +82,9 @@ describe('DocumentCreateCharacteristicsComponent', () => {
       component.onRemoveCharacteristic(0);
 
       expect(component.characteristicsForm.length).toBe(1);
-      expect(component.characteristicsForm.at(0).controls.name.value).toBe('size');
+      expect(component.characteristicsForm.at(0).controls.name.value).toBe(
+        'size'
+      );
     });
   });
 
@@ -68,7 +92,9 @@ describe('DocumentCreateCharacteristicsComponent', () => {
     it('should emit save with form raw values when form is valid', () => {
       const emitted: any[] = [];
       component.save.subscribe((v) => emitted.push(v));
-      component.characteristics = [{ id: 'c1', name: 'color', value: 'red' }] as any;
+      component.characteristics = [
+        { id: 'c1', name: 'color', value: 'red' },
+      ] as any;
       component.ngOnInit();
 
       component.onSaveClick();
@@ -94,7 +120,9 @@ describe('DocumentCreateCharacteristicsComponent', () => {
 
       component.onSaveClick();
 
-      expect(component.characteristicsForm.at(0).controls.name.touched).toBe(true);
+      expect(component.characteristicsForm.at(0).controls.name.touched).toBe(
+        true
+      );
     });
   });
 

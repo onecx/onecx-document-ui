@@ -41,7 +41,9 @@ describe('DocumentCreateEffects', () => {
         DocumentCreateEffects,
         provideRouter([]),
         provideMockActions(() => actions$),
-        provideMockStore({ initialState: { document: { create: initialState } } }),
+        provideMockStore({
+          initialState: { document: { create: initialState } },
+        }),
         { provide: PortalMessageService, useValue: messageService },
       ],
     });
@@ -72,7 +74,9 @@ describe('DocumentCreateEffects', () => {
       });
 
       actions$.next(
-        DocumentCreateActions.attachmentMimeTypeNotSupported({ fileName: 'test.exe' })
+        DocumentCreateActions.attachmentMimeTypeNotSupported({
+          fileName: 'test.exe',
+        })
       );
     });
   });
@@ -98,7 +102,10 @@ describe('DocumentCreateEffects', () => {
         ],
         characteristics: [],
       };
-      store.overrideSelector(selectDocumentCreateSubmissionSource, source as any);
+      store.overrideSelector(
+        selectDocumentCreateSubmissionSource,
+        source as any
+      );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action) => {
@@ -117,7 +124,10 @@ describe('DocumentCreateEffects', () => {
         attachments: [],
         characteristics: [],
       };
-      store.overrideSelector(selectDocumentCreateSubmissionSource, source as any);
+      store.overrideSelector(
+        selectDocumentCreateSubmissionSource,
+        source as any
+      );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action) => {
@@ -138,7 +148,10 @@ describe('DocumentCreateEffects', () => {
         attachments: [],
         characteristics: [],
       };
-      store.overrideSelector(selectDocumentCreateSubmissionSource, source as any);
+      store.overrideSelector(
+        selectDocumentCreateSubmissionSource,
+        source as any
+      );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action) => {
@@ -153,7 +166,10 @@ describe('DocumentCreateEffects', () => {
 
     it('should dispatch stepValidationFailed when details is null', (done) => {
       const source = { details: null, attachments: [], characteristics: [] };
-      store.overrideSelector(selectDocumentCreateSubmissionSource, source as any);
+      store.overrideSelector(
+        selectDocumentCreateSubmissionSource,
+        source as any
+      );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action) => {
@@ -177,7 +193,9 @@ describe('DocumentCreateEffects', () => {
       });
 
       actions$.next(
-        DocumentCreateOperationsActions.documentCreationCompleted({ documentId: 'doc-1' })
+        DocumentCreateOperationsActions.documentCreationCompleted({
+          documentId: 'doc-1',
+        })
       );
     });
   });
@@ -203,22 +221,30 @@ describe('DocumentCreateEffects', () => {
       });
 
       actions$.next(
-        DocumentCreateOperationsActions.documentCreationFinalStepFailed({ documentId: 'doc-1' })
+        DocumentCreateOperationsActions.documentCreationFinalStepFailed({
+          documentId: 'doc-1',
+        })
       );
     });
   });
 
   describe('onDocumentCreationFinished$', () => {
     [
-      DocumentCreateOperationsActions.documentCreationCompleted({ documentId: 'doc-1' }),
+      DocumentCreateOperationsActions.documentCreationCompleted({
+        documentId: 'doc-1',
+      }),
       DocumentCreateOperationsActions.documentCreationFailed(),
-      DocumentCreateOperationsActions.documentCreationFinalStepFailed({ documentId: 'doc-1' }),
+      DocumentCreateOperationsActions.documentCreationFinalStepFailed({
+        documentId: 'doc-1',
+      }),
     ].forEach((trigger) => {
       it(`should dispatch submitFinished on ${trigger.type}`, (done) => {
-        effects.onDocumentCreationFinished$.pipe(take(1)).subscribe((action) => {
-          expect(action).toEqual(DocumentCreateActions.submitFinished());
-          done();
-        });
+        effects.onDocumentCreationFinished$
+          .pipe(take(1))
+          .subscribe((action) => {
+            expect(action).toEqual(DocumentCreateActions.submitFinished());
+            done();
+          });
 
         actions$.next(trigger);
       });
@@ -233,17 +259,21 @@ describe('DocumentCreateEffects', () => {
       });
 
       actions$.next(
-        DocumentCreateOperationsActions.documentCreationCompleted({ documentId: 'doc-1' })
+        DocumentCreateOperationsActions.documentCreationCompleted({
+          documentId: 'doc-1',
+        })
       );
     });
   });
 
   describe('resetStateWhenLeavingCreatePage$', () => {
     it('should dispatch resetClicked when URL does not include /create-document', (done) => {
-      effects.resetStateWhenLeavingCreatePage$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentCreateActions.resetClicked());
-        done();
-      });
+      effects.resetStateWhenLeavingCreatePage$
+        .pipe(take(1))
+        .subscribe((action) => {
+          expect(action).toEqual(DocumentCreateActions.resetClicked());
+          done();
+        });
 
       actions$.next({
         type: routerNavigatedAction.type,
@@ -260,7 +290,9 @@ describe('DocumentCreateEffects', () => {
 
       actions$.next({
         type: routerNavigatedAction.type,
-        payload: { routerState: { url: '/document-management/create-document' } },
+        payload: {
+          routerState: { url: '/document-management/create-document' },
+        },
       } as any);
 
       // give the observable a tick to emit if it would
@@ -300,7 +332,10 @@ describe('DocumentCreateEffects', () => {
           { id: null, name: '', value: '' }, // should be filtered out
         ],
       };
-      store.overrideSelector(selectDocumentCreateSubmissionSource, source as any);
+      store.overrideSelector(
+        selectDocumentCreateSubmissionSource,
+        source as any
+      );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action: any) => {
@@ -312,6 +347,102 @@ describe('DocumentCreateEffects', () => {
         });
         expect(action.docRequest.characteristics).toHaveLength(1);
         expect(action.docRequest.characteristics[0].name).toBe('color');
+        done();
+      });
+
+      actions$.next(DocumentCreateActions.submitClicked());
+    });
+
+    it('should dispatch stepValidationFailed when details channel is missing', (done) => {
+      const source = {
+        details: { name: 'Doc', type: 'type-1', channel: null },
+        attachments: [],
+        characteristics: [],
+      };
+      store.overrideSelector(
+        selectDocumentCreateSubmissionSource,
+        source as any
+      );
+      store.refreshState();
+
+      effects.submitDocumentCreation$.pipe(take(1)).subscribe((action: any) => {
+        expect(action.type).toBe(
+          DocumentCreateActions.stepValidationFailed.type
+        );
+        done();
+      });
+
+      actions$.next(DocumentCreateActions.submitClicked());
+    });
+
+    it('should map non-null involvement fields in relatedObject when provided', (done) => {
+      const source = {
+        details: {
+          name: 'Doc',
+          type: 'type-1',
+          channel: 'ch-1',
+          status: 'Draft',
+          description: null,
+          version: null,
+          involvement: 'OWNER',
+          objectReferenceType: 'CONTRACT',
+          objectReferenceId: 'ref-1',
+        },
+        attachments: [],
+        characteristics: [],
+      };
+      store.overrideSelector(
+        selectDocumentCreateSubmissionSource,
+        source as any
+      );
+      store.refreshState();
+
+      effects.submitDocumentCreation$.pipe(take(1)).subscribe((action: any) => {
+        expect(action.docRequest.relatedObject).toEqual({
+          involvement: 'OWNER',
+          objectReferenceType: 'CONTRACT',
+          objectReferenceId: 'ref-1',
+        });
+        done();
+      });
+
+      actions$.next(DocumentCreateActions.submitClicked());
+    });
+
+    it('should use undefined for mimeTypeId when attachment mimeTypeId is null', (done) => {
+      const source = {
+        details: {
+          name: 'Doc',
+          type: 'type-1',
+          channel: 'ch-1',
+          status: 'Draft',
+          description: null,
+          version: null,
+          involvement: null,
+          objectReferenceType: null,
+          objectReferenceId: null,
+        },
+        attachments: [
+          {
+            name: null,
+            description: null,
+            mimeTypeId: null,
+            validForEnd: null,
+            fileName: 'file.pdf',
+            file: new File(['content'], 'file.pdf'),
+          },
+        ],
+        characteristics: [{ id: 'existing-id', name: 'color', value: 'red' }],
+      };
+      store.overrideSelector(
+        selectDocumentCreateSubmissionSource,
+        source as any
+      );
+      store.refreshState();
+
+      effects.submitDocumentCreation$.pipe(take(1)).subscribe((action: any) => {
+        expect(action.docRequest.attachments[0].mimeTypeId).toBeUndefined();
+        expect(action.docRequest.characteristics[0].id).toBe('existing-id');
         done();
       });
 

@@ -8,7 +8,10 @@ import { LetDirective } from '@ngrx/component';
 import { Store, StoreModule } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks';
-import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular';
+import {
+  BreadcrumbService,
+  PortalCoreModule,
+} from '@onecx/portal-integration-angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 import { DataViewModule } from 'primeng/dataview';
 import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions';
@@ -206,7 +209,7 @@ describe('DocumentQuickUploadComponent', () => {
   it('should navigate to search on onCancelYes', () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
     component.onCancelYes();
-    expect(navigateSpy).toHaveBeenCalledWith(['../../search'], {
+    expect(navigateSpy).toHaveBeenCalledWith(['../'], {
       relativeTo: mockActivatedRoute,
     });
   });
@@ -219,6 +222,25 @@ describe('DocumentQuickUploadComponent', () => {
     component.onDeleteUploadFile(attachment1);
 
     expect(component.attachmentArray).toEqual([attachment2]);
+  });
+
+  it('should set enableCreateButton=false when remaining attachment is invalid after delete', () => {
+    const invalidAttachment = { name: 'invalid.pdf', isValid: false } as any;
+    const toDelete = { name: 'file1.pdf', isValid: true } as any;
+    component.attachmentArray = [toDelete, invalidAttachment];
+
+    component.onDeleteUploadFile(toDelete);
+
+    expect(component.enableCreateButton).toBe(false);
+  });
+
+  it('should set enableCreateButton=false when all attachments are deleted', () => {
+    const toDelete = { name: 'file1.pdf', isValid: true } as any;
+    component.attachmentArray = [toDelete];
+
+    component.onDeleteUploadFile(toDelete);
+
+    expect(component.enableCreateButton).toBe(false);
   });
 
   it('should return PrimeIcons.MICROPHONE for audio attachments', () => {
@@ -254,5 +276,51 @@ describe('DocumentQuickUploadComponent', () => {
   it('should return true for isPaginatorVisible when attachmentArray has items', () => {
     component.attachmentArray = [{ name: 'file.pdf' } as any];
     expect(component.isPaginatorVisible).toBe(true);
+  });
+
+  it('should map non-empty attachmentArray when onSave is called', () => {
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
+    component.documentQuickUploadForm.setValue({
+      documentName: 'My Doc',
+      typeId: 'type-1',
+      channelname: 'email',
+      lifeCycleState: 'DRAFT',
+    });
+    component.attachmentArray = [
+      {
+        name: 'file.pdf',
+        description: 'desc',
+        mimeTypeId: 'mime-1',
+        fileName: 'file.pdf',
+        fileData: new File(['content'], 'file.pdf'),
+        validFor: { endDateTime: '2025-12-31' },
+        isValid: true,
+      } as any,
+    ];
+
+    component.onSave();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: DocumentCreateOperationsActions.startDocumentCreation.type,
+        docRequest: expect.objectContaining({
+          attachments: [
+            expect.objectContaining({ name: 'file.pdf', mimeTypeId: 'mime-1' }),
+          ],
+        }),
+      })
+    );
+  });
+
+  it('should set sortOrder=1 when sorting non-fileData.name field in ASCENDING order', () => {
+    component.sortField = 'fileName';
+    component.onSortOrderChange(true);
+    expect(component.sortOrder).toBe(1);
+  });
+
+  it('should set sortOrder=-1 when sorting non-fileData.name field in DESCENDING order', () => {
+    component.sortField = 'fileName';
+    component.onSortOrderChange(false);
+    expect(component.sortOrder).toBe(-1);
   });
 });

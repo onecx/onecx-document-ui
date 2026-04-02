@@ -16,8 +16,16 @@ describe('document-details-form.factory', () => {
     it('should create a form group with all required controls', () => {
       const form = createDocumentDetailsSectionForm();
       const expected = [
-        'name', 'type', 'version', 'channel', 'specification',
-        'status', 'description', 'involvement', 'objectReferenceType', 'objectReferenceId',
+        'name',
+        'type',
+        'version',
+        'channel',
+        'specification',
+        'status',
+        'description',
+        'involvement',
+        'objectReferenceType',
+        'objectReferenceId',
       ];
       expected.forEach((control) => {
         expect(form.contains(control)).toBe(true);
@@ -31,7 +39,12 @@ describe('document-details-form.factory', () => {
 
     it('should be valid when all required fields are filled', () => {
       const form = createDocumentDetailsSectionForm();
-      form.patchValue({ name: 'Doc', type: 't1', channel: 'ch1', status: 'Draft' });
+      form.patchValue({
+        name: 'Doc',
+        type: 't1',
+        channel: 'ch1',
+        status: 'Draft',
+      });
       expect(form.valid).toBe(true);
     });
 
@@ -88,7 +101,12 @@ describe('document-details-form.factory', () => {
       const form = createDocumentDetailsForm();
       const details = {
         attachments: [
-          { id: 'a1', name: 'file.pdf', fileName: 'file.pdf', mimeType: { name: 'application/pdf' } },
+          {
+            id: 'a1',
+            name: 'file.pdf',
+            fileName: 'file.pdf',
+            mimeType: { name: 'application/pdf' },
+          },
         ],
         characteristics: [],
       } as any;
@@ -109,7 +127,9 @@ describe('document-details-form.factory', () => {
       patchDocumentDetailsForm(form, details);
 
       expect(form.controls.characteristics.length).toBe(1);
-      expect(form.controls.characteristics.at(0).get('name')!.value).toBe('color');
+      expect(form.controls.characteristics.at(0).get('name')!.value).toBe(
+        'color'
+      );
     });
 
     it('should handle undefined details without throwing', () => {
@@ -176,7 +196,9 @@ describe('document-details-form.factory', () => {
       removeCharacteristic(form, 0);
 
       expect(form.controls.characteristics.length).toBe(1);
-      expect(form.controls.characteristics.at(0).get('name')!.value).toBe('size');
+      expect(form.controls.characteristics.at(0).get('name')!.value).toBe(
+        'size'
+      );
     });
   });
 
@@ -218,13 +240,59 @@ describe('document-details-form.factory', () => {
     });
 
     it('should be valid when name and value are provided', () => {
-      const group = createCharacteristicFormGroup({ id: null, name: 'color', value: 'red' } as any);
+      const group = createCharacteristicFormGroup({
+        id: null,
+        name: 'color',
+        value: 'red',
+      } as any);
       expect(group.valid).toBe(true);
     });
 
     it('should invalidate name when exceeding 255 characters', () => {
-      const group = createCharacteristicFormGroup({ name: 'x'.repeat(256), value: 'val' } as any);
+      const group = createCharacteristicFormGroup({
+        name: 'x'.repeat(256),
+        value: 'val',
+      } as any);
       expect(group.get('name')!.valid).toBe(false);
+    });
+  });
+
+  describe('createAttachmentFormGroup (via setAttachmentsOnForm)', () => {
+    it('should populate attachment form group fields when all attachment properties are present', () => {
+      const form = createDocumentDetailsForm();
+      const attachment = {
+        id: 'att-1',
+        name: 'doc.pdf',
+        description: 'A description',
+        fileName: 'doc.pdf',
+        type: 'application/pdf',
+        size: 1024,
+        sizeUnit: 'KB',
+        mimeType: { name: 'application/pdf' },
+        storageUploadStatus: true,
+      } as any;
+
+      setAttachmentsOnForm(form, [attachment]);
+
+      const group = getAttachmentFormArray(form).at(0);
+      expect(group.get('id')!.value).toBe('att-1');
+      expect(group.get('name')!.value).toBe('doc.pdf');
+      expect(group.get('description')!.value).toBe('A description');
+      expect(group.get('mimeTypeName')!.value).toBe('application/pdf');
+      expect(group.get('storageUploadStatus')!.value).toBe(true);
+    });
+
+    it('should use null fallback for attachment form group when properties are undefined', () => {
+      const form = createDocumentDetailsForm();
+      const attachment = {} as any;
+
+      setAttachmentsOnForm(form, [attachment]);
+
+      const group = getAttachmentFormArray(form).at(0);
+      expect(group.get('id')!.value).toBeNull();
+      expect(group.get('name')!.value).toBeNull();
+      expect(group.get('mimeTypeName')!.value).toBeNull();
+      expect(group.get('storageUploadStatus')!.value).toBe(false);
     });
   });
 });
