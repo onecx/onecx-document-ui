@@ -72,6 +72,10 @@
           </td>
           <td class="text-center">
             <p-button
+              *ngIf="
+                attachmentFormGroup.get('storageUploadStatus')?.value === true;
+                else retryFileUpload
+              "
               type="button"
               icon="pi pi-download"
               [text]="true"
@@ -86,6 +90,23 @@
               [disabled]="!attachmentFormGroup.get('id')?.value"
               (onClick)="onDownloadClicked(attachmentFormGroup)"
             ></p-button>
+            <ng-template #retryFileUpload>
+              <p-button
+                type="button"
+                (onClick)="onRetryUploadClicked(attachmentFormGroup)"
+                icon="pi pi-refresh"
+                [text]="true"
+                [rounded]="true"
+                [pTooltip]="
+                  'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate
+                "
+                tooltipPosition="top"
+                [attr.aria-label]="
+                  'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate
+                "
+              >
+              </p-button>
+            </ng-template>
           </td>
         </tr>
       </ng-template>

@@ -197,7 +197,7 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
 
   /***function for Yes option on cancel dialogue */
   onCancelYes() {
-    this.router.navigate(['../../search'], {
+    this.router.navigate(['../'], {
       relativeTo: this.activeRoute,
     });
   }
@@ -287,15 +287,6 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
     } else {
       this.sortOrder = this.sortOrderType === SortOrder.ASCENDING ? 1 : -1;
     }
-  }
-
-  /**
-   * function to check if file is valid according to allowed file size
-   * @param file file data
-   */
-  private isValidFile(file: File): boolean {
-    const fileSize = file.size ?? 0;
-    return fileSize > 0 && fileSize <= 2097152;
   }
 
   /**

@@ -13,11 +13,17 @@ export class DocumentDetailsAttachmentListComponent {
   @Input() editMode = false;
 
   @Output() download = new EventEmitter<DocumentAttachmentFormValue>();
+  @Output() retryUpload = new EventEmitter<{ id: string; fileName: string }>();
 
   readonly formatBytes = formatBytes;
 
   onDownloadClicked(attachmentFormGroup: FormGroup): void {
     this.download.emit(this.getAttachmentValue(attachmentFormGroup));
+  }
+
+  onRetryUploadClicked(attachmentFormGroup: FormGroup) {
+    const { id, fileName } = this.getAttachmentValue(attachmentFormGroup);
+    this.retryUpload.emit({ id: id!, fileName: fileName! });
   }
 
   trackByIndex(index: number): number {

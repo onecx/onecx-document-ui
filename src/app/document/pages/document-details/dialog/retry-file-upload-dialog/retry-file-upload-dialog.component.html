@@ -1,0 +1,16 @@
+<div>
+  @if (dialogResult) {
+  <div
+    class="flex align-items-center justify-content-between p-2 mb-1 cursor-pointer border-round"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="text-sm overflow-hidden white-space-nowrap text-overflow-ellipsis"
+    >
+      {{ dialogResult.name }}
+    </span>
+  </div>
+  }
+  <app-file-upload (fileSelected)="onFileSelected($event)"></app-file-upload>
+</div>

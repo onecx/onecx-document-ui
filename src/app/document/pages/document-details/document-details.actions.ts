@@ -52,5 +52,7 @@ export const DocumentDetailsActions = createActionGroup({
     }>(),
     'save downloaded attachment': props<{ file: Blob; fileName: string }>(),
     'attachment download failed': emptyProps(),
+    'retry file upload': props<{ attachmentId: string; fileName: string }>(),
+    'retry file upload canceled': emptyProps(),
   },
 });

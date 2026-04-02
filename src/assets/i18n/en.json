@@ -128,6 +128,12 @@
       "CANCEL": "Cancel",
       "SUCCESS": "Document deleted successfully",
       "ERROR": "Could not delete Document"
+    },
+    "DIALOGS": {
+      "RETRY_FILE_UPLOAD": {
+        "TITLE": "Upload file",
+        "SAVE_BTN": "Confirm"
+      }
     }
   },
   "DOCUMENT_SEARCH": {

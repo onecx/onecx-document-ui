@@ -109,6 +109,12 @@ export class DocumentDetailsComponent implements OnInit, OnDestroy {
     addCharacteristic(this.formGroup);
   }
 
+  onFileUploadRetry({ id, fileName }: { id: string; fileName: string }) {
+    this.store.dispatch(
+      DocumentDetailsActions.retryFileUpload({ attachmentId: id, fileName })
+    );
+  }
+
   private makeSubscriptions() {
     this.sub.add(this.viewModel$.subscribe((vm) => this.updateFormValue(vm)));
   }
@@ -127,7 +133,6 @@ export class DocumentDetailsComponent implements OnInit, OnDestroy {
             labelKey: 'DOCUMENT_DETAILS.GENERAL.BACK',
             show: 'always',
             disabled: !vm.backNavigationPossible,
-            permission: 'DOCUMENT#BACK',
             showCondition: !vm.editMode,
             actionCallback: () => {
               this.store.dispatch(
@@ -141,6 +146,7 @@ export class DocumentDetailsComponent implements OnInit, OnDestroy {
             show: 'always',
             icon: PrimeIcons.PENCIL,
             conditional: true,
+            permission: 'DOCUMENT#WRITE',
             showCondition: !vm.editMode,
             actionCallback: () => {
               this.edit();

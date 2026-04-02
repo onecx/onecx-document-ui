@@ -85,5 +85,21 @@ export const documentDetailsReducer = createReducer(
       ...state,
       availableMimeTypes: mimeTypes,
     })
+  ),
+  on(
+    DocumentCreateOperationsActions.requestDocumentUploadUrls,
+    (state: DocumentDetailsState): DocumentDetailsState => ({
+      ...state,
+      isSubmitting: true,
+    })
+  ),
+  on(
+    DocumentCreateOperationsActions.documentCreationCompleted,
+    DocumentCreateOperationsActions.documentCreationFinalStepFailed,
+    DocumentCreateOperationsActions.attachmentUploadFailed,
+    (state: DocumentDetailsState): DocumentDetailsState => ({
+      ...state,
+      isSubmitting: false,
+    })
   )
 );

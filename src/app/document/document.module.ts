@@ -40,6 +40,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { DocumentDetailsFormComponent } from './components/document-details-form/document-details-form.component';
 import { DocumentDetailsCharacteristicsComponent } from './pages/document-details/components/document-details-characteristics/document-details-characteristics.component';
+import { RetryFileUploadDialogComponent } from './pages/document-details/dialog/retry-file-upload-dialog/retry-file-upload-dialog.component';
 
 @NgModule({
   providers: [providePortalDialogService()],
@@ -57,6 +58,7 @@ import { DocumentDetailsCharacteristicsComponent } from './pages/document-detail
     DocumentDetailsAttachmentListComponent,
     DocumentDetailsCharacteristicsComponent,
     FileUploadComponent,
+    RetryFileUploadDialogComponent,
   ],
   imports: [
     CommonModule,

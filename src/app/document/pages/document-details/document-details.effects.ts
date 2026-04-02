@@ -25,17 +25,23 @@ import {
   DocumentCreateUpdate,
   DocumentDetail,
   LifeCycleState,
+  UploadAttachmentPresignedUrlRequest,
 } from '../../../shared/generated';
 import { DocumentDetailsActions } from './document-details.actions';
 import { DocumentDetailsComponent } from './document-details.component';
-import { documentDetailsSelectors } from './document-details.selectors';
+import {
+  documentDetailsSelectors,
+  selectDocumentDetailsViewModel,
+} from './document-details.selectors';
 import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions';
 import { ExternalFileHandlerService } from '../../service/external-file-handler.service';
 import {
+  AttachmentFile,
   DocumentAttachmentFormValue,
   DocumentCharacteristicFormValue,
   DocumentDetailsFormValue,
 } from '../../types/document-create.types';
+import { RetryFileUploadDialogComponent } from './dialog/retry-file-upload-dialog/retry-file-upload-dialog.component';
 
 @Injectable()
 export class DocumentDetailsEffects {
@@ -332,6 +338,64 @@ export class DocumentDetailsEffects {
         window.history.back();
         return of(DocumentDetailsActions.backNavigationStarted());
       })
+    );
+  });
+
+  retryFileUpload$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DocumentDetailsActions.retryFileUpload),
+      concatLatestFrom(() => this.store.select(selectDocumentDetailsViewModel)),
+      switchMap(([action, { details }]) => {
+        return this.portalDialogService
+          .openDialog(
+            'DOCUMENT_DETAILS.DIALOGS.RETRY_FILE_UPLOAD.TITLE',
+            RetryFileUploadDialogComponent,
+            'DOCUMENT_DETAILS.DIALOGS.RETRY_FILE_UPLOAD.SAVE_BTN',
+            undefined,
+            { showXButton: true, width: '40vw' }
+          )
+          .pipe(
+            map((dialogResult) => {
+              if (
+                !dialogResult ||
+                dialogResult.button !== 'primary' ||
+                !dialogResult.result
+              ) {
+                return DocumentDetailsActions.retryFileUploadCanceled();
+              }
+              const fileToUpload = dialogResult.result;
+              const urlRequest: UploadAttachmentPresignedUrlRequest[] = [
+                {
+                  fileName: action.fileName,
+                  attachmentId: action.attachmentId,
+                },
+              ];
+              const files: AttachmentFile[] = [
+                {
+                  attachmentId: action.attachmentId,
+                  file: fileToUpload,
+                  fileName: action.fileName,
+                },
+              ];
+              return DocumentCreateOperationsActions.requestDocumentUploadUrls({
+                createdDocument: details!,
+                uploadRequests: urlRequest,
+                files,
+              });
+            })
+          );
+      })
+    );
+  });
+
+  documentCreationSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DocumentCreateOperationsActions.documentCreationCompleted),
+      concatLatestFrom(() => this.store.select(selectDocumentDetailsViewModel)),
+      filter(([action, vm]) => action.documentId === vm.details?.id),
+      map(([action]) =>
+        DocumentDetailsActions.navigatedToDetailsPage({ id: action.documentId })
+      )
     );
   });
 

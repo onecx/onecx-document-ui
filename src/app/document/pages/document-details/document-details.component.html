@@ -45,6 +45,7 @@
               [attachments]="attachmentsFormArray"
               [editMode]="vm.editMode"
               (download)="onAttachmentDownload($event)"
+              (retryUpload)="onFileUploadRetry($event)"
             >
             </app-document-details-attachment-list>
           </p-tabPanel>

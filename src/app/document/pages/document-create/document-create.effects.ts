@@ -201,8 +201,8 @@ export class DocumentCreateEffects {
       .filter((characteristic) => characteristic.name && characteristic.value)
       .map((characteristic) => ({
         id: characteristic.id ?? undefined,
-        name: characteristic.name ?? undefined,
-        value: characteristic.value ?? undefined,
+        name: characteristic.name!, // filter guarantees non-null
+        value: characteristic.value!, // filter guarantees non-null
       }));
   }
 }

@@ -11,12 +11,11 @@
         pButton
         icon="pi pi-times"
         (click)="onCancel()"
-        [label]="'GENERAL.CANCEL' | translate"
         [pTooltip]="'GENERAL.CANCEL' | translate"
         tooltipPosition="top"
         iconPos="left"
         [disabled]="isSubmitted"
-      ></button>
+      >{{'GENERAL.CANCEL' | translate}}</button>
       <button
         class="w-12 lg:w-8 ml-2"
         pButton
@@ -90,11 +89,12 @@
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-text"
                     pButton
-                    title="{{ 'GENERAL.REMOVE' | translate }}"
                     (click)="
                       isSubmitted ? null : onDeleteUploadFile(attachment)
                     "
-                  ></button>
+                  >
+                    {{ 'GENERAL.REMOVE' | translate }}
+                  </button>
                 </span>
                 <div class="tile-item">
                   <div class="mb-2">
@@ -109,7 +109,7 @@
                         class="flex flex-row justify-content-between align-items-center text-2xl font-medium"
                       >
                         <p
-                          class="white-space-nowrap"
+                          class="white-space-nowrap overflow-hidden text-overflow-ellipsis"
                           [pTooltip]="attachment.name"
                           [tooltipPosition]="'right'"
                         >
@@ -208,11 +208,12 @@
                         icon="pi pi-trash"
                         class="p-button-rounded p-button-text mb-1 mr-2"
                         pButton
-                        title="{{ 'GENERAL.REMOVE' | translate }}"
                         (click)="
                           isSubmitted ? null : onDeleteUploadFile(attachment)
                         "
-                      ></button>
+                      >
+                        {{ 'GENERAL.REMOVE' | translate }}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -239,19 +240,14 @@
     {{ 'DOCUMENT_QUICK_UPLOAD.CANCEL_MODAL.CONFIRM' | translate }}
   </div>
   <p-footer class="btn-text">
-    <button
-      type="button"
-      pButton
-      icon="pi pi-times"
-      (click)="onCancelNo()"
-      label="{{ 'GENERAL.NO' | translate }}"
-    ></button>
+    <button type="button" pButton icon="pi pi-times" (click)="onCancelNo()">
+      {{ 'GENERAL.NO' | translate }}
+    </button>
     <button
       type="button"
       pButton
       icon="pi pi-check"
       (click)="onCancelYes()"
-      label="{{ 'GENERAL.YES' | translate }}"
-    ></button>
+    >{{ 'GENERAL.YES' | translate }}</button>
   </p-footer>
 </p-dialog>

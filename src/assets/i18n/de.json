@@ -123,6 +123,12 @@
       "CANCEL": "Abbrechen",
       "SUCCESS": "Document erfolgreich gelöscht",
       "ERROR": "Konnte Document nicht löschen"
+    },
+    "DIALOGS": {
+      "RETRY_FILE_UPLOAD": {
+        "TITLE": "Datei hochladen",
+        "SAVE_BTN": "Bestätigen"
+      }
     }
   },
   "DOCUMENT_SEARCH": {
