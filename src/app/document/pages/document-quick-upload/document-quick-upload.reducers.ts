@@ -6,11 +6,6 @@ export const initialState: DocumentQuickUploadState = {
   optionsLoading: false,
   mimeTypesLoaded: false,
   documentTypesLoaded: false,
-  availableDocumentTypes: [],
-  availableMimeTypes: [],
-  pendingAttachmentUploads: 0,
-  successfulAttachmentIds: [],
-  failedAttachmentIds: [],
 };
 
 export const documentQuickUploadReducer = createReducer(
@@ -24,18 +19,16 @@ export const documentQuickUploadReducer = createReducer(
   ),
   on(
     DocumentCreateOperationsActions.availableDocumentTypesReceived,
-    (state, { types }): DocumentQuickUploadState => ({
+    (state): DocumentQuickUploadState => ({
       ...state,
-      availableDocumentTypes: types,
       documentTypesLoaded: true,
       optionsLoading: !state.mimeTypesLoaded,
     })
   ),
   on(
     DocumentCreateOperationsActions.availableMimeTypesReceived,
-    (state, { mimeTypes }): DocumentQuickUploadState => ({
+    (state): DocumentQuickUploadState => ({
       ...state,
-      availableMimeTypes: mimeTypes,
       mimeTypesLoaded: true,
       optionsLoading: !state.documentTypesLoaded,
     })
@@ -48,38 +41,12 @@ export const documentQuickUploadReducer = createReducer(
     })
   ),
   on(
-    DocumentCreateOperationsActions.requestDocumentUploadUrls,
-    (state, { files }): DocumentQuickUploadState => ({
-      ...state,
-      pendingAttachmentUploads: files.length,
-      successfulAttachmentIds: [],
-      failedAttachmentIds: [],
-    })
-  ),
-  on(
-    DocumentCreateOperationsActions.uploadAttachmentSuccess,
-    (state, { attachmentId }): DocumentQuickUploadState => ({
-      ...state,
-      successfulAttachmentIds: [...state.successfulAttachmentIds, attachmentId],
-      pendingAttachmentUploads: state.pendingAttachmentUploads - 1,
-    })
-  ),
-  on(
-    DocumentCreateOperationsActions.attachmentUploadFailed,
-    (state, { attachmentId }): DocumentQuickUploadState => ({
-      ...state,
-      failedAttachmentIds: [...state.failedAttachmentIds, attachmentId],
-      pendingAttachmentUploads: state.pendingAttachmentUploads - 1,
-    })
-  ),
-  on(
     DocumentCreateOperationsActions.documentCreationCompleted,
     DocumentCreateOperationsActions.documentCreationFinalStepFailed,
     DocumentCreateOperationsActions.documentCreationFailed,
     DocumentCreateOperationsActions.loadReferenceDataFailed,
     (): DocumentQuickUploadState => ({
       ...initialState,
-      optionsLoading: false,
     })
   )
 );

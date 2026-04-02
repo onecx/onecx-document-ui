@@ -1,8 +1,4 @@
-import {
-  DocumentDetail,
-  DocumentType,
-  SupportedMimeType,
-} from '../../../shared/generated';
+import { DocumentDetail } from '../../../shared/generated';
 
 export interface DocumentDetailsState {
   details: DocumentDetail | undefined;
@@ -10,6 +6,4 @@ export interface DocumentDetailsState {
   detailsLoaded: boolean;
   editMode: boolean;
   isSubmitting: boolean;
-  availableDocumentTypes: DocumentType[];
-  availableMimeTypes: SupportedMimeType[];
 }

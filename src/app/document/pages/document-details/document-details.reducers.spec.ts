@@ -1,4 +1,3 @@
-import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions';
 import { DocumentDetailsActions } from './document-details.actions';
 import * as reducers from './document-details.reducers';
 
@@ -25,8 +24,13 @@ describe('DocumentDetailsReducer', () => {
   describe('documentDetailsReceived', () => {
     it('should set details and set detailsLoaded=true, detailsLoadingIndicator=false', () => {
       const details = { id: '1', name: 'Doc' } as any;
-      const action = DocumentDetailsActions.documentDetailsReceived({ details });
-      const state = reducers.documentDetailsReducer(reducers.initialState, action);
+      const action = DocumentDetailsActions.documentDetailsReceived({
+        details,
+      });
+      const state = reducers.documentDetailsReducer(
+        reducers.initialState,
+        action
+      );
       expect(state.details).toEqual(details);
       expect(state.detailsLoaded).toBe(true);
       expect(state.detailsLoadingIndicator).toBe(false);
@@ -54,7 +58,10 @@ describe('DocumentDetailsReducer', () => {
   describe('editButtonClicked', () => {
     it('should set editMode=true', () => {
       const action = DocumentDetailsActions.editButtonClicked();
-      const state = reducers.documentDetailsReducer(reducers.initialState, action);
+      const state = reducers.documentDetailsReducer(
+        reducers.initialState,
+        action
+      );
       expect(state.editMode).toBe(true);
     });
   });
@@ -64,7 +71,10 @@ describe('DocumentDetailsReducer', () => {
       const action = DocumentDetailsActions.saveButtonClicked({
         details: {} as any,
       });
-      const state = reducers.documentDetailsReducer(reducers.initialState, action);
+      const state = reducers.documentDetailsReducer(
+        reducers.initialState,
+        action
+      );
       expect(state.isSubmitting).toBe(true);
     });
   });
@@ -99,28 +109,6 @@ describe('DocumentDetailsReducer', () => {
       });
       const state = reducers.documentDetailsReducer(preState, action);
       expect(state.isSubmitting).toBe(false);
-    });
-  });
-
-  describe('availableDocumentTypesReceived', () => {
-    it('should set availableDocumentTypes', () => {
-      const types = [{ id: 't1', name: 'Invoice' }] as any;
-      const action =
-        DocumentCreateOperationsActions.availableDocumentTypesReceived({
-          types,
-        });
-      const state = reducers.documentDetailsReducer(reducers.initialState, action);
-      expect(state.availableDocumentTypes).toEqual(types);
-    });
-  });
-
-  describe('availableMimeTypesReceived', () => {
-    it('should set availableMimeTypes', () => {
-      const mimeTypes = [{ id: 'm1', name: 'application/pdf' }] as any;
-      const action =
-        DocumentCreateOperationsActions.availableMimeTypesReceived({ mimeTypes });
-      const state = reducers.documentDetailsReducer(reducers.initialState, action);
-      expect(state.availableMimeTypes).toEqual(mimeTypes);
     });
   });
 });

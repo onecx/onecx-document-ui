@@ -3,6 +3,7 @@ import { createChildSelectors } from '@onecx/ngrx-accelerator';
 import { selectBackNavigationPossible } from 'src/app/shared/selectors/onecx.selectors';
 import { DocumentDetail, SupportedMimeType } from '../../../shared/generated';
 import { documentFeature } from '../../document.reducers';
+import { documentCreateOperationsSelectors } from '../../operations/document-create-operations.selectors';
 import { initialState } from './document-details.reducers';
 import { DocumentDetailsViewModel } from './document-details.viewmodel';
 import { SelectItem } from 'primeng/api';
@@ -13,7 +14,7 @@ export const documentDetailsSelectors = createChildSelectors(
 );
 
 export const selectDocumentTypes = createSelector(
-  documentDetailsSelectors.selectAvailableDocumentTypes,
+  documentCreateOperationsSelectors.selectAvailableDocumentTypes,
   (types): SelectItem[] =>
     types.map((type) => ({
       label: type.name,
@@ -22,7 +23,7 @@ export const selectDocumentTypes = createSelector(
 );
 
 export const selectMimeTypes = createSelector(
-  documentDetailsSelectors.selectAvailableMimeTypes,
+  documentCreateOperationsSelectors.selectAvailableMimeTypes,
   (mimeTypes: SupportedMimeType[]): SelectItem[] =>
     mimeTypes.map((mimeType) => ({
       label: mimeType.name,

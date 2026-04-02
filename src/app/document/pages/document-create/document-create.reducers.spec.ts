@@ -14,11 +14,10 @@ describe('DocumentCreateReducer', () => {
       expect(state.error).toBeNull();
     });
 
-    it('should set referenceDataLoading=false when types and mimeTypes are already loaded', () => {
+    it('should set referenceDataLoading=false when referenceDataLoaded is already true', () => {
       const preState = {
         ...reducers.initialState,
-        availableDocumentTypes: [{ id: 't1' }] as any,
-        availableMimeTypes: [{ id: 'm1' }] as any,
+        referenceDataLoaded: true,
       };
       const state = reducers.documentCreateReducer(
         preState,
@@ -194,10 +193,10 @@ describe('DocumentCreateReducer', () => {
   });
 
   describe('availableDocumentTypesReceived', () => {
-    it('should set availableDocumentTypes and referenceDataLoaded=true when mimeTypes also present', () => {
+    it('should set documentTypesReceived=true, referenceDataLoaded=true when mimeTypes also received', () => {
       const preState = {
         ...reducers.initialState,
-        availableMimeTypes: [{ id: 'm1' }] as any,
+        mimeTypesReceived: true,
       };
       const types = [{ id: 't1', name: 'Invoice' }] as any;
       const state = reducers.documentCreateReducer(
@@ -206,12 +205,12 @@ describe('DocumentCreateReducer', () => {
           types,
         })
       );
-      expect(state.availableDocumentTypes).toEqual(types);
+      expect(state.documentTypesReceived).toBe(true);
       expect(state.referenceDataLoaded).toBe(true);
       expect(state.referenceDataLoading).toBe(false);
     });
 
-    it('should set referenceDataLoading=true when mimeTypes not yet available', () => {
+    it('should set referenceDataLoading=true when mimeTypes not yet received', () => {
       const types = [{ id: 't1' }] as any;
       const state = reducers.documentCreateReducer(
         reducers.initialState,
@@ -225,10 +224,10 @@ describe('DocumentCreateReducer', () => {
   });
 
   describe('availableMimeTypesReceived', () => {
-    it('should set availableMimeTypes and referenceDataLoaded=true when types also present', () => {
+    it('should set mimeTypesReceived=true, referenceDataLoaded=true when types also received', () => {
       const preState = {
         ...reducers.initialState,
-        availableDocumentTypes: [{ id: 't1' }] as any,
+        documentTypesReceived: true,
       };
       const mimeTypes = [{ id: 'm1', name: 'application/pdf' }] as any;
       const state = reducers.documentCreateReducer(
@@ -237,22 +236,30 @@ describe('DocumentCreateReducer', () => {
           mimeTypes,
         })
       );
-      expect(state.availableMimeTypes).toEqual(mimeTypes);
+      expect(state.mimeTypesReceived).toBe(true);
       expect(state.referenceDataLoaded).toBe(true);
       expect(state.referenceDataLoading).toBe(false);
     });
   });
 
   describe('loadReferenceDataFailed', () => {
-    it('should set referenceDataLoading=false, referenceDataLoaded=false and store error', () => {
+    it('should set referenceDataLoading=false, referenceDataLoaded=false, reset received flags and store error', () => {
+      const preState = {
+        ...reducers.initialState,
+        documentTypesReceived: true,
+        mimeTypesReceived: true,
+        referenceDataLoaded: true,
+      };
       const state = reducers.documentCreateReducer(
-        reducers.initialState,
+        preState,
         DocumentCreateOperationsActions.loadReferenceDataFailed({
           error: 'LOAD_FAILED',
         })
       );
       expect(state.referenceDataLoading).toBe(false);
       expect(state.referenceDataLoaded).toBe(false);
+      expect(state.documentTypesReceived).toBe(false);
+      expect(state.mimeTypesReceived).toBe(false);
       expect(state.error).toBe('LOAD_FAILED');
     });
   });

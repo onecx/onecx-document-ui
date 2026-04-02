@@ -23,7 +23,7 @@ import {
   switchMap,
 } from 'rxjs';
 import { ExternalFileHandlerService } from '../service/external-file-handler.service';
-import { documentQuickUploadSelectors } from '../pages/document-quick-upload/document-quick-upload.selectors';
+import { documentCreateOperationsSelectors } from './document-create-operations.selectors';
 import { AttachmentFile } from '../types/document-create.types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppStateService } from '@onecx/angular-integration-interface';
@@ -63,10 +63,10 @@ export class DocumentCreateOperationsEffects {
       ofType(DocumentCreateOperationsActions.ensureReferenceDataLoaded),
       concatLatestFrom(() => [
         this.store.select(
-          documentQuickUploadSelectors.selectAvailableDocumentTypes
+          documentCreateOperationsSelectors.selectAvailableDocumentTypes
         ),
         this.store.select(
-          documentQuickUploadSelectors.selectAvailableMimeTypes
+          documentCreateOperationsSelectors.selectAvailableMimeTypes
         ),
       ]),
       switchMap(([, availableDocumentTypes, availableMimeTypes]) => {
@@ -201,13 +201,13 @@ export class DocumentCreateOperationsEffects {
       ),
       concatLatestFrom(() => [
         this.store.select(
-          documentQuickUploadSelectors.selectPendingAttachmentUploads
+          documentCreateOperationsSelectors.selectPendingAttachmentUploads
         ),
         this.store.select(
-          documentQuickUploadSelectors.selectSuccessfulAttachmentIds
+          documentCreateOperationsSelectors.selectSuccessfulAttachmentIds
         ),
         this.store.select(
-          documentQuickUploadSelectors.selectFailedAttachmentIds
+          documentCreateOperationsSelectors.selectFailedAttachmentIds
         ),
       ]),
       filter(([, pending]) => (pending as number) === 0),

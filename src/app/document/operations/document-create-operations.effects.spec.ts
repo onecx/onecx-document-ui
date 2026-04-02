@@ -16,8 +16,8 @@ import {
 import { ExternalFileHandlerService } from '../service/external-file-handler.service';
 import { DocumentCreateOperationsActions } from './document-create-operations.actions';
 import { DocumentCreateOperationsEffects } from './document-create-operations.effects';
-import { documentQuickUploadSelectors } from '../pages/document-quick-upload/document-quick-upload.selectors';
-import { initialState as quickUploadInitialState } from '../pages/document-quick-upload/document-quick-upload.reducers';
+import { documentCreateOperationsSelectors } from './document-create-operations.selectors';
+import { initialState as operationsInitialState } from './document-create-operations.reducers';
 
 describe('DocumentCreateOperationsEffects', () => {
   let actions$: ReplaySubject<Action>;
@@ -57,7 +57,7 @@ describe('DocumentCreateOperationsEffects', () => {
         provideRouter([]),
         provideMockActions(() => actions$),
         provideMockStore({
-          initialState: { document: { quickUpload: quickUploadInitialState } },
+          initialState: { document: { operations: operationsInitialState } },
         }),
         provideAppStateServiceMock(),
         { provide: DocumentControllerV1, useValue: documentService },
@@ -133,11 +133,11 @@ describe('DocumentCreateOperationsEffects', () => {
       mimeTypeService.getAllSupportedMimeTypes.mockReturnValue(of(mimeTypes));
 
       store.overrideSelector(
-        documentQuickUploadSelectors.selectAvailableDocumentTypes,
+        documentCreateOperationsSelectors.selectAvailableDocumentTypes,
         []
       );
       store.overrideSelector(
-        documentQuickUploadSelectors.selectAvailableMimeTypes,
+        documentCreateOperationsSelectors.selectAvailableMimeTypes,
         []
       );
       store.refreshState();
@@ -171,11 +171,11 @@ describe('DocumentCreateOperationsEffects', () => {
       mimeTypeService.getAllSupportedMimeTypes.mockReturnValue(of(mimeTypes));
 
       store.overrideSelector(
-        documentQuickUploadSelectors.selectAvailableDocumentTypes,
+        documentCreateOperationsSelectors.selectAvailableDocumentTypes,
         cachedTypes
       );
       store.overrideSelector(
-        documentQuickUploadSelectors.selectAvailableMimeTypes,
+        documentCreateOperationsSelectors.selectAvailableMimeTypes,
         []
       );
       store.refreshState();
@@ -209,11 +209,11 @@ describe('DocumentCreateOperationsEffects', () => {
       mimeTypeService.getAllSupportedMimeTypes.mockReturnValue(of([]) as any);
 
       store.overrideSelector(
-        documentQuickUploadSelectors.selectAvailableDocumentTypes,
+        documentCreateOperationsSelectors.selectAvailableDocumentTypes,
         []
       );
       store.overrideSelector(
-        documentQuickUploadSelectors.selectAvailableMimeTypes,
+        documentCreateOperationsSelectors.selectAvailableMimeTypes,
         []
       );
       store.refreshState();
@@ -238,11 +238,11 @@ describe('DocumentCreateOperationsEffects', () => {
       documentTypeService.getAllTypesOfDocument.mockReturnValue(of(types));
 
       store.overrideSelector(
-        documentQuickUploadSelectors.selectAvailableDocumentTypes,
+        documentCreateOperationsSelectors.selectAvailableDocumentTypes,
         []
       );
       store.overrideSelector(
-        documentQuickUploadSelectors.selectAvailableMimeTypes,
+        documentCreateOperationsSelectors.selectAvailableMimeTypes,
         cachedMimeTypes
       );
       store.refreshState();
@@ -425,15 +425,15 @@ describe('DocumentCreateOperationsEffects', () => {
   describe('trackUploadCompletion$', () => {
     it('should dispatch allAttachmentsUploaded when pendingAttachmentUploads reaches 0', (done) => {
       store.overrideSelector(
-        documentQuickUploadSelectors.selectPendingAttachmentUploads,
+        documentCreateOperationsSelectors.selectPendingAttachmentUploads,
         0
       );
       store.overrideSelector(
-        documentQuickUploadSelectors.selectSuccessfulAttachmentIds,
+        documentCreateOperationsSelectors.selectSuccessfulAttachmentIds,
         ['att-1']
       );
       store.overrideSelector(
-        documentQuickUploadSelectors.selectFailedAttachmentIds,
+        documentCreateOperationsSelectors.selectFailedAttachmentIds,
         []
       );
       store.refreshState();
@@ -459,7 +459,7 @@ describe('DocumentCreateOperationsEffects', () => {
 
     it('should not dispatch when pendingAttachmentUploads is greater than 0', (done) => {
       store.overrideSelector(
-        documentQuickUploadSelectors.selectPendingAttachmentUploads,
+        documentCreateOperationsSelectors.selectPendingAttachmentUploads,
         2
       );
       store.refreshState();

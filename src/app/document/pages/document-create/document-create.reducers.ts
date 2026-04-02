@@ -11,8 +11,8 @@ export const initialState: DocumentCreateState = {
   characteristics: [],
   referenceDataLoading: false,
   referenceDataLoaded: false,
-  availableDocumentTypes: [],
-  availableMimeTypes: [],
+  documentTypesReceived: false,
+  mimeTypesReceived: false,
   submitting: false,
   error: null,
 };
@@ -24,9 +24,7 @@ export const documentCreateReducer = createReducer(
     (state): DocumentCreateState => ({
       ...state,
       error: null,
-      referenceDataLoading:
-        !state.availableDocumentTypes.length ||
-        !state.availableMimeTypes.length,
+      referenceDataLoading: !state.referenceDataLoaded,
     })
   ),
   on(
@@ -123,22 +121,21 @@ export const documentCreateReducer = createReducer(
   ),
   on(
     DocumentCreateOperationsActions.availableDocumentTypesReceived,
-    (state, { types }): DocumentCreateState => ({
+    (state): DocumentCreateState => ({
       ...state,
-      availableDocumentTypes: types,
-      referenceDataLoaded: !!types.length && !!state.availableMimeTypes.length,
-      referenceDataLoading: !state.availableMimeTypes.length,
+      documentTypesReceived: true,
+      referenceDataLoaded: state.mimeTypesReceived,
+      referenceDataLoading: !state.mimeTypesReceived,
       error: null,
     })
   ),
   on(
     DocumentCreateOperationsActions.availableMimeTypesReceived,
-    (state, { mimeTypes }): DocumentCreateState => ({
+    (state): DocumentCreateState => ({
       ...state,
-      availableMimeTypes: mimeTypes,
-      referenceDataLoaded:
-        !!mimeTypes.length && !!state.availableDocumentTypes.length,
-      referenceDataLoading: !state.availableDocumentTypes.length,
+      mimeTypesReceived: true,
+      referenceDataLoaded: state.documentTypesReceived,
+      referenceDataLoading: !state.documentTypesReceived,
       error: null,
     })
   ),
@@ -148,6 +145,8 @@ export const documentCreateReducer = createReducer(
       ...state,
       referenceDataLoading: false,
       referenceDataLoaded: false,
+      documentTypesReceived: false,
+      mimeTypesReceived: false,
       error: error ?? null,
     })
   ),

@@ -2,6 +2,7 @@ import { createSelector } from '@ngrx/store';
 import { createChildSelectors } from '@onecx/ngrx-accelerator';
 import { SelectItem } from 'primeng/api';
 import { documentFeature } from '../../document.reducers';
+import { documentCreateOperationsSelectors } from '../../operations/document-create-operations.selectors';
 import { initialState } from './document-create.reducers';
 import { DocumentCreateViewModel } from './document-create.viewmodel';
 
@@ -11,7 +12,7 @@ export const documentCreateSelectors = createChildSelectors(
 );
 
 export const selectCreateDocumentTypes = createSelector(
-  documentCreateSelectors.selectAvailableDocumentTypes,
+  documentCreateOperationsSelectors.selectAvailableDocumentTypes,
   (types): SelectItem[] =>
     types.map((type) => ({
       label: type.name,
@@ -20,7 +21,7 @@ export const selectCreateDocumentTypes = createSelector(
 );
 
 export const selectCreateMimeTypes = createSelector(
-  documentCreateSelectors.selectAvailableMimeTypes,
+  documentCreateOperationsSelectors.selectAvailableMimeTypes,
   (mimeTypes): SelectItem[] =>
     mimeTypes.map((mimeType) => ({
       label: mimeType.name,

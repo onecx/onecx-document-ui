@@ -2,16 +2,15 @@ import { createSelector } from '@ngrx/store';
 import { createChildSelectors } from '@onecx/ngrx-accelerator';
 import { SelectItem } from 'primeng/api';
 import { SupportedMimeType } from 'src/app/shared/generated';
-import { documentFeature } from '../../document.reducers';
-import { documentCreateOperationsSelectors } from '../../operations/document-create-operations.selectors';
-import { initialState } from './document-quick-upload.reducers';
+import { documentFeature } from '../document.reducers';
+import { initialState } from './document-create-operations.reducers';
 
-export const documentQuickUploadSelectors = createChildSelectors(
-  documentFeature.selectQuickUpload,
+export const documentCreateOperationsSelectors = createChildSelectors(
+  documentFeature.selectOperations,
   initialState
 );
 
-export const selectQuickUploadDocumentTypes = createSelector(
+export const selectOperationsDocumentTypes = createSelector(
   documentCreateOperationsSelectors.selectAvailableDocumentTypes,
   (types): SelectItem[] =>
     types.map((type) => ({
@@ -20,7 +19,7 @@ export const selectQuickUploadDocumentTypes = createSelector(
     }))
 );
 
-export const selectQuickUploadMimeTypes = createSelector(
+export const selectOperationsMimeTypes = createSelector(
   documentCreateOperationsSelectors.selectAvailableMimeTypes,
   (mimeTypes: SupportedMimeType[]): SelectItem[] =>
     mimeTypes.map((mimeType) => ({

@@ -3,7 +3,6 @@ import {
   DocumentCharacteristicFormValue,
   DocumentCreateDetailsStepData,
 } from '../../types/document-create.types';
-import { DocumentType, SupportedMimeType } from 'src/app/shared/generated';
 import { DocumentCreateStep } from '../../types/document-create-step.enum';
 
 export interface DocumentCreateState {
@@ -13,8 +12,8 @@ export interface DocumentCreateState {
   characteristics: DocumentCharacteristicFormValue[];
   referenceDataLoading: boolean;
   referenceDataLoaded: boolean;
-  availableDocumentTypes: DocumentType[];
-  availableMimeTypes: SupportedMimeType[];
+  documentTypesReceived: boolean;
+  mimeTypesReceived: boolean;
   submitting: boolean;
   error: string | null;
 }

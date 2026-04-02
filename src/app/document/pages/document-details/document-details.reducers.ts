@@ -9,8 +9,6 @@ export const initialState: DocumentDetailsState = {
   detailsLoaded: false,
   editMode: false,
   isSubmitting: false,
-  availableDocumentTypes: [],
-  availableMimeTypes: [],
 };
 
 export const documentDetailsReducer = createReducer(
@@ -70,20 +68,6 @@ export const documentDetailsReducer = createReducer(
     (state: DocumentDetailsState): DocumentDetailsState => ({
       ...state,
       isSubmitting: false,
-    })
-  ),
-  on(
-    DocumentCreateOperationsActions.availableDocumentTypesReceived,
-    (state: DocumentDetailsState, { types }): DocumentDetailsState => ({
-      ...state,
-      availableDocumentTypes: types,
-    })
-  ),
-  on(
-    DocumentCreateOperationsActions.availableMimeTypesReceived,
-    (state: DocumentDetailsState, { mimeTypes }): DocumentDetailsState => ({
-      ...state,
-      availableMimeTypes: mimeTypes,
     })
   ),
   on(
