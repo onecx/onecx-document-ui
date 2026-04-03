@@ -347,9 +347,12 @@ export class DocumentDetailsEffects {
       concatLatestFrom(() => this.store.select(selectDocumentDetailsViewModel)),
       switchMap(([action, { details }]) => {
         return this.portalDialogService
-          .openDialog(
+          .openDialog<File | null>(
             'DOCUMENT_DETAILS.DIALOGS.RETRY_FILE_UPLOAD.TITLE',
-            RetryFileUploadDialogComponent,
+            {
+              type: RetryFileUploadDialogComponent,
+              inputs: { fileName: action.fileName },
+            },
             'DOCUMENT_DETAILS.DIALOGS.RETRY_FILE_UPLOAD.SAVE_BTN',
             undefined,
             { showXButton: true, width: '40vw' }

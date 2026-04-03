@@ -132,7 +132,8 @@
     "DIALOGS": {
       "RETRY_FILE_UPLOAD": {
         "TITLE": "Upload file",
-        "SAVE_BTN": "Confirm"
+        "SAVE_BTN": "Confirm",
+        "FILENAME_MISMATCH": "Please upload file with required file name {{fileName}}"
       }
     }
   },

@@ -127,7 +127,8 @@
     "DIALOGS": {
       "RETRY_FILE_UPLOAD": {
         "TITLE": "Datei hochladen",
-        "SAVE_BTN": "Bestätigen"
+        "SAVE_BTN": "Bestätigen",
+        "FILENAME_MISMATCH": "Bitte lade die Datei mit dem erforderlichen Dateinamen {{fileName}} hoch"
       }
     }
   },

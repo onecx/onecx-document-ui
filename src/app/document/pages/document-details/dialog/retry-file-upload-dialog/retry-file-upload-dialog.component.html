@@ -1,5 +1,20 @@
 <div>
-  @if (dialogResult) {
+  @if (showFileNameMismatch) {
+  <div
+    class="flex align-items-center justify-content-between p-2 mb-1 cursor-pointer border-round"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="text-sm overflow-hidden white-space-nowrap text-overflow-ellipsis text-red-500"
+    >
+      {{
+        'DOCUMENT_DETAILS.DIALOGS.RETRY_FILE_UPLOAD.FILENAME_MISMATCH'
+          | translate : { fileName: fileName }
+      }}
+    </span>
+  </div>
+  } @if (dialogResult) {
   <div
     class="flex align-items-center justify-content-between p-2 mb-1 cursor-pointer border-round"
     role="button"
