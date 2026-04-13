@@ -1,3 +1,4 @@
+---
 openapi: 3.0.3
 info:
   title: document-management
@@ -7,8 +8,8 @@ tags:
   - name: DocumentControllerV1
   - name: DocumentSpecificationControllerV1
   - name: DocumentTypeControllerV1
-  - name: FileControllerV1
   - name: SupportedMimeTypeControllerV1
+
 paths:
   /document:
     post:
@@ -437,28 +438,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RFCProblem'
-  /document/file/delete-bulk-attachment:
-    delete:
-      x-onecx:
-        permissions:
-          document:
-            - delete
-      tags:
-        - DocumentControllerV1
-      description: Delete attachment's files in bulk
-      operationId: deleteFilesInBulk
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: string
-      responses:
-        '204':
-          description: No Content
-        '404':
-          description: Not found
   /document/file/{attachmentId}:
     get:
       x-onecx:
@@ -482,50 +461,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AttachmentPresignedUrlResponse'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
         '404':
           description: Not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
-  /document/file/{documentId}/attachments:
-    get:
-      x-onecx:
-        permissions:
-          document:
-            - read
-      tags:
-        - DocumentControllerV1
-      description: Get all the attachments of the document packaged in a zip file
-      operationId: getAllDocumentAttachmentsAsZip
-      parameters:
-        - name: documentId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: client-timezone
-          in: header
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-        '204':
-          description: No content
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /document/{documentId}/files/metadata:
     patch:
       x-onecx:
@@ -645,9 +592,10 @@ paths:
         permissions:
           document:
             - read
-      operationId: getDocumentDetailById
       tags:
         - DocumentControllerV1
+      description: Gets Document by Id
+      operationId: getDocumentById
       parameters:
         - name: id
           in: path
@@ -656,30 +604,26 @@ paths:
             type: string
       responses:
         '200':
-          description: OK
+          description: Ok
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DocumentDetail'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
         '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
+          description: Not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
+                $ref: '#/components/schemas/RFCProblem'
     put:
-      operationId: updateDocumentDetail
+      x-onecx:
+        permissions:
+          document:
+            - write
       tags:
         - DocumentControllerV1
-      description: This operation performs an update.
+      description: Update an document
+      operationId: updateDocument
       parameters:
         - name: id
           in: path
@@ -687,13 +631,12 @@ paths:
           schema:
             type: string
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/DocumentCreateUpdate'
       responses:
-        '204':
+        '200':
           description: DocumentDetail updated
           headers:
             Location:
@@ -713,11 +656,19 @@ paths:
                 $ref: '#/components/schemas/ProblemDetailResponse'
         '404':
           description: DocumentDetail not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
     delete:
+      x-onecx:
+        permissions:
+          document:
+            - delete
       tags:
         - DocumentControllerV1
-      operationId: deleteDocumentDetail
-      description: Delete DocumentDetail by id
+      description: Delete Document by Id
+      operationId: deleteDocumentById
       parameters:
         - name: id
           in: path
@@ -726,120 +677,13 @@ paths:
             type: string
       responses:
         '204':
-          description: DocumentDetail deleted
-  /files/bucket/{name}:
-    post:
-      x-onecx:
-        permissions:
-          document:
-            - write
-      tags:
-        - FileControllerV1
-      summary: Creates a bucket with the given name
-      description: Create a bucket
-      operationId: createBucket
-      parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: Created
-        '400':
-          description: Bad request
-  /files/{bucket}/{path}:
-    get:
-      x-onecx:
-        permissions:
-          document:
-            - read
-      tags:
-        - FileControllerV1
-      summary: Download file contents
-      operationId: downloadFile
-      parameters:
-        - name: bucket
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: path
-          in: path
-          required: true
-          schema:
-            pattern: .+
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
+          description: Deleted Document by id
         '404':
           description: Not found
-    put:
-      x-onecx:
-        permissions:
-          document:
-            - write
-      tags:
-        - FileControllerV1
-      summary: Uploads a file to the given location
-      description: Uploads the file
-      operationId: uploadFile
-      parameters:
-        - name: bucket
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: path
-          in: path
-          required: true
-          schema:
-            pattern: .+
-            type: string
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/FileMultipartBody'
-      responses:
-        '201':
-          description: Created
-        '400':
-          description: Bad request
-    delete:
-      x-onecx:
-        permissions:
-          document:
-            - delete
-      tags:
-        - FileControllerV1
-      summary: Deletes the file from Minio object storage
-      description: Deletes the file
-      operationId: deleteFile
-      parameters:
-        - name: bucket
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: path
-          in: path
-          required: true
-          schema:
-            pattern: .+
-            type: string
-      responses:
-        '201':
-          description: File Deleted
-        '404':
-          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RFCProblem'
   /supported-mime-type:
     get:
       x-onecx:

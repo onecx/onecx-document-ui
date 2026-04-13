@@ -75,7 +75,7 @@ export class DocumentDetailsEffects {
     return this.actions$.pipe(
       ofType(DocumentDetailsActions.navigatedToDetailsPage),
       switchMap(({ id }) =>
-        this.documentService.getDocumentDetailById(id ?? '').pipe(
+        this.documentService.getDocumentById(id ?? '').pipe(
           map((details) =>
             DocumentDetailsActions.documentDetailsReceived({
               details,
@@ -137,7 +137,7 @@ export class DocumentDetailsEffects {
         }
         const itemToEdit = this.getUpdateRequest(prevDetails, details);
         return this.documentService
-          .updateDocumentDetail(itemToEditId, itemToEdit)
+          .updateDocument(itemToEditId, itemToEdit)
           .pipe(
             mergeMap((response) => [
               DocumentDetailsActions.updateDocumentSucceeded(),
@@ -208,7 +208,7 @@ export class DocumentDetailsEffects {
           throw new Error('Item to delete not found!');
         }
 
-        return this.documentService.deleteDocumentDetail(itemToDelete.id!).pipe(
+        return this.documentService.deleteDocumentById(itemToDelete.id!).pipe(
           map(() => {
             this.messageService.success({
               summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS',

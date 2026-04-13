@@ -47,9 +47,9 @@ describe('DocumentDetailsEffects', () => {
     actions$ = new ReplaySubject(1);
 
     documentService = {
-      getDocumentDetailById: jest.fn(),
-      updateDocumentDetail: jest.fn(),
-      deleteDocumentDetail: jest.fn(),
+      getDocumentById: jest.fn(),
+      updateDocument: jest.fn(),
+      deleteDocumentById: jest.fn(),
       getFile: jest.fn(),
     } as unknown as jest.Mocked<DocumentControllerV1>;
 
@@ -145,7 +145,7 @@ describe('DocumentDetailsEffects', () => {
   describe('loadDocumentById$', () => {
     it('should dispatch documentDetailsReceived on success', (done) => {
       const details = { id: '1', name: 'Doc' } as any;
-      documentService.getDocumentDetailById.mockReturnValue(of(details));
+      documentService.getDocumentById.mockReturnValue(of(details));
 
       effects.loadDocumentById$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
@@ -159,9 +159,7 @@ describe('DocumentDetailsEffects', () => {
 
     it('should dispatch documentDetailsLoadingFailed on API error', (done) => {
       const error = 'load failed';
-      documentService.getDocumentDetailById.mockReturnValue(
-        throwError(() => error)
-      );
+      documentService.getDocumentById.mockReturnValue(throwError(() => error));
 
       effects.loadDocumentById$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
@@ -175,10 +173,10 @@ describe('DocumentDetailsEffects', () => {
 
     it('should use empty string when id is undefined in navigatedToDetailsPage', (done) => {
       const details = { id: '', name: 'Doc' } as any;
-      documentService.getDocumentDetailById.mockReturnValue(of(details));
+      documentService.getDocumentById.mockReturnValue(of(details));
 
       effects.loadDocumentById$.pipe(take(1)).subscribe(() => {
-        expect(documentService.getDocumentDetailById).toHaveBeenCalledWith('');
+        expect(documentService.getDocumentById).toHaveBeenCalledWith('');
         done();
       });
 
@@ -283,7 +281,7 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(of(updatedDetails));
+      documentService.updateDocument.mockReturnValue(of(updatedDetails));
 
       const dispatched: Action[] = [];
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
@@ -327,9 +325,7 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
-        throwError(() => error)
-      );
+      documentService.updateDocument.mockReturnValue(throwError(() => error));
 
       effects.saveButtonClicked$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
@@ -393,7 +389,7 @@ describe('DocumentDetailsEffects', () => {
       portalDialogService.openDialog.mockReturnValue(
         of({ button: 'primary' } as DialogState<any>)
       );
-      documentService.deleteDocumentDetail.mockReturnValue(of({} as any));
+      documentService.deleteDocumentById.mockReturnValue(of({} as any));
 
       effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
@@ -415,7 +411,7 @@ describe('DocumentDetailsEffects', () => {
       portalDialogService.openDialog.mockReturnValue(
         of({ button: 'primary' } as DialogState<any>)
       );
-      documentService.deleteDocumentDetail.mockReturnValue(
+      documentService.deleteDocumentById.mockReturnValue(
         throwError(() => error)
       );
 
@@ -686,14 +682,14 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({
               documentRelationships: [],
@@ -732,14 +728,14 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({
               documentRelationships: [
@@ -785,14 +781,14 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({
               attachments: [
@@ -842,14 +838,14 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({
               specification: expect.objectContaining({
@@ -887,14 +883,14 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({ attachments: [] })
           );
@@ -923,14 +919,14 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({
               characteristics: [
@@ -1190,14 +1186,14 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({ specification: undefined })
           );
@@ -1225,14 +1221,14 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({
               channel: expect.objectContaining({ id: undefined }),
@@ -1262,7 +1258,7 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
@@ -1274,7 +1270,7 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({
               attachments: expect.arrayContaining([
@@ -1308,7 +1304,7 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
@@ -1320,7 +1316,7 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({
               characteristics: expect.arrayContaining([
@@ -1355,7 +1351,7 @@ describe('DocumentDetailsEffects', () => {
         prevDetails
       );
       store.refreshState();
-      documentService.updateDocumentDetail.mockReturnValue(
+      documentService.updateDocument.mockReturnValue(
         of({ id: 'doc-1' } as any)
       );
 
@@ -1367,7 +1363,7 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocumentDetail).toHaveBeenCalledWith(
+          expect(documentService.updateDocument).toHaveBeenCalledWith(
             'doc-1',
             expect.objectContaining({
               specification: expect.objectContaining({ name: undefined }),
