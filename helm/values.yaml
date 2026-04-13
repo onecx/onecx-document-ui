@@ -34,9 +34,3 @@ app:
             READ: Read documents
             WRITE: Write document data
             DELETE: Delete document data
-    keycloak:
-      client:
-        enabled: true
-        spec:
-          kcConfig:
-            clientId: onecx-document-management-ui
