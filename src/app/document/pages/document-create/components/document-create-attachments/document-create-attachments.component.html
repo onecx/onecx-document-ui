@@ -7,7 +7,7 @@
       }}</span>
     </div>
 
-    <div
+    <button
       *ngFor="let form of attachmentForms.controls; let i = index"
       class="flex align-items-center justify-content-between p-2 mb-1 cursor-pointer border-round"
       [class.surface-100]="i === selectedIndex"
@@ -33,7 +33,7 @@
         [attr.aria-label]="'DOCUMENT_CREATE.ATTACHMENTS.REMOVE' | translate"
         (click)="removeAttachment(i); $event.stopPropagation()"
       ></button>
-    </div>
+    </button>
 
     <div
       *ngIf="attachmentForms.length === 0"

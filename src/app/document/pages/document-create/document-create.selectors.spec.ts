@@ -39,14 +39,18 @@ describe('DocumentCreateSelectors', () => {
       const details = { name: 'My Doc' } as any;
 
       const result = selectDocumentCreateViewModel.projector(
-        DocumentCreateStep.Attachments,
-        details,
-        attachments,
-        characteristics,
-        false,
-        true,
-        false,
-        'some error'
+        {
+          activeStep: DocumentCreateStep.Attachments,
+          details,
+          attachments,
+          characteristics,
+        },
+        {
+          submitting: false,
+          referenceDataLoading: true,
+          referenceDataLoaded: false,
+          error: 'some error',
+        }
       );
 
       expect(result).toEqual({

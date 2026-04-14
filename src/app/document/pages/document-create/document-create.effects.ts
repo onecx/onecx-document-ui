@@ -27,7 +27,7 @@ import { selectDocumentCreateSubmissionSource } from './document-create.selector
 @Injectable()
 export class DocumentCreateEffects {
   constructor(
-    private actions$: Actions,
+    private readonly actions$: Actions,
     private readonly store: Store,
     private readonly router: Router,
     private readonly messageService: PortalMessageService
@@ -143,10 +143,9 @@ export class DocumentCreateEffects {
     source: DocumentCreateSubmissionSource
   ): { docRequest: DocumentCreateUpdate; files: AttachmentFile[] } | null {
     if (
-      !source.details ||
-      !source.details.name ||
-      !source.details.type ||
-      !source.details.channel
+      !source.details?.name ||
+      !source.details?.type ||
+      !source.details?.channel
     ) {
       return null;
     }
@@ -155,7 +154,7 @@ export class DocumentCreateEffects {
       name: source.details.name,
       typeId: source.details.type,
       channel: {
-        name: source.details.channel!,
+        name: source.details.channel,
       },
       lifeCycleState: source.details.status as LifeCycleState,
       documentVersion: source.details.version ?? undefined,

@@ -29,33 +29,38 @@ export const selectCreateMimeTypes = createSelector(
     }))
 );
 
-export const selectDocumentCreateViewModel = createSelector(
+const selectDocumentCreateFormState = createSelector(
   documentCreateSelectors.selectActiveStep,
   documentCreateSelectors.selectDetails,
   documentCreateSelectors.selectAttachments,
   documentCreateSelectors.selectCharacteristics,
+  (activeStep, details, attachments, characteristics) => ({
+    activeStep,
+    details,
+    attachments,
+    characteristics,
+  })
+);
+
+const selectDocumentCreateStatusState = createSelector(
   documentCreateSelectors.selectSubmitting,
   documentCreateSelectors.selectReferenceDataLoading,
   documentCreateSelectors.selectReferenceDataLoaded,
   documentCreateSelectors.selectError,
-  (
-    activeStep,
-    details,
-    attachments,
-    characteristics,
-    submitting,
-    referenceDataLoading,
-    referenceDataLoaded,
-    error
-  ): DocumentCreateViewModel => ({
-    activeStep,
-    details,
-    attachments,
-    characteristics,
+  (submitting, referenceDataLoading, referenceDataLoaded, error) => ({
     submitting,
     referenceDataLoading,
     referenceDataLoaded,
     error,
+  })
+);
+
+export const selectDocumentCreateViewModel = createSelector(
+  selectDocumentCreateFormState,
+  selectDocumentCreateStatusState,
+  (formState, statusState): DocumentCreateViewModel => ({
+    ...formState,
+    ...statusState,
   })
 );
 

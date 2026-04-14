@@ -4,14 +4,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LetDirective } from '@ngrx/component';
 import { EffectsModule } from '@ngrx/effects';
-import { providePortalDialogService } from '@onecx/portal-integration-angular';
 import { DocumentDetailsComponent } from './pages/document-details/document-details.component';
 import { DocumentDetailsEffects } from './pages/document-details/document-details.effects';
 
 import { StoreModule } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addInitializeModuleGuard } from '@onecx/angular-integration-interface';
-import { PortalCoreModule } from '@onecx/portal-integration-angular';
+import {
+  PortalCoreModule,
+  providePortalDialogService,
+} from '@onecx/portal-integration-angular';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';

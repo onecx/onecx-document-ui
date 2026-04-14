@@ -45,13 +45,31 @@ const selectChannels = createSelector(
   }
 );
 
-export const selectDocumentSearchViewModel = createSelector(
+const selectDocumentSearchResultState = createSelector(
   documentSearchSelectors.selectColumns,
   documentSearchSelectors.selectCriteria,
   selectResults,
   documentSearchSelectors.selectResultComponentState,
   documentSearchSelectors.selectSearchHeaderComponentState,
   documentSearchSelectors.selectDiagramComponentState,
+  (
+    columns,
+    searchCriteria,
+    results,
+    resultComponentState,
+    searchHeaderComponentState,
+    diagramComponentState
+  ) => ({
+    columns,
+    searchCriteria,
+    results,
+    resultComponentState,
+    searchHeaderComponentState,
+    diagramComponentState,
+  })
+);
+
+const selectDocumentSearchStatusState = createSelector(
   documentSearchSelectors.selectChartVisible,
   documentSearchSelectors.selectSearchLoadingIndicator,
   documentSearchSelectors.selectSearchExecuted,
@@ -59,30 +77,27 @@ export const selectDocumentSearchViewModel = createSelector(
   selectDocumentTypes,
   selectChannels,
   (
-    columns,
-    searchCriteria,
-    results,
-    resultComponentState,
-    searchHeaderComponentState,
-    diagramComponentState,
     chartVisible,
     searchLoadingIndicator,
     searchExecuted,
     criteriaOptionsLoaded,
     availableDocumentTypes,
     avilableChannels
-  ): DocumentSearchViewModel => ({
-    columns,
-    searchCriteria,
-    results,
-    resultComponentState,
-    searchHeaderComponentState,
-    diagramComponentState,
+  ) => ({
     chartVisible,
     searchLoadingIndicator,
     searchExecuted,
     criteriaOptionsLoaded,
     availableDocumentTypes,
     avilableChannels,
+  })
+);
+
+export const selectDocumentSearchViewModel = createSelector(
+  selectDocumentSearchResultState,
+  selectDocumentSearchStatusState,
+  (resultState, statusState): DocumentSearchViewModel => ({
+    ...resultState,
+    ...statusState,
   })
 );

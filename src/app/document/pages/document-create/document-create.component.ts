@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { BreadcrumbService } from '@onecx/portal-integration-angular';
-import { SelectItem } from 'primeng/api';
+import { SelectItem, MenuItem } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { DocumentCreateStep } from '../../types/document-create-step.enum';
 import {
@@ -18,7 +18,6 @@ import {
   selectCreateMimeTypes,
   selectDocumentCreateViewModel,
 } from './document-create.selectors';
-import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-document-create',

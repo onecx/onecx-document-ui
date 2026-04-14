@@ -580,11 +580,11 @@ describe('DocumentDetailsEffects', () => {
       const appendChildSpy = jest
         .spyOn(document.body, 'appendChild')
         .mockImplementation(() => anchorSpy as any);
-      Object.defineProperty(window.URL, 'createObjectURL', {
+      Object.defineProperty(globalThis.URL, 'createObjectURL', {
         value: jest.fn(() => 'blob:url'),
         writable: true,
       });
-      Object.defineProperty(window.URL, 'revokeObjectURL', {
+      Object.defineProperty(globalThis.URL, 'revokeObjectURL', {
         value: jest.fn(),
         writable: true,
       });
@@ -636,11 +636,11 @@ describe('DocumentDetailsEffects', () => {
   });
 
   describe('navigateBack$', () => {
-    it('should dispatch backNavigationStarted and call window.history.back when navigation is possible', (done) => {
+    it('should dispatch backNavigationStarted and call globalThis.history.back when navigation is possible', (done) => {
       store.overrideSelector(selectBackNavigationPossible, true);
       store.refreshState();
       const historyBackSpy = jest
-        .spyOn(window.history, 'back')
+        .spyOn(globalThis.history, 'back')
         .mockImplementation(() => {});
 
       effects.navigateBack$.pipe(take(1)).subscribe((action) => {
