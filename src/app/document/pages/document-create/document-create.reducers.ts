@@ -54,7 +54,7 @@ export const documentCreateReducer = createReducer(
     (state, { details }): DocumentCreateState => ({
       ...state,
       details: {
-        ...(state.details ?? {}),
+        ...state.details,
         ...details,
       },
       error: null,

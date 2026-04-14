@@ -46,13 +46,13 @@ import { RetryFileUploadDialogComponent } from './dialog/retry-file-upload-dialo
 @Injectable()
 export class DocumentDetailsEffects {
   constructor(
-    private actions$: Actions,
-    private documentService: DocumentControllerV1,
-    private router: Router,
-    private store: Store,
-    private messageService: PortalMessageService,
-    private portalDialogService: PortalDialogService,
-    private fileHandlerService: ExternalFileHandlerService
+    private readonly actions$: Actions,
+    private readonly documentService: DocumentControllerV1,
+    private readonly router: Router,
+    private readonly store: Store,
+    private readonly messageService: PortalMessageService,
+    private readonly portalDialogService: PortalDialogService,
+    private readonly fileHandlerService: ExternalFileHandlerService
   ) {}
 
   navigatedToDetailsPage$ = createEffect(() => {
@@ -75,7 +75,7 @@ export class DocumentDetailsEffects {
     return this.actions$.pipe(
       ofType(DocumentDetailsActions.navigatedToDetailsPage),
       switchMap(({ id }) =>
-        this.documentService.getDocumentDetailById(id ?? '').pipe(
+        this.documentService.getDocumentById(id ?? '').pipe(
           map((details) =>
             DocumentDetailsActions.documentDetailsReceived({
               details,
@@ -137,7 +137,7 @@ export class DocumentDetailsEffects {
         }
         const itemToEdit = this.getUpdateRequest(prevDetails, details);
         return this.documentService
-          .updateDocumentDetail(itemToEditId, itemToEdit)
+          .updateDocument(itemToEditId, itemToEdit)
           .pipe(
             mergeMap((response) => [
               DocumentDetailsActions.updateDocumentSucceeded(),
@@ -208,24 +208,26 @@ export class DocumentDetailsEffects {
           throw new Error('Item to delete not found!');
         }
 
-        return this.documentService.deleteDocumentDetail(itemToDelete.id!).pipe(
-          map(() => {
-            this.messageService.success({
-              summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS',
-            });
-            return DocumentDetailsActions.deleteDocumentSucceeded();
-          }),
-          catchError((error) => {
-            this.messageService.error({
-              summaryKey: 'DOCUMENT_DETAILS.DELETE.ERROR',
-            });
-            return of(
-              DocumentDetailsActions.deleteDocumentFailed({
-                error,
-              })
-            );
-          })
-        );
+        return this.documentService
+          .deleteDocumentById(itemToDelete.id as string)
+          .pipe(
+            map(() => {
+              this.messageService.success({
+                summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS',
+              });
+              return DocumentDetailsActions.deleteDocumentSucceeded();
+            }),
+            catchError((error) => {
+              this.messageService.error({
+                summaryKey: 'DOCUMENT_DETAILS.DELETE.ERROR',
+              });
+              return of(
+                DocumentDetailsActions.deleteDocumentFailed({
+                  error,
+                })
+              );
+            })
+          );
       })
     );
   });
@@ -335,7 +337,7 @@ export class DocumentDetailsEffects {
         if (!backNavigationPossible) {
           return of(DocumentDetailsActions.backNavigationFailed());
         }
-        window.history.back();
+        globalThis.history.back();
         return of(DocumentDetailsActions.backNavigationStarted());
       })
     );
@@ -359,11 +361,10 @@ export class DocumentDetailsEffects {
           )
           .pipe(
             map((dialogResult) => {
-              if (
-                !dialogResult ||
-                dialogResult.button !== 'primary' ||
-                !dialogResult.result
-              ) {
+              if (dialogResult?.button !== 'primary') {
+                return DocumentDetailsActions.retryFileUploadCanceled();
+              }
+              if (!dialogResult.result) {
                 return DocumentDetailsActions.retryFileUploadCanceled();
               }
               const fileToUpload = dialogResult.result;
@@ -403,7 +404,7 @@ export class DocumentDetailsEffects {
   });
 
   private saveDownloadedFile(blob: Blob, fileName: string) {
-    const objectUrl = window.URL.createObjectURL(blob);
+    const objectUrl = globalThis.URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = objectUrl;
     anchor.download = fileName;
@@ -413,15 +414,13 @@ export class DocumentDetailsEffects {
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
-    window.URL.revokeObjectURL(objectUrl);
+    globalThis.URL.revokeObjectURL(objectUrl);
   }
 
   private getUpdateRequest(
     prevState: DocumentDetail,
     formValue: DocumentDetailsFormValue
   ): DocumentCreateUpdate {
-    void formValue;
-
     return {
       modificationCount: prevState.modificationCount,
       creationDate: prevState.creationDate,

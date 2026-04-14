@@ -6,7 +6,6 @@ api/api.ts
 api/documentControllerV1.service.ts
 api/documentSpecificationControllerV1.service.ts
 api/documentTypeControllerV1.service.ts
-api/fileControllerV1.service.ts
 api/supportedMimeTypeControllerV1.service.ts
 configuration.ts
 encoder.ts
@@ -33,6 +32,7 @@ model/documentSpecificationCreateUpdate.ts
 model/documentType.ts
 model/documentTypeCreateUpdate.ts
 model/fileInfo.ts
+model/fileMultipartBody.ts
 model/lifeCycleState.ts
 model/modelFile.ts
 model/models.ts

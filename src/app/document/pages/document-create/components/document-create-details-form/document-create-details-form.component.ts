@@ -9,7 +9,6 @@ import {
 @Component({
   selector: 'app-document-create-details-form',
   templateUrl: './document-create-details-form.component.html',
-  styleUrls: ['./document-create-details-form.component.scss'],
 })
 export class DocumentCreateDetailsFormComponent implements OnInit {
   @Input() details: Partial<DocumentCreateDetailsStepData> | null = null;

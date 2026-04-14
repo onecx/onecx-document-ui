@@ -27,12 +27,12 @@ import {
 @Injectable()
 export class DocumentSearchEffects {
   constructor(
-    private actions$: Actions,
-    private route: ActivatedRoute,
-    private documentService: DocumentControllerV1,
-    private router: Router,
-    private store: Store,
-    private messageService: PortalMessageService,
+    private readonly actions$: Actions,
+    private readonly route: ActivatedRoute,
+    private readonly documentService: DocumentControllerV1,
+    private readonly router: Router,
+    private readonly store: Store,
+    private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService,
     private readonly documentTypeService: DocumentTypeControllerV1
   ) {}
@@ -53,8 +53,6 @@ export class DocumentSearchEffects {
           if (!results.success || !equal(criteria, results.data)) {
             const params = {
               ...criteria,
-              //TODO: Move to docs to explain how to only put the date part in the URL in case you have date and not datetime
-              //exampleDate: criteria.exampleDate?.toISOString()?.slice(0, 10)
             };
             this.router.navigate([], {
               relativeTo: this.route,

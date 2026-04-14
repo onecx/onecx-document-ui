@@ -29,7 +29,6 @@ import {
 @Component({
   selector: 'app-document-details',
   templateUrl: './document-details.component.html',
-  styleUrls: ['./document-details.component.scss'],
 })
 export class DocumentDetailsComponent implements OnInit, OnDestroy {
   viewModel$: Observable<DocumentDetailsViewModel>;
@@ -38,11 +37,11 @@ export class DocumentDetailsComponent implements OnInit, OnDestroy {
 
   public formGroup!: DocumentDetailsFormGroup;
 
-  private sub = new Subscription();
+  private readonly sub = new Subscription();
 
   constructor(
-    private store: Store,
-    private breadcrumbService: BreadcrumbService
+    private readonly store: Store,
+    private readonly breadcrumbService: BreadcrumbService
   ) {
     this.viewModel$ = this.store.select(selectDocumentDetailsViewModel);
     this.setForm();

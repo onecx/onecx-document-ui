@@ -5,11 +5,11 @@ export const documentSearchCriteriasSchema = z.object({
   id: z.string().optional(),
   name: z.string().optional(),
   lifeCycleState: z.preprocess(
-    (val) => (val === undefined ? undefined : Array.isArray(val) ? val : [val]),
+    (val) => (val === undefined ? undefined : getValueInArray(val)),
     z.array(z.string()).optional()
   ),
   documentTypeId: z.preprocess(
-    (val) => (val === undefined ? undefined : Array.isArray(val) ? val : [val]),
+    (val) => (val === undefined ? undefined : getValueInArray(val)),
     z.array(z.string()).optional()
   ),
   channelName: z.string().optional(),
@@ -25,3 +25,10 @@ export const documentSearchCriteriasSchema = z.object({
 export type DocumentSearchCriteriaSchema = z.infer<
   typeof documentSearchCriteriasSchema
 >;
+
+const getValueInArray = (val: unknown): unknown[] => {
+  if (Array.isArray(val)) {
+    return val;
+  }
+  return [val];
+};

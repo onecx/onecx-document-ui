@@ -12,13 +12,13 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th>
+          <th id="CHAR_NAME_COL">
             {{ 'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.NAME' | translate }}
           </th>
-          <th>
+          <th id="CHAR_VAL_COL">
             {{ 'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.VALUE' | translate }}
           </th>
-          <th *ngIf="editMode">
+          <th *ngIf="editMode" id="CHAR_ACTIONS_COL">
             {{ 'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.ACTIONS' | translate }}
           </th>
         </tr>

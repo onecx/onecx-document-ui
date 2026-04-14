@@ -1,4 +1,3 @@
-import { isDevMode } from '@angular/core';
 import { routerReducer } from '@ngrx/router-store';
 import { ActionReducer, ActionReducerMap, MetaReducer } from '@ngrx/store';
 import { lazyLoadingMergeReducer, oneCxReducer } from '@onecx/ngrx-accelerator';
@@ -34,6 +33,4 @@ export function localStorageSyncReducer(
   })(reducer);
 }
 
-export const metaReducers: MetaReducer<State>[] = isDevMode()
-  ? [localStorageSyncReducer]
-  : [localStorageSyncReducer];
+export const metaReducers: MetaReducer<State>[] = [localStorageSyncReducer];

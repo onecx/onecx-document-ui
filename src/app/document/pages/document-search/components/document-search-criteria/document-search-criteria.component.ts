@@ -6,7 +6,6 @@ import { Calendar } from 'primeng/calendar';
 @Component({
   selector: 'app-document-search-criteria',
   templateUrl: './document-search-criteria.component.html',
-  styleUrl: './document-search-criteria.component.scss',
 })
 export class DocumentSearchCriteriaComponent {
   @ViewChildren(Calendar) calendars!: QueryList<Calendar>;

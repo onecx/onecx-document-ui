@@ -27,7 +27,7 @@ import { selectDocumentCreateSubmissionSource } from './document-create.selector
 @Injectable()
 export class DocumentCreateEffects {
   constructor(
-    private actions$: Actions,
+    private readonly actions$: Actions,
     private readonly store: Store,
     private readonly router: Router,
     private readonly messageService: PortalMessageService
@@ -142,29 +142,25 @@ export class DocumentCreateEffects {
   private mapSubmitPayload(
     source: DocumentCreateSubmissionSource
   ): { docRequest: DocumentCreateUpdate; files: AttachmentFile[] } | null {
-    if (
-      !source.details ||
-      !source.details.name ||
-      !source.details.type ||
-      !source.details.channel
-    ) {
+    const details = source.details;
+    if (!details?.name || !details.type || !details.channel) {
       return null;
     }
 
     const docRequest: DocumentCreateUpdate = {
-      name: source.details.name,
-      typeId: source.details.type,
+      name: details.name,
+      typeId: details.type,
       channel: {
-        name: source.details.channel!,
+        name: details.channel,
       },
-      lifeCycleState: source.details.status as LifeCycleState,
-      documentVersion: source.details.version ?? undefined,
+      lifeCycleState: details.status as LifeCycleState,
+      documentVersion: details.version ?? undefined,
       specification: undefined,
-      description: source.details.description || undefined,
+      description: details.description || undefined,
       relatedObject: {
-        involvement: source.details.involvement ?? undefined,
-        objectReferenceType: source.details.objectReferenceType ?? undefined,
-        objectReferenceId: source.details.objectReferenceId ?? undefined,
+        involvement: details.involvement ?? undefined,
+        objectReferenceType: details.objectReferenceType ?? undefined,
+        objectReferenceId: details.objectReferenceId ?? undefined,
       },
       tags: [],
       documentRelationships: [],

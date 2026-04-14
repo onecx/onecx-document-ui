@@ -8,10 +8,10 @@ import { AttachmentPresignedUrlResponse } from 'src/app/shared/generated';
   providedIn: 'root',
 })
 export class ExternalFileHandlerService {
-  private httpClient: HttpClient;
+  private readonly httpClient: HttpClient;
 
-  constructor(handler: HttpBackend) {
-    this.httpClient = new HttpClient(handler);
+  constructor(private readonly handler: HttpBackend) {
+    this.httpClient = new HttpClient(this.handler);
   }
 
   uploadAttachment(url: string, file: File): Observable<void> {
