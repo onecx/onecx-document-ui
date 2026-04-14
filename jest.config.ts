@@ -1,40 +1,49 @@
-export default {
-  displayName: 'onecx-document-management-ui',
+import type { Config } from 'jest'
+
+// list of patterns for which no transformation/transpiling should be made
+const ignoredModulePatterns: string = ['d3-.*', '(.*.mjs$)'].join('|')
+// list of patterns excluded by testing/coverage (default: node_modules)
+const ignoredPathPatterns: string[] = [
+  '<rootDir>/pre_loaders/',
+  '<rootDir>/src/main.ts',
+  '<rootDir>/src/bootstrap.ts',
+  '<rootDir>/src/scope-polyfill',
+  '<rootDir>/src/app/shared/generated'
+]
+
+const config: Config = {
+  displayName: 'onecx-shell-ui',
+  silent: true,
+  verbose: false,
+  testEnvironment: 'jsdom',
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: './coverage/onecx-document-management-ui',
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/**/*.spec.ts',
-    '!src/main.ts',
-    '!src/test-setup.ts',
-    '!src/app/shared/generated/**',
-    '!src/**/*.module.ts',
-    '!src/**/*.routes.ts',
-    '!src/**/*.harness.ts',
-    '!src/app/document/document.selectors.ts',
+  snapshotSerializers: [
+    'jest-preset-angular/build/serializers/no-ng-attributes',
+    'jest-preset-angular/build/serializers/ng-snapshot',
+    'jest-preset-angular/build/serializers/html-comment'
   ],
+  testMatch: ['<rootDir>/src/app/**/*.spec.ts'],
+  testPathIgnorePatterns: ignoredPathPatterns,
+  // transformation
+  moduleNameMapper: {
+    '@primeng/themes': '<rootDir>/node_modules/@primeng/themes/index.mjs'
+  },
+  transformIgnorePatterns: [`node_modules/(?!${ignoredModulePatterns})`],
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
       {
         tsconfig: '<rootDir>/tsconfig.spec.json',
-        stringifyContentPathRegex: '\\.(html|svg)$',
-      },
-    ],
+        stringifyContentPathRegex: '\\.(html|svg)$'
+      }
+    ]
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!@ngrx|(?!deck.gl)|d3-scale|(?!.*.mjs$))',
-  ],
-  snapshotSerializers: [
-    'jest-preset-angular/build/serializers/no-ng-attributes',
-    'jest-preset-angular/build/serializers/ng-snapshot',
-    'jest-preset-angular/build/serializers/html-comment',
-  ],
-  testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.[jt]s?(x)',
-    '<rootDir>/src/**/*(*.)@(spec|test).[jt]s?(x)',
-  ],
+  // reporting
+  collectCoverage: true,
+  coverageDirectory: '<rootDir>/reports/coverage/',
+  coveragePathIgnorePatterns: ignoredPathPatterns,
+  coverageReporters: ['json', 'text', 'lcov', 'text-summary'],
   testResultsProcessor: 'jest-sonar-reporter',
   reporters: [
     'default',
@@ -47,4 +56,6 @@ export default {
       }
     ]
   ]
-};
+}
+
+export default config
