@@ -102,8 +102,8 @@ export class DocumentQuickUploadFormComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const files = input.files;
     if (files?.length) {
-      for (let i = 0; i < files.length; i++) {
-        this.enterDataToListView(files[i]);
+      for (const file of Array.from(files)) {
+        this.enterDataToListView(file);
       }
     }
     this.validateAttachmentArray();
@@ -117,8 +117,8 @@ export class DocumentQuickUploadFormComponent implements OnInit {
     event.preventDefault();
     const files = event.dataTransfer?.files;
     if (files?.length) {
-      for (let i = 0; i < files.length; i++) {
-        this.enterDataToListView(files[i]);
+      for (const file of Array.from(files)) {
+        this.enterDataToListView(file);
       }
     }
     this.validateAttachmentArray();

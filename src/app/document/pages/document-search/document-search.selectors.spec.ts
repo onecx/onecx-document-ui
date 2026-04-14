@@ -4,7 +4,6 @@ import { Store, StoreModule } from '@ngrx/store';
 import { take } from 'rxjs/operators';
 import { documentFeature } from '../../document.reducers';
 import * as selectors from './document-search.selectors';
-import { initialState } from './document-search.reducers';
 import { DocumentSearchActions } from './document-search.actions';
 
 describe('DocumentSearch selectors', () => {
@@ -63,18 +62,22 @@ describe('DocumentSearch selectors', () => {
     const availableChannels = [{ label: 'Email', value: 'c1' }];
 
     const result = selectors.selectDocumentSearchViewModel.projector(
-      columns,
-      searchCriteria,
-      results,
-      null,
-      null,
-      null,
-      chartVisible,
-      false,
-      true,
-      true,
-      availableDocumentTypes,
-      availableChannels
+      {
+        columns,
+        searchCriteria,
+        results,
+        resultComponentState: null,
+        searchHeaderComponentState: null,
+        diagramComponentState: null,
+      },
+      {
+        chartVisible,
+        searchLoadingIndicator: false,
+        searchExecuted: true,
+        criteriaOptionsLoaded: true,
+        availableDocumentTypes,
+        avilableChannels: availableChannels,
+      }
     );
 
     expect(result).toEqual({
@@ -114,18 +117,22 @@ describe('DocumentSearch selectors', () => {
       }));
 
       const result = selectors.selectDocumentSearchViewModel.projector(
-        [],
-        {},
-        [],
-        null,
-        null,
-        null,
-        false,
-        false,
-        false,
-        false,
-        mappedTypes,
-        mappedChannels
+        {
+          columns: [],
+          searchCriteria: {},
+          results: [],
+          resultComponentState: null,
+          searchHeaderComponentState: null,
+          diagramComponentState: null,
+        },
+        {
+          chartVisible: false,
+          searchLoadingIndicator: false,
+          searchExecuted: false,
+          criteriaOptionsLoaded: false,
+          availableDocumentTypes: mappedTypes,
+          avilableChannels: mappedChannels,
+        }
       );
 
       expect(result.availableDocumentTypes).toEqual([
@@ -139,18 +146,22 @@ describe('DocumentSearch selectors', () => {
 
     it('should return empty arrays when no types or channels are available', () => {
       const result = selectors.selectDocumentSearchViewModel.projector(
-        [],
-        {},
-        [],
-        null,
-        null,
-        null,
-        false,
-        false,
-        false,
-        false,
-        [],
-        []
+        {
+          columns: [],
+          searchCriteria: {},
+          results: [],
+          resultComponentState: null,
+          searchHeaderComponentState: null,
+          diagramComponentState: null,
+        },
+        {
+          chartVisible: false,
+          searchLoadingIndicator: false,
+          searchExecuted: false,
+          criteriaOptionsLoaded: false,
+          availableDocumentTypes: [],
+          avilableChannels: [],
+        }
       );
 
       expect(result.availableDocumentTypes).toEqual([]);

@@ -6,7 +6,7 @@ import {
 } from '@onecx/angular-accelerator/testing';
 
 export class DocumentSearchHarness extends ComponentHarness {
-  static hostSelector = 'app-document-search';
+  static readonly hostSelector = 'app-document-search';
 
   getHeader = this.locatorFor(SearchHeaderHarness);
   getSearchResults = this.locatorFor(InteractiveDataViewHarness);

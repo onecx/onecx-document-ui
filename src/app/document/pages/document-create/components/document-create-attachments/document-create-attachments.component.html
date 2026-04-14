@@ -9,29 +9,32 @@
 
     <div
       *ngFor="let form of attachmentForms.controls; let i = index"
-      class="flex align-items-center justify-content-between p-2 mb-1 cursor-pointer border-round"
+      class="flex align-items-center justify-content-between p-2 mb-1 border-round hover:surface-100"
       [class.surface-100]="i === selectedIndex"
-      role="button"
-      tabindex="0"
-      (click)="selectAttachment(i)"
-      (keyup.enter)="selectAttachment(i)"
     >
-      <span
-        class="text-sm overflow-hidden white-space-nowrap text-overflow-ellipsis"
+      <button
+        type="button"
+        class="border-none bg-transparent p-0 m-0 flex-1 text-left cursor-pointer"
+        (click)="selectAttachment(i)"
+        [attr.aria-pressed]="i === selectedIndex"
       >
-        {{
-          form.controls.name.value ||
-            form.controls.mimeTypeName.value ||
-            ('DOCUMENT_CREATE.ATTACHMENTS.UNNAMED' | translate)
-        }}
-      </span>
+        <span
+          class="text-sm overflow-hidden white-space-nowrap text-overflow-ellipsis block"
+        >
+          {{
+            form.controls.name.value ||
+              form.controls.mimeTypeName.value ||
+              ('DOCUMENT_CREATE.ATTACHMENTS.UNNAMED' | translate)
+          }}
+        </span>
+      </button>
       <button
         pButton
         type="button"
         icon="pi pi-trash"
         class="p-button-text p-button-danger p-button-sm ml-2"
         [attr.aria-label]="'DOCUMENT_CREATE.ATTACHMENTS.REMOVE' | translate"
-        (click)="removeAttachment(i); $event.stopPropagation()"
+        (click)="removeAttachment(i)"
       ></button>
     </div>
 

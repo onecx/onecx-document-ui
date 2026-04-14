@@ -54,7 +54,7 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   sortField = '';
   layout: 'list' | 'grid' = 'grid';
 
-  private subs = new Subscription();
+  private readonly subs = new Subscription();
   readonly formatBytes = formatBytes;
 
   constructor(
