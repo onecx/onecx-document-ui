@@ -1,4 +1,5 @@
 import { DocumentCreateStep } from '../../types/document-create-step.enum';
+import { initialState } from './document-create.reducers';
 import {
   selectCanGoNextFromAttachments,
   selectCreateDocumentTypes,
@@ -39,14 +40,18 @@ describe('DocumentCreateSelectors', () => {
       const details = { name: 'My Doc' } as any;
 
       const result = selectDocumentCreateViewModel.projector(
-        DocumentCreateStep.Attachments,
-        details,
-        attachments,
-        characteristics,
-        false,
-        true,
-        false,
-        'some error'
+        {
+          activeStep: DocumentCreateStep.Attachments,
+          details,
+          attachments,
+          characteristics,
+        },
+        {
+          submitting: false,
+          referenceDataLoading: true,
+          referenceDataLoaded: false,
+          error: 'some error',
+        }
       );
 
       expect(result).toEqual({
@@ -58,6 +63,39 @@ describe('DocumentCreateSelectors', () => {
         referenceDataLoading: true,
         referenceDataLoaded: false,
         error: 'some error',
+      });
+    });
+
+    it('should compose form and status slices from root state selector path', () => {
+      const details = { name: 'Doc from state' } as any;
+      const attachments = [{ fileName: 'state.pdf' }] as any;
+      const characteristics = [{ name: 'k', value: 'v' }] as any;
+
+      const state = {
+        document: {
+          create: {
+            ...initialState,
+            activeStep: DocumentCreateStep.Characteristics,
+            details,
+            attachments,
+            characteristics,
+            submitting: true,
+            referenceDataLoading: false,
+            referenceDataLoaded: true,
+            error: 'state error',
+          },
+        },
+      };
+
+      expect(selectDocumentCreateViewModel(state as any)).toEqual({
+        activeStep: DocumentCreateStep.Characteristics,
+        details,
+        attachments,
+        characteristics,
+        submitting: true,
+        referenceDataLoading: false,
+        referenceDataLoaded: true,
+        error: 'state error',
       });
     });
   });

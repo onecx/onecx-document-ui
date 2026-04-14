@@ -11,6 +11,7 @@ import {
   SupportedMimeTypeControllerV1,
   UpdateFileMetadataRequest,
   UploadAttachmentPresignedUrlRequest,
+  UploadAttachmentPresignedUrlResponse,
 } from 'src/app/shared/generated';
 import { DocumentCreateOperationsActions } from './document-create-operations.actions';
 import {
@@ -31,15 +32,15 @@ import { AppStateService } from '@onecx/angular-integration-interface';
 @Injectable({ providedIn: 'root' })
 export class DocumentCreateOperationsEffects {
   constructor(
-    private actions$: Actions,
+    private readonly actions$: Actions,
     private readonly store: Store,
-    private documentService: DocumentControllerV1,
+    private readonly documentService: DocumentControllerV1,
     private readonly documentTypeService: DocumentTypeControllerV1,
     private readonly supportedMimeTypeService: SupportedMimeTypeControllerV1,
-    private uploaderService: ExternalFileHandlerService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private appStateService: AppStateService
+    private readonly uploaderService: ExternalFileHandlerService,
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly appStateService: AppStateService
   ) {}
 
   private readonly referenceDataPaths = ['quick-upload', 'create-document'];
@@ -145,23 +146,12 @@ export class DocumentCreateOperationsEffects {
       ofType(DocumentCreateOperationsActions.requestDocumentUploadUrls),
       switchMap((action) =>
         this.documentService
-          .uploadAllFiles(action.createdDocument.id!, action.uploadRequests)
+          .uploadAllFiles(
+            action.createdDocument.id as string,
+            action.uploadRequests
+          )
           .pipe(
-            mergeMap((response) =>
-              response.map((presignedUrlResponse) => {
-                const { attachmentId, url } = presignedUrlResponse;
-                const { id } = action.createdDocument;
-                const { file } = action.files.find(
-                  (attFile) => attFile.attachmentId === attachmentId
-                )!;
-                return DocumentCreateOperationsActions.uploadAttachment({
-                  presignedUrl: url!,
-                  file,
-                  attachmentId: attachmentId!,
-                  documentId: id!,
-                });
-              })
-            )
+            mergeMap((response) => this.getUploadFileActions(response, action))
           )
       )
     );
@@ -308,7 +298,28 @@ export class DocumentCreateOperationsEffects {
     );
     return attachmentFiles.map((attFIle) => ({
       ...attFIle,
-      attachmentId: fileNames[attFIle.fileName!],
+      attachmentId: fileNames[attFIle.fileName],
     }));
+  }
+
+  private getUploadFileActions(
+    response: UploadAttachmentPresignedUrlResponse[],
+    action: ReturnType<
+      typeof DocumentCreateOperationsActions.requestDocumentUploadUrls
+    >
+  ) {
+    return response.map((presignedUrlResponse) => {
+      const { attachmentId, url } = presignedUrlResponse;
+      const { id } = action.createdDocument;
+      const { file } = action.files.find(
+        (attFile) => attFile.attachmentId === attachmentId
+      )!;
+      return DocumentCreateOperationsActions.uploadAttachment({
+        presignedUrl: url!,
+        file,
+        attachmentId: attachmentId!,
+        documentId: id!,
+      });
+    });
   }
 }

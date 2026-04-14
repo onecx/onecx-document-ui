@@ -19,6 +19,7 @@ export * from './documentSpecificationCreateUpdate';
 export * from './documentType';
 export * from './documentTypeCreateUpdate';
 export * from './fileInfo';
+export * from './fileMultipartBody';
 export * from './lifeCycleState';
 export * from './modelFile';
 export * from './pageResult';

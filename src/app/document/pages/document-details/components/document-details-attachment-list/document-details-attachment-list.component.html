@@ -9,20 +9,24 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th>{{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate }}</th>
-          <th>
+          <th id="ATT_NAME_COL">
+            {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate }}
+          </th>
+          <th id="ATT_DESC_COL">
             {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.DESCRIPTION' | translate }}
           </th>
-          <th>{{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.SIZE' | translate }}</th>
-          <th>
+          <th id="ATT_SIZE_COL">
+            {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.SIZE' | translate }}
+          </th>
+          <th id="ATT_MIME_COL">
             {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.MIME_TYPE' | translate }}
           </th>
-          <th>
+          <th id="ATT_UPLOAD_COL">
             {{
               'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.UPLOAD_STATUS' | translate
             }}
           </th>
-          <th class="text-center">
+          <th class="text-center" id="ATT_ACTIONS_COL">
             {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.ACTIONS' | translate }}
           </th>
         </tr>

@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import {
   DocumentCharacteristicFormValue,
@@ -15,7 +9,6 @@ import { createCharacteristicFormGroup } from '../../../../utils/document-detail
 @Component({
   selector: 'app-document-create-characteristics',
   templateUrl: './document-create-characteristics.component.html',
-  styleUrls: ['./document-create-characteristics.component.scss'],
 })
 export class DocumentCreateCharacteristicsComponent implements OnInit {
   @Input() characteristics: DocumentCharacteristicFormValue[] = [];

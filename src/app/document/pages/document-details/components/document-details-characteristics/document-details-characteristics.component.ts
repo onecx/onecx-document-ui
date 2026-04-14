@@ -5,7 +5,6 @@ import { DocumentCharacteristicsFormGroup } from 'src/app/document/types/documen
 @Component({
   selector: 'app-document-details-characteristics',
   templateUrl: './document-details-characteristics.component.html',
-  styleUrl: './document-details-characteristics.component.scss',
 })
 export class DocumentDetailsCharacteristicsComponent {
   @Input() characteristics!: FormArray<DocumentCharacteristicsFormGroup>;

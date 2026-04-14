@@ -10,7 +10,6 @@ import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-document-details-form',
   templateUrl: './document-details-form.component.html',
-  styleUrl: './document-details-form.component.scss',
 })
 export class DocumentDetailsFormComponent implements OnInit {
   @Input() formGroup!:

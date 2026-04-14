@@ -7,7 +7,6 @@ import { AttachmentFormGroup } from './document-create-attachments.types';
 @Component({
   selector: 'app-document-create-attachments',
   templateUrl: './document-create-attachments.component.html',
-  styleUrls: ['./document-create-attachments.component.scss'],
 })
 export class DocumentCreateAttachmentsComponent implements OnInit {
   @Input() attachments: AttachmentDraft[] = [];
