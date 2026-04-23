@@ -1,5 +1,5 @@
 /**
- * document-management
+ * OneCX Document BFF
  *
  * 
  *
@@ -17,11 +17,11 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { RFCProblem } from '../model/rFCProblem';
+import { DocumentSpecification } from '../model/documentSpecification';
 // @ts-ignore
-import { SupportedMimeType } from '../model/supportedMimeType';
+import { DocumentSpecificationCreateUpdate } from '../model/documentSpecificationCreateUpdate';
 // @ts-ignore
-import { SupportedMimeTypeCreateUpdate } from '../model/supportedMimeTypeCreateUpdate';
+import { ProblemDetailResponse } from '../model/problemDetailResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -33,24 +33,24 @@ import { BaseService } from '../api.base.service';
 @Injectable({
   providedIn: 'any'
 })
-export class SupportedMimeTypeControllerV1 extends BaseService {
+export class DocumentSpecificationController extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * Creates supported mime-type
-     * @endpoint post /supported-mime-type
-     * @param supportedMimeTypeCreateUpdate 
+     * Creates specification of document
+     * @endpoint post /document-specification
+     * @param documentSpecificationCreateUpdate 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createSupportedMimeType(supportedMimeTypeCreateUpdate?: SupportedMimeTypeCreateUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<SupportedMimeType>;
-    public createSupportedMimeType(supportedMimeTypeCreateUpdate?: SupportedMimeTypeCreateUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<SupportedMimeType>>;
-    public createSupportedMimeType(supportedMimeTypeCreateUpdate?: SupportedMimeTypeCreateUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<SupportedMimeType>>;
-    public createSupportedMimeType(supportedMimeTypeCreateUpdate?: SupportedMimeTypeCreateUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public createDocumentSpecification(documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<DocumentSpecification>;
+    public createDocumentSpecification(documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<DocumentSpecification>>;
+    public createDocumentSpecification(documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<DocumentSpecification>>;
+    public createDocumentSpecification(documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -84,12 +84,12 @@ export class SupportedMimeTypeControllerV1 extends BaseService {
             }
         }
 
-        let localVarPath = `/supported-mime-type`;
+        let localVarPath = `/document-specification`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<SupportedMimeType>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<DocumentSpecification>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: supportedMimeTypeCreateUpdate,
+                body: documentSpecificationCreateUpdate,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -100,19 +100,19 @@ export class SupportedMimeTypeControllerV1 extends BaseService {
     }
 
     /**
-     * Deletes supported mime-type by id
-     * @endpoint delete /supported-mime-type/{id}
+     * Deletes specification of document by id
+     * @endpoint delete /document-specification/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteSupportedMimeTypeId(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public deleteSupportedMimeTypeId(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteSupportedMimeTypeId(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteSupportedMimeTypeId(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public deleteDocumentSpecificationById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public deleteDocumentSpecificationById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public deleteDocumentSpecificationById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public deleteDocumentSpecificationById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteSupportedMimeTypeId.');
+            throw new Error('Required parameter id was null or undefined when calling deleteDocumentSpecificationById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -138,7 +138,7 @@ export class SupportedMimeTypeControllerV1 extends BaseService {
             }
         }
 
-        let localVarPath = `/supported-mime-type/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/document-specification/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -153,16 +153,16 @@ export class SupportedMimeTypeControllerV1 extends BaseService {
     }
 
     /**
-     * Finds all supported mime-types
-     * @endpoint get /supported-mime-type
+     * Finds all specification of documents
+     * @endpoint get /document-specification
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAllSupportedMimeTypes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<SupportedMimeType>>;
-    public getAllSupportedMimeTypes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<SupportedMimeType>>>;
-    public getAllSupportedMimeTypes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<SupportedMimeType>>>;
-    public getAllSupportedMimeTypes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public getAllDocumentSpecifications(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<DocumentSpecification>>;
+    public getAllDocumentSpecifications(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<DocumentSpecification>>>;
+    public getAllDocumentSpecifications(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<DocumentSpecification>>>;
+    public getAllDocumentSpecifications(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -187,9 +187,9 @@ export class SupportedMimeTypeControllerV1 extends BaseService {
             }
         }
 
-        let localVarPath = `/supported-mime-type`;
+        let localVarPath = `/document-specification`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<SupportedMimeType>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<DocumentSpecification>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -202,19 +202,19 @@ export class SupportedMimeTypeControllerV1 extends BaseService {
     }
 
     /**
-     * Gets supported mime-type by id
-     * @endpoint get /supported-mime-type/{id}
+     * Gets document specification by id
+     * @endpoint get /document-specification/{id}
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getSupportedMimeTypeById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<SupportedMimeType>;
-    public getSupportedMimeTypeById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<SupportedMimeType>>;
-    public getSupportedMimeTypeById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<SupportedMimeType>>;
-    public getSupportedMimeTypeById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public getDocumentSpecificationById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<DocumentSpecification>;
+    public getDocumentSpecificationById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<DocumentSpecification>>;
+    public getDocumentSpecificationById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<DocumentSpecification>>;
+    public getDocumentSpecificationById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getSupportedMimeTypeById.');
+            throw new Error('Required parameter id was null or undefined when calling getDocumentSpecificationById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -240,9 +240,9 @@ export class SupportedMimeTypeControllerV1 extends BaseService {
             }
         }
 
-        let localVarPath = `/supported-mime-type/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/document-specification/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<SupportedMimeType>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<DocumentSpecification>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -255,20 +255,20 @@ export class SupportedMimeTypeControllerV1 extends BaseService {
     }
 
     /**
-     * Updates supported mime-type by id
-     * @endpoint put /supported-mime-type/{id}
+     * Updates specification of document by id
+     * @endpoint put /document-specification/{id}
      * @param id 
-     * @param supportedMimeTypeCreateUpdate 
+     * @param documentSpecificationCreateUpdate 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateSupportedMimeTypeById(id: string, supportedMimeTypeCreateUpdate?: SupportedMimeTypeCreateUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<SupportedMimeType>;
-    public updateSupportedMimeTypeById(id: string, supportedMimeTypeCreateUpdate?: SupportedMimeTypeCreateUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<SupportedMimeType>>;
-    public updateSupportedMimeTypeById(id: string, supportedMimeTypeCreateUpdate?: SupportedMimeTypeCreateUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<SupportedMimeType>>;
-    public updateSupportedMimeTypeById(id: string, supportedMimeTypeCreateUpdate?: SupportedMimeTypeCreateUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public updateDocumentSpecificationById(id: string, documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<DocumentSpecification>;
+    public updateDocumentSpecificationById(id: string, documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<DocumentSpecification>>;
+    public updateDocumentSpecificationById(id: string, documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<DocumentSpecification>>;
+    public updateDocumentSpecificationById(id: string, documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling updateSupportedMimeTypeById.');
+            throw new Error('Required parameter id was null or undefined when calling updateDocumentSpecificationById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -303,12 +303,12 @@ export class SupportedMimeTypeControllerV1 extends BaseService {
             }
         }
 
-        let localVarPath = `/supported-mime-type/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/document-specification/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<SupportedMimeType>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<DocumentSpecification>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: supportedMimeTypeCreateUpdate,
+                body: documentSpecificationCreateUpdate,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

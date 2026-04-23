@@ -1,5 +1,5 @@
 /**
- * document-management
+ * OneCX Document BFF
  *
  * 
  *

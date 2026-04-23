@@ -76,7 +76,7 @@ describe('DocumentCreateEffects', () => {
       actions$.next(
         DocumentCreateActions.attachmentMimeTypeNotSupported({
           fileName: 'test.exe',
-        })
+        }),
       );
     });
   });
@@ -104,13 +104,13 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any
+        source as any,
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action) => {
         expect(action.type).toBe(
-          DocumentCreateOperationsActions.startDocumentCreation.type
+          DocumentCreateOperationsActions.startDocumentCreation.type,
         );
         done();
       });
@@ -126,7 +126,7 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any
+        source as any,
       );
       store.refreshState();
 
@@ -134,7 +134,7 @@ describe('DocumentCreateEffects', () => {
         expect(action).toEqual(
           DocumentCreateActions.stepValidationFailed({
             error: 'DOCUMENT_CREATE.ERROR_MESSAGES.SUBMIT_VALIDATION',
-          })
+          }),
         );
         done();
       });
@@ -150,13 +150,13 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any
+        source as any,
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action) => {
         expect(action.type).toBe(
-          DocumentCreateActions.stepValidationFailed.type
+          DocumentCreateActions.stepValidationFailed.type,
         );
         done();
       });
@@ -168,13 +168,13 @@ describe('DocumentCreateEffects', () => {
       const source = { details: null, attachments: [], characteristics: [] };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any
+        source as any,
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action) => {
         expect(action.type).toBe(
-          DocumentCreateActions.stepValidationFailed.type
+          DocumentCreateActions.stepValidationFailed.type,
         );
         done();
       });
@@ -195,7 +195,7 @@ describe('DocumentCreateEffects', () => {
       actions$.next(
         DocumentCreateOperationsActions.documentCreationCompleted({
           documentId: 'doc-1',
-        })
+        }),
       );
     });
   });
@@ -223,7 +223,7 @@ describe('DocumentCreateEffects', () => {
       actions$.next(
         DocumentCreateOperationsActions.documentCreationFinalStepFailed({
           documentId: 'doc-1',
-        })
+        }),
       );
     });
   });
@@ -261,7 +261,7 @@ describe('DocumentCreateEffects', () => {
       actions$.next(
         DocumentCreateOperationsActions.documentCreationCompleted({
           documentId: 'doc-1',
-        })
+        }),
       );
     });
   });
@@ -277,7 +277,7 @@ describe('DocumentCreateEffects', () => {
 
       actions$.next({
         type: routerNavigatedAction.type,
-        payload: { routerState: { url: '/document-management/search' } },
+        payload: { routerState: { url: '/document/search' } },
       } as any);
     });
 
@@ -291,7 +291,7 @@ describe('DocumentCreateEffects', () => {
       actions$.next({
         type: routerNavigatedAction.type,
         payload: {
-          routerState: { url: '/document-management/create-document' },
+          routerState: { url: '/document/create-document' },
         },
       } as any);
 
@@ -334,13 +334,13 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any
+        source as any,
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action: any) => {
         expect(action.type).toBe(
-          DocumentCreateOperationsActions.startDocumentCreation.type
+          DocumentCreateOperationsActions.startDocumentCreation.type,
         );
         expect(action.docRequest.attachments[0].validFor).toEqual({
           endDateTime: '2025-12-31',
@@ -361,13 +361,13 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any
+        source as any,
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action: any) => {
         expect(action.type).toBe(
-          DocumentCreateActions.stepValidationFailed.type
+          DocumentCreateActions.stepValidationFailed.type,
         );
         done();
       });
@@ -393,7 +393,7 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any
+        source as any,
       );
       store.refreshState();
 
@@ -436,7 +436,7 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any
+        source as any,
       );
       store.refreshState();
 

@@ -92,14 +92,14 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null));
     provideNavigatedEventStoreConnector(),
   ],
 })
-export class OnecxDocumentManagementUiModule implements DoBootstrap {
+export class OnecxDocumentUiModule implements DoBootstrap {
   constructor(private readonly injector: Injector) {}
 
   ngDoBootstrap(): void {
     createAppEntrypoint(
       AppEntrypointComponent,
-      'onecx-document-management-ui-webcomponent',
-      this.injector
+      'onecx-document-ui-webcomponent',
+      this.injector,
     );
   }
 }

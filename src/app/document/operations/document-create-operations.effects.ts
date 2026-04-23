@@ -5,10 +5,10 @@ import { routerNavigatedAction } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import {
   Attachment,
-  DocumentControllerV1,
+  DocumentController,
   DocumentDetail,
-  DocumentTypeControllerV1,
-  SupportedMimeTypeControllerV1,
+  DocumentTypeController,
+  SupportedMimeTypeController,
   UpdateFileMetadataRequest,
   UploadAttachmentPresignedUrlRequest,
   UploadAttachmentPresignedUrlResponse,
@@ -34,9 +34,9 @@ export class DocumentCreateOperationsEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
-    private readonly documentService: DocumentControllerV1,
-    private readonly documentTypeService: DocumentTypeControllerV1,
-    private readonly supportedMimeTypeService: SupportedMimeTypeControllerV1,
+    private readonly documentService: DocumentController,
+    private readonly documentTypeService: DocumentTypeController,
+    private readonly supportedMimeTypeService: SupportedMimeTypeController,
     private readonly uploaderService: ExternalFileHandlerService,
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
@@ -264,7 +264,7 @@ export class DocumentCreateOperationsEffects {
             map((mfe) => {
               this.router.navigate([
                 `/${mfe.baseHref}`,
-                'document-management',
+                'document',
                 'details',
                 action.documentId,
               ]);

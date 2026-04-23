@@ -6,7 +6,7 @@ import { startsWith } from '@onecx/angular-webcomponents';
 
 export const routes: Routes = [
   {
-    matcher: startsWith('document-management'),
+    matcher: startsWith(''),
     loadChildren: () =>
       import('./document/document.module').then((mod) => mod.DocumentModule),
   },

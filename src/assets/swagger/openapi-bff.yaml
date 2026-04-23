@@ -1,14 +1,16 @@
 ---
 openapi: 3.0.3
 info:
-  title: document-management
-  description: 1000kit document management
+  title: OneCX Document BFF
+  description: OneCX Document Backend For Frontend API
   version: '1.0'
+servers:
+  - url: http://onecx-document-bff:8080/
 tags:
-  - name: DocumentControllerV1
-  - name: DocumentSpecificationControllerV1
-  - name: DocumentTypeControllerV1
-  - name: SupportedMimeTypeControllerV1
+  - name: DocumentController
+  - name: DocumentSpecificationController
+  - name: DocumentTypeController
+  - name: SupportedMimeTypeController
 
 paths:
   /document:
@@ -18,7 +20,7 @@ paths:
           document:
             - write
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Create Document
       operationId: createDocument
       requestBody:
@@ -44,7 +46,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RFCProblem'
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /document/search:
     post:
       x-onecx:
@@ -52,7 +54,7 @@ paths:
           document:
             - read
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Gets documents by criteria
       operationId: getDocumentByCriteria
       requestBody:
@@ -66,13 +68,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PageResult'
+                $ref: '#/components/schemas/DocumentPageResult'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RFCProblem'
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /document-specification:
     get:
       x-onecx:
@@ -80,7 +82,7 @@ paths:
           document:
             - read
       tags:
-        - DocumentSpecificationControllerV1
+        - DocumentSpecificationController
       description: Finds all specification of documents
       operationId: getAllDocumentSpecifications
       responses:
@@ -94,17 +96,13 @@ paths:
                   $ref: '#/components/schemas/DocumentSpecification'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
     post:
       x-onecx:
         permissions:
           document:
             - write
       tags:
-        - DocumentSpecificationControllerV1
+        - DocumentSpecificationController
       description: Creates specification of document
       operationId: createDocumentSpecification
       requestBody:
@@ -121,10 +119,6 @@ paths:
                 $ref: '#/components/schemas/DocumentSpecification'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
   /document-specification/{id}:
     get:
       x-onecx:
@@ -132,7 +126,7 @@ paths:
           document:
             - read
       tags:
-        - DocumentSpecificationControllerV1
+        - DocumentSpecificationController
       description: Gets document specification by id
       operationId: getDocumentSpecificationById
       parameters:
@@ -150,17 +144,13 @@ paths:
                 $ref: '#/components/schemas/DocumentSpecification'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
     put:
       x-onecx:
         permissions:
           document:
             - write
       tags:
-        - DocumentSpecificationControllerV1
+        - DocumentSpecificationController
       description: Updates specification of document by id
       operationId: updateDocumentSpecificationById
       parameters:
@@ -183,17 +173,13 @@ paths:
                 $ref: '#/components/schemas/DocumentSpecification'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
     delete:
       x-onecx:
         permissions:
           document:
             - delete
       tags:
-        - DocumentSpecificationControllerV1
+        - DocumentSpecificationController
       description: Deletes specification of document by id
       operationId: deleteDocumentSpecificationById
       parameters:
@@ -210,13 +196,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RFCProblem'
+                $ref: '#/components/schemas/ProblemDetailResponse'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
   /document-type:
     get:
       x-onecx:
@@ -224,7 +206,7 @@ paths:
           document:
             - read
       tags:
-        - DocumentTypeControllerV1
+        - DocumentTypeController
       description: Finds all types of document
       operationId: getAllTypesOfDocument
       responses:
@@ -238,17 +220,13 @@ paths:
                   $ref: '#/components/schemas/DocumentType'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
     post:
       x-onecx:
         permissions:
           document:
             - write
       tags:
-        - DocumentTypeControllerV1
+        - DocumentTypeController
       description: Creates type of document
       operationId: createDocumentType
       requestBody:
@@ -265,10 +243,6 @@ paths:
                 $ref: '#/components/schemas/DocumentType'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
   /document-type/{id}:
     get:
       x-onecx:
@@ -276,7 +250,7 @@ paths:
           document:
             - read
       tags:
-        - DocumentTypeControllerV1
+        - DocumentTypeController
       description: Gets document type by id
       operationId: getDocumentTypeById
       parameters:
@@ -294,17 +268,13 @@ paths:
                 $ref: '#/components/schemas/DocumentType'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
     put:
       x-onecx:
         permissions:
           document:
             - write
       tags:
-        - DocumentTypeControllerV1
+        - DocumentTypeController
       description: Updates type of document by id
       operationId: updateDocumentTypeById
       parameters:
@@ -327,17 +297,13 @@ paths:
                 $ref: '#/components/schemas/DocumentType'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
     delete:
       x-onecx:
         permissions:
           document:
             - delete
       tags:
-        - DocumentTypeControllerV1
+        - DocumentTypeController
       description: Deletes type of document by id
       operationId: deleteDocumentTypeById
       parameters:
@@ -354,13 +320,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RFCProblem'
+                $ref: '#/components/schemas/ProblemDetailResponse'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
   /document/bulkupdate:
     put:
       x-onecx:
@@ -368,7 +330,7 @@ paths:
           document:
             - write
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Bulk Update an document
       operationId: bulkUpdateDocument
       requestBody:
@@ -389,10 +351,6 @@ paths:
                   $ref: '#/components/schemas/DocumentDetail'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
   /document/channels:
     get:
       x-onecx:
@@ -400,7 +358,7 @@ paths:
           document:
             - read
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Gets all channels
       operationId: getAllChannels
       responses:
@@ -419,7 +377,7 @@ paths:
           document:
             - delete
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Delete Multiple Document by Ids
       operationId: deleteBulkDocuments
       requestBody:
@@ -434,10 +392,6 @@ paths:
           description: Delete Documents by ids
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
   /document/file/{attachmentId}:
     get:
       x-onecx:
@@ -445,7 +399,7 @@ paths:
           document:
             - read
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Get attachment's file
       operationId: getFile
       parameters:
@@ -463,10 +417,6 @@ paths:
                 $ref: '#/components/schemas/AttachmentPresignedUrlResponse'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
         '400':
           description: Bad request
           content:
@@ -480,7 +430,7 @@ paths:
           document:
             - write
       tags:
-        - DocumentControllerV1
+        - DocumentController
       operationId: updateAttachmentsMetadata
       description: Update attachment metadata for specified document
       parameters:
@@ -506,7 +456,7 @@ paths:
           document:
             - write
       tags:
-        - DocumentControllerV1
+        - DocumentController
       operationId: createFailedAttachmentsAuditLogs
       description: Create audit logs for failed attachments
       parameters:
@@ -532,7 +482,7 @@ paths:
           document:
             - read
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Get data of all the failed attachment based on document ID
       operationId: getFailedAttachmentData
       parameters:
@@ -552,10 +502,6 @@ paths:
                   $ref: '#/components/schemas/StorageUploadAudit'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
   /document/search/show-all-documents:
     post:
       x-onecx:
@@ -563,7 +509,7 @@ paths:
           document:
             - read
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Gets all documents by criteria
       operationId: showAllDocumentsByCriteria
       requestBody:
@@ -585,7 +531,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RFCProblem'
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /document/{id}:
     get:
       x-onecx:
@@ -593,7 +539,7 @@ paths:
           document:
             - read
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Gets Document by Id
       operationId: getDocumentById
       parameters:
@@ -611,17 +557,13 @@ paths:
                 $ref: '#/components/schemas/DocumentDetail'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
     put:
       x-onecx:
         permissions:
           document:
             - write
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Update an document
       operationId: updateDocument
       parameters:
@@ -656,17 +598,13 @@ paths:
                 $ref: '#/components/schemas/ProblemDetailResponse'
         '404':
           description: DocumentDetail not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
     delete:
       x-onecx:
         permissions:
           document:
             - delete
       tags:
-        - DocumentControllerV1
+        - DocumentController
       description: Delete Document by Id
       operationId: deleteDocumentById
       parameters:
@@ -680,10 +618,6 @@ paths:
           description: Deleted Document by id
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
   /supported-mime-type:
     get:
       x-onecx:
@@ -691,7 +625,7 @@ paths:
           document:
             - read
       tags:
-        - SupportedMimeTypeControllerV1
+        - SupportedMimeTypeController
       description: Finds all supported mime-types
       operationId: getAllSupportedMimeTypes
       responses:
@@ -705,17 +639,13 @@ paths:
                   $ref: '#/components/schemas/SupportedMimeType'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
     post:
       x-onecx:
         permissions:
           document:
             - write
       tags:
-        - SupportedMimeTypeControllerV1
+        - SupportedMimeTypeController
       description: Creates supported mime-type
       operationId: createSupportedMimeType
       requestBody:
@@ -732,10 +662,6 @@ paths:
                 $ref: '#/components/schemas/SupportedMimeType'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
   /supported-mime-type/{id}:
     get:
       x-onecx:
@@ -743,7 +669,7 @@ paths:
           document:
             - read
       tags:
-        - SupportedMimeTypeControllerV1
+        - SupportedMimeTypeController
       description: Gets supported mime-type by id
       operationId: getSupportedMimeTypeById
       parameters:
@@ -761,17 +687,13 @@ paths:
                 $ref: '#/components/schemas/SupportedMimeType'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
     put:
       x-onecx:
         permissions:
           document:
             - write
       tags:
-        - SupportedMimeTypeControllerV1
+        - SupportedMimeTypeController
       description: Updates supported mime-type by id
       operationId: updateSupportedMimeTypeById
       parameters:
@@ -794,17 +716,13 @@ paths:
                 $ref: '#/components/schemas/SupportedMimeType'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
     delete:
       x-onecx:
         permissions:
           document:
             - delete
       tags:
-        - SupportedMimeTypeControllerV1
+        - SupportedMimeTypeController
       description: Deletes supported mime-type by id
       operationId: deleteSupportedMimeTypeId
       parameters:
@@ -821,13 +739,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RFCProblem'
+                $ref: '#/components/schemas/ProblemDetailResponse'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RFCProblem'
   /document/files/upload/{documentId}:
     post:
       x-onecx:
@@ -835,7 +749,7 @@ paths:
           document:
             - write
       tags:
-        - DocumentControllerV1
+        - DocumentController
       operationId: uploadAllFiles
       description: uploads all the files
       parameters:
@@ -869,10 +783,6 @@ paths:
                 $ref: '#/components/schemas/ProblemDetailResponse'
         '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
 components:
   schemas:
     AttachmentCreateUpdate:
@@ -1306,7 +1216,7 @@ components:
       format: date-time
       type: string
       example: 2022-03-10T12:15:50-04:00
-    PageResult:
+    DocumentPageResult:
       type: object
       properties:
         totalElements:
@@ -1325,42 +1235,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DocumentDetail'
-    RFCProblem:
-      required:
-        - type
-        - title
-      type: object
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          format: int32
-          type: integer
-        detail:
-          type: string
-        instance:
-          type: string
-        problems:
-          type: array
-          items:
-            $ref: '#/components/schemas/RFCProblemDetail'
-    RFCProblemDetail:
-      required:
-        - message
-        - messageId
-        - messageType
-      type: object
-      properties:
-        message:
-          type: string
-        messageId:
-          type: string
-        code:
-          type: string
-        messageType:
-          type: string
     RelatedObjectRefCreateUpdate:
       type: object
       properties:

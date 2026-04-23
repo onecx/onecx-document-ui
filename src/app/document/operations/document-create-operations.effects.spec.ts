@@ -9,9 +9,9 @@ import { provideAppStateServiceMock } from '@onecx/angular-integration-interface
 import { of, ReplaySubject, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
 import {
-  DocumentControllerV1,
-  DocumentTypeControllerV1,
-  SupportedMimeTypeControllerV1,
+  DocumentController,
+  DocumentTypeController,
+  SupportedMimeTypeController,
 } from 'src/app/shared/generated';
 import { ExternalFileHandlerService } from '../service/external-file-handler.service';
 import { DocumentCreateOperationsActions } from './document-create-operations.actions';
@@ -23,9 +23,9 @@ describe('DocumentCreateOperationsEffects', () => {
   let actions$: ReplaySubject<Action>;
   let effects: DocumentCreateOperationsEffects;
   let store: MockStore<Store>;
-  let documentService: jest.Mocked<DocumentControllerV1>;
-  let documentTypeService: jest.Mocked<DocumentTypeControllerV1>;
-  let mimeTypeService: jest.Mocked<SupportedMimeTypeControllerV1>;
+  let documentService: jest.Mocked<DocumentController>;
+  let documentTypeService: jest.Mocked<DocumentTypeController>;
+  let mimeTypeService: jest.Mocked<SupportedMimeTypeController>;
   let uploaderService: jest.Mocked<ExternalFileHandlerService>;
   let appStateService: AppStateService;
 
@@ -37,15 +37,15 @@ describe('DocumentCreateOperationsEffects', () => {
       uploadAllFiles: jest.fn(),
       updateAttachmentsMetadata: jest.fn(),
       createFailedAttachmentsAuditLogs: jest.fn(),
-    } as unknown as jest.Mocked<DocumentControllerV1>;
+    } as unknown as jest.Mocked<DocumentController>;
 
     documentTypeService = {
       getAllTypesOfDocument: jest.fn(),
-    } as unknown as jest.Mocked<DocumentTypeControllerV1>;
+    } as unknown as jest.Mocked<DocumentTypeController>;
 
     mimeTypeService = {
       getAllSupportedMimeTypes: jest.fn(),
-    } as unknown as jest.Mocked<SupportedMimeTypeControllerV1>;
+    } as unknown as jest.Mocked<SupportedMimeTypeController>;
 
     uploaderService = {
       uploadAttachment: jest.fn(),
@@ -60,9 +60,9 @@ describe('DocumentCreateOperationsEffects', () => {
           initialState: { document: { operations: operationsInitialState } },
         }),
         provideAppStateServiceMock(),
-        { provide: DocumentControllerV1, useValue: documentService },
-        { provide: DocumentTypeControllerV1, useValue: documentTypeService },
-        { provide: SupportedMimeTypeControllerV1, useValue: mimeTypeService },
+        { provide: DocumentController, useValue: documentService },
+        { provide: DocumentTypeController, useValue: documentTypeService },
+        { provide: SupportedMimeTypeController, useValue: mimeTypeService },
         { provide: ExternalFileHandlerService, useValue: uploaderService },
       ],
     });
@@ -85,7 +85,7 @@ describe('DocumentCreateOperationsEffects', () => {
 
       actions$.next({
         type: routerNavigatedAction.type,
-        payload: { routerState: { url: '/document-management/quick-upload' } },
+        payload: { routerState: { url: '/document/quick-upload' } },
       } as any);
     });
 
@@ -102,7 +102,7 @@ describe('DocumentCreateOperationsEffects', () => {
       actions$.next({
         type: routerNavigatedAction.type,
         payload: {
-          routerState: { url: '/document-management/create-document' },
+          routerState: { url: '/document/create-document' },
         },
       } as any);
     });
@@ -115,7 +115,7 @@ describe('DocumentCreateOperationsEffects', () => {
 
       actions$.next({
         type: routerNavigatedAction.type,
-        payload: { routerState: { url: '/document-management/search' } },
+        payload: { routerState: { url: '/document/search' } },
       } as any);
 
       setTimeout(() => {
@@ -641,7 +641,7 @@ describe('DocumentCreateOperationsEffects', () => {
 
       effects.navigateToDetails$.pipe(take(1)).subscribe(() => {
         expect(navigateSpy).toHaveBeenCalledWith(
-          expect.arrayContaining(['document-management', 'details', 'doc-1'])
+          expect.arrayContaining(['document', 'details', 'doc-1'])
         );
         done();
       });

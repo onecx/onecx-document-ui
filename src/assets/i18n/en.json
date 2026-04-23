@@ -337,7 +337,7 @@
     "NO": "No",
     "YES": "Yes"
   },
-  "OnecxDocumentManagementUi": {
-    "ARIA-LABEL": "OnecxDocumentManagementUi App"
+  "OnecxDocumentUi": {
+    "ARIA-LABEL": "OnecxDocumentUi App"
   }
 }
