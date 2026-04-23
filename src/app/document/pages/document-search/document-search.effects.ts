@@ -13,8 +13,8 @@ import equal from 'fast-deep-equal';
 import { catchError, forkJoin, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { selectUrl } from 'src/app/shared/selectors/router.selectors';
 import {
-  DocumentControllerV1,
-  DocumentTypeControllerV1,
+  DocumentController,
+  DocumentTypeController,
 } from '../../../shared/generated';
 import { DocumentSearchActions } from './document-search.actions';
 import { DocumentSearchComponent } from './document-search.component';
@@ -29,12 +29,12 @@ export class DocumentSearchEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly route: ActivatedRoute,
-    private readonly documentService: DocumentControllerV1,
+    private readonly documentService: DocumentController,
     private readonly router: Router,
     private readonly store: Store,
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService,
-    private readonly documentTypeService: DocumentTypeControllerV1
+    private readonly documentTypeService: DocumentTypeController
   ) {}
 
   syncParamsToUrl$ = createEffect(

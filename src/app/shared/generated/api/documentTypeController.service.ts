@@ -1,5 +1,5 @@
 /**
- * document-management
+ * OneCX Document BFF
  *
  * 
  *
@@ -21,7 +21,7 @@ import { DocumentType } from '../model/documentType';
 // @ts-ignore
 import { DocumentTypeCreateUpdate } from '../model/documentTypeCreateUpdate';
 // @ts-ignore
-import { RFCProblem } from '../model/rFCProblem';
+import { ProblemDetailResponse } from '../model/problemDetailResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -33,7 +33,7 @@ import { BaseService } from '../api.base.service';
 @Injectable({
   providedIn: 'any'
 })
-export class DocumentTypeControllerV1 extends BaseService {
+export class DocumentTypeController extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);

@@ -1,5 +1,5 @@
 /**
- * document-management
+ * OneCX Document BFF
  *
  * 
  *
@@ -10,7 +10,7 @@
 import { DocumentDetail } from './documentDetail';
 
 
-export interface PageResult { 
+export interface DocumentPageResult { 
     totalElements?: number;
     number?: number;
     size?: number;

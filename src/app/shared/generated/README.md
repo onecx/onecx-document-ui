@@ -1,6 +1,6 @@
 # @
 
-1000kit document management
+OneCX Document Backend For Frontend API
 
 The version of the OpenAPI document: 1.0
 

@@ -1,5 +1,5 @@
 {
-  "name": "onecx-document-management-ui",
+  "name": "onecx-document-ui",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
@@ -10,7 +10,7 @@
       "executor": "@nx/angular:webpack-browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/onecx-document-management-ui",
+        "outputPath": "dist/onecx-document-ui",
         "index": "./src/index.html",
         "polyfills": "src/polyfills.ts",
         "tsConfig": "tsconfig.app.json",
@@ -79,10 +79,10 @@
       "executor": "@nx/angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "onecx-document-management-ui:build:production"
+          "buildTarget": "onecx-document-ui:build:production"
         },
         "development": {
-          "buildTarget": "onecx-document-management-ui:build:development"
+          "buildTarget": "onecx-document-ui:build:development"
         }
       },
       "defaultConfiguration": "development",
@@ -95,7 +95,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "onecx-document-management-ui:build"
+        "buildTarget": "onecx-document-ui:build"
       }
     },
     "lint": {
@@ -115,8 +115,8 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "onecx-document-management-ui:build",
-        "staticFilePath": "dist/onecx-document-management-ui/browser",
+        "buildTarget": "onecx-document-ui:build",
+        "staticFilePath": "dist/onecx-document-ui/browser",
         "spa": true
       }
     }

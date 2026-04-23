@@ -6,10 +6,10 @@ const {
   withModuleFederationPlugin,
 } = require('@angular-architects/module-federation/webpack');
 const config = withModuleFederationPlugin({
-  name: 'onecx-document-management-ui-app',
+  name: 'onecx-document-ui-app',
   filename: 'remoteEntry.js',
   exposes: {
-    './OnecxDocumentManagementUiModule': './src/main.ts',
+    './OnecxDocumentUiModule': './src/main.ts',
   },
   shared: share({
     '@angular/core': {
@@ -99,7 +99,7 @@ module.exports = {
   ...config,
   plugins,
   output: {
-    uniqueName: 'onecx-document-management-ui',
+    uniqueName: 'onecx-document-ui',
     publicPath: 'auto',
   },
   experiments: {

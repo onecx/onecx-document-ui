@@ -1,5 +1,5 @@
 /**
- * document-management
+ * OneCX Document BFF
  *
  * 
  *
@@ -25,13 +25,11 @@ import { DocumentCreateUpdate } from '../model/documentCreateUpdate';
 // @ts-ignore
 import { DocumentDetail } from '../model/documentDetail';
 // @ts-ignore
+import { DocumentPageResult } from '../model/documentPageResult';
+// @ts-ignore
 import { DocumentSearchCriteria } from '../model/documentSearchCriteria';
 // @ts-ignore
-import { PageResult } from '../model/pageResult';
-// @ts-ignore
 import { ProblemDetailResponse } from '../model/problemDetailResponse';
-// @ts-ignore
-import { RFCProblem } from '../model/rFCProblem';
 // @ts-ignore
 import { StorageUploadAudit } from '../model/storageUploadAudit';
 // @ts-ignore
@@ -51,7 +49,7 @@ import { BaseService } from '../api.base.service';
 @Injectable({
   providedIn: 'any'
 })
-export class DocumentControllerV1 extends BaseService {
+export class DocumentController extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
@@ -248,15 +246,14 @@ export class DocumentControllerV1 extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteBulkDocuments(requestBody?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public deleteBulkDocuments(requestBody?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteBulkDocuments(requestBody?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteBulkDocuments(requestBody?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public deleteBulkDocuments(requestBody?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public deleteBulkDocuments(requestBody?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public deleteBulkDocuments(requestBody?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public deleteBulkDocuments(requestBody?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -308,10 +305,10 @@ export class DocumentControllerV1 extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteDocumentById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public deleteDocumentById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteDocumentById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteDocumentById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public deleteDocumentById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public deleteDocumentById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public deleteDocumentById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public deleteDocumentById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteDocumentById.');
         }
@@ -319,7 +316,6 @@ export class DocumentControllerV1 extends BaseService {
         let localVarHeaders = this.defaultHeaders;
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -410,9 +406,9 @@ export class DocumentControllerV1 extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getDocumentByCriteria(documentSearchCriteria?: DocumentSearchCriteria, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<PageResult>;
-    public getDocumentByCriteria(documentSearchCriteria?: DocumentSearchCriteria, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<PageResult>>;
-    public getDocumentByCriteria(documentSearchCriteria?: DocumentSearchCriteria, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<PageResult>>;
+    public getDocumentByCriteria(documentSearchCriteria?: DocumentSearchCriteria, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<DocumentPageResult>;
+    public getDocumentByCriteria(documentSearchCriteria?: DocumentSearchCriteria, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<DocumentPageResult>>;
+    public getDocumentByCriteria(documentSearchCriteria?: DocumentSearchCriteria, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<DocumentPageResult>>;
     public getDocumentByCriteria(documentSearchCriteria?: DocumentSearchCriteria, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -449,7 +445,7 @@ export class DocumentControllerV1 extends BaseService {
 
         let localVarPath = `/document/search`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<PageResult>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<DocumentPageResult>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: documentSearchCriteria,

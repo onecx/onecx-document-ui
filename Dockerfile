@@ -3,13 +3,13 @@ FROM ghcr.io/onecx/docker-spa-base:2.14.0
 # Copy nginx configuration
 COPY nginx/locations.conf $DIR_LOCATION/locations.conf
 # Copy application build
-COPY dist/onecx-document-management-ui/ $DIR_HTML
+COPY dist/onecx-document-ui/ $DIR_HTML
 
 # Optional extend list of application environments
 #ENV CONFIG_ENV_LIST BFF_URL,APP_BASE_HREF
 
 # Application environments default values
-ENV BFF_URL http://onecx-document-management-bff:8080/
+ENV BFF_URL http://onecx-document-bff:8080/
 ENV APP_BASE_HREF /
 
 RUN chmod 775 -R "$DIR_HTML"/assets

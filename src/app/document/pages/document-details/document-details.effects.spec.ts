@@ -12,7 +12,7 @@ import {
 } from '@onecx/portal-integration-angular';
 import { of, ReplaySubject, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { DocumentControllerV1 } from '../../../shared/generated';
+import { DocumentController } from '../../../shared/generated';
 import { ExternalFileHandlerService } from '../../service/external-file-handler.service';
 import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions';
 import { DocumentDetailsActions } from './document-details.actions';
@@ -38,7 +38,7 @@ describe('DocumentDetailsEffects', () => {
   let effects: DocumentDetailsEffects;
   let store: MockStore<Store>;
   let router: jest.Mocked<Router>;
-  let documentService: jest.Mocked<DocumentControllerV1>;
+  let documentService: jest.Mocked<DocumentController>;
   let messageService: jest.Mocked<PortalMessageService>;
   let portalDialogService: jest.Mocked<PortalDialogService>;
   let fileHandlerService: jest.Mocked<ExternalFileHandlerService>;
@@ -51,7 +51,7 @@ describe('DocumentDetailsEffects', () => {
       updateDocument: jest.fn(),
       deleteDocumentById: jest.fn(),
       getFile: jest.fn(),
-    } as unknown as jest.Mocked<DocumentControllerV1>;
+    } as unknown as jest.Mocked<DocumentController>;
 
     router = {
       navigate: jest.fn().mockReturnValue(Promise.resolve(true)),
@@ -85,7 +85,7 @@ describe('DocumentDetailsEffects', () => {
         }),
         provideMockActions(() => actions$),
         { provide: Router, useValue: router },
-        { provide: DocumentControllerV1, useValue: documentService },
+        { provide: DocumentController, useValue: documentService },
         { provide: PortalMessageService, useValue: messageService },
         { provide: PortalDialogService, useValue: portalDialogService },
         { provide: ExternalFileHandlerService, useValue: fileHandlerService },

@@ -12,8 +12,8 @@ import {
 import { of, ReplaySubject, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
 import {
-  DocumentControllerV1,
-  DocumentTypeControllerV1,
+  DocumentController,
+  DocumentTypeController,
 } from '../../../shared/generated';
 import { DocumentSearchActions } from './document-search.actions';
 import { DocumentSearchEffects } from './document-search.effects';
@@ -39,8 +39,8 @@ describe('DocumentSearchEffects', () => {
   let store: MockStore<Store>;
   let router: jest.Mocked<Router>;
   let route: ActivatedRoute;
-  let documentService: jest.Mocked<DocumentControllerV1>;
-  let documentTypeService: jest.Mocked<DocumentTypeControllerV1>;
+  let documentService: jest.Mocked<DocumentController>;
+  let documentTypeService: jest.Mocked<DocumentTypeController>;
   let messageService: jest.Mocked<PortalMessageService>;
   let exportDataService: jest.Mocked<ExportDataService>;
 
@@ -52,11 +52,11 @@ describe('DocumentSearchEffects', () => {
     documentService = {
       getDocumentByCriteria: jest.fn(),
       getAllChannels: jest.fn(),
-    } as unknown as jest.Mocked<DocumentControllerV1>;
+    } as unknown as jest.Mocked<DocumentController>;
 
     documentTypeService = {
       getAllTypesOfDocument: jest.fn(),
-    } as unknown as jest.Mocked<DocumentTypeControllerV1>;
+    } as unknown as jest.Mocked<DocumentTypeController>;
 
     router = {
       navigate: jest.fn().mockReturnValue(Promise.resolve(true)),
@@ -88,8 +88,8 @@ describe('DocumentSearchEffects', () => {
         provideMockActions(() => actions$),
         { provide: ActivatedRoute, useValue: route },
         { provide: Router, useValue: router },
-        { provide: DocumentControllerV1, useValue: documentService },
-        { provide: DocumentTypeControllerV1, useValue: documentTypeService },
+        { provide: DocumentController, useValue: documentService },
+        { provide: DocumentTypeController, useValue: documentTypeService },
         { provide: PortalMessageService, useValue: messageService },
         { provide: ExportDataService, useValue: exportDataService },
       ],

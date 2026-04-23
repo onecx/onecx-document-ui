@@ -47,7 +47,7 @@ describe('DocumentCreateComponent', () => {
     error: null,
   };
 
-  /* eslint-disable @typescript-eslint/no-var-requires */
+   
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [

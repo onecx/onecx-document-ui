@@ -21,7 +21,7 @@ import {
   Attachment,
   AttachmentCreateUpdate,
   DocumentCharacteristicCreateUpdate,
-  DocumentControllerV1,
+  DocumentController,
   DocumentCreateUpdate,
   DocumentDetail,
   LifeCycleState,
@@ -47,7 +47,7 @@ import { RetryFileUploadDialogComponent } from './dialog/retry-file-upload-dialo
 export class DocumentDetailsEffects {
   constructor(
     private readonly actions$: Actions,
-    private readonly documentService: DocumentControllerV1,
+    private readonly documentService: DocumentController,
     private readonly router: Router,
     private readonly store: Store,
     private readonly messageService: PortalMessageService,

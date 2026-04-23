@@ -32,7 +32,7 @@ describe('DocumentQuickUploadComponent', () => {
 
   const mockActivatedRoute = { snapshot: { data: {} } };
 
-  /* eslint-disable @typescript-eslint/no-var-requires */
+   
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [

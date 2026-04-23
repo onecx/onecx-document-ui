@@ -4,7 +4,7 @@
 
 ```bash
 npm start               # Dev server on localhost:4200
-npm run build           # Production build → dist/onecx-document-management-ui
+npm run build           # Production build → dist/onecx-document-ui
 npm run test            # Run all Jest tests
 npm run test:ci         # CI mode: no watch, headless, with coverage
 npm run lint            # ESLint
@@ -23,7 +23,7 @@ npx nx test --testFile="path/to/file.spec.ts"
 
 ## Architecture
 
-This is an **Angular 18 micro-frontend** built with NX 19. It runs embedded in the OneCX portal shell via **Module Federation** — the entry point is `src/main.ts`, which exposes `OnecxDocumentManagementUiModule`.
+This is an **Angular 18 micro-frontend** built with NX 19. It runs embedded in the OneCX portal shell via **Module Federation** — the entry point is `src/main.ts`, which exposes `OnecxDocumentUiModule`.
 
 **Feature structure** (`src/app/document/`): one lazy-loaded feature module with four pages. Each page is a self-contained slice:
 
@@ -41,12 +41,11 @@ pages/document-search/
   components/                     # Dumb/presentational components
 ```
 
-**Routing**: Root router uses a `startsWith('document-management')` matcher (from `@onecx/angular-webcomponents`) to lazy-load the document feature. Child routes: `''` → search, `create-document`, `details/:id`, `quick-upload`.
+**Routing**: Root router uses a `startsWith('document')` matcher (from `@onecx/angular-webcomponents`) to lazy-load the document feature. Child routes: `''` → search, `create-document`, `details/:id`, `quick-upload`.
 
 **State**: NgRx with `createFeature`. Root state in `app.reducers.ts`; feature state in `document.reducers.ts` with sub-slices per page. Router state is synced via `StoreRouterConnectingModule`.
 
-**API layer**: `src/app/shared/generated/` is **entirely auto-generated** from `src/assets/swagger/onecx-document-management-ui-bff.yaml`. Do not edit files there — run `npm run apigen` instead. Services use `providedIn: 'any'`.
-
+**API layer**: `src/app/shared/generated/` is **entirely auto-generated** from `src/assets/swagger/openapi-bff.yaml`. Do not edit files there — run `npm run apigen` instead. Services use `providedIn: 'any'`.
 ## Key Conventions
 
 ### Smart vs Dumb Components
@@ -73,7 +72,7 @@ Uses traditional **NgModule-based** architecture. Components are declared in the
 
 ### HTTP / API Services
 
-Generated services (`DocumentControllerV1`, `FileControllerV1`, etc.) are injected directly. The `ExternalFileHandlerService` uses `HttpBackend` directly (bypasses interceptors) for file upload/download with retry logic (3 retries).
+Generated services (`DocumentController`, `FileController`, etc.) are injected directly. The `ExternalFileHandlerService` uses `HttpBackend` directly (bypasses interceptors) for file upload/download with retry logic (3 retries).
 
 API base URL is configured via `apiConfigProvider()` in `shared/utils/apiConfigProvider.utils.ts`, which reads from `ConfigurationService` and `AppStateService`.
 

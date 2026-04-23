@@ -54,7 +54,7 @@ export const commonImports = [CommonModule];
     }),
     EffectsModule.forRoot([]),
     HttpClientModule,
-    PortalCoreModule.forRoot('onecx-document-management-ui-app'),
+    PortalCoreModule.forRoot('onecx-document-ui-app'),
     TranslateModule.forRoot({
       extend: true,
       loader: {
