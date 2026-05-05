@@ -3,7 +3,6 @@ import {
   DocumentCreateUpdate,
   DocumentDetail,
   DocumentType,
-  SupportedMimeType,
   UploadAttachmentPresignedUrlRequest,
 } from 'src/app/shared/generated';
 import { AttachmentFile } from '../types/document-create.types';
@@ -39,7 +38,7 @@ export const DocumentCreateOperationsActions = createActionGroup({
     'load reference data failed': props<{ error: string | null }>(),
     'available document types received': props<{ types: DocumentType[] }>(),
     'available mime types received': props<{
-      mimeTypes: SupportedMimeType[];
+      mimeTypes: string[];
     }>(),
     'attachment upload failed': props<{
       documentId: string;

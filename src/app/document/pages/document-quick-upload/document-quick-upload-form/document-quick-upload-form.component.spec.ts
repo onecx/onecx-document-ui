@@ -103,7 +103,7 @@ describe('DocumentQuickUploadFormComponent', () => {
     component.onFilesSelected([file]);
 
     expect(component.attachmentArray.length).toBe(1);
-    expect(component.attachmentArray[0].mimeTypeId).toBe('mime-1');
+    expect(component.attachmentArray[0].mimeType).toBe('mime-1');
     expect(component.attachmentArray[0].isValid).toBe(true);
   });
 
@@ -114,7 +114,7 @@ describe('DocumentQuickUploadFormComponent', () => {
     component.onFilesSelected([file]);
 
     expect(component.attachmentArray[0].isValid).toBe(false);
-    expect(component.attachmentArray[0].mimeTypeId).toBeUndefined();
+    expect(component.attachmentArray[0].mimeType).toBeUndefined();
   });
 
   it('should mark attachment as invalid when file size exceeds 2097152 bytes', () => {

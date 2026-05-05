@@ -184,7 +184,7 @@ export class DocumentCreateEffects {
     return attachments.map((attachment) => ({
       name: attachment.name ?? undefined,
       description: attachment.description ?? undefined,
-      mimeTypeId: attachment.mimeTypeId ?? undefined,
+      mimeType: attachment.mimeType ?? undefined,
       fileName: attachment.fileName,
       validFor: { endDateTime: attachment.validForEnd || undefined },
     }));

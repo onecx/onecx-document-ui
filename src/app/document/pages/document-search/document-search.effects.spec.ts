@@ -7,6 +7,7 @@ import { Action, Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
   ExportDataService,
+  PortalDialogService,
   PortalMessageService,
 } from '@onecx/portal-integration-angular';
 import { of, ReplaySubject, throwError } from 'rxjs';
@@ -23,6 +24,7 @@ import {
   documentSearchSelectors,
   selectDocumentSearchViewModel,
 } from './document-search.selectors';
+import { DialogService } from 'primeng/dynamicdialog';
 
 jest.mock('@onecx/ngrx-accelerator', () => {
   const actual = jest.requireActual('@onecx/ngrx-accelerator');
@@ -77,9 +79,30 @@ describe('DocumentSearchEffects', () => {
       queryParams: of({}),
       snapshot: { queryParams: {} },
     } as unknown as ActivatedRoute;
+    const createSpyObj = (
+      baseName: string,
+      methodNames: Array<string>
+    ): { [key: string]: any } => {
+      const obj: any = {};
+
+      for (let i = 0; i < methodNames.length; i++) {
+        obj[methodNames[i]] = jest.fn();
+      }
+
+      return obj;
+    };
+
+    const portalDialogSpy = createSpyObj('portalDialogService', [
+      'openDialog',
+    ]) as PortalDialogService;
 
     await TestBed.configureTestingModule({
       providers: [
+        DialogService,
+        {
+          provide: PortalDialogService,
+          useValue: portalDialogSpy,
+        },
         DocumentSearchEffects,
         provideRouter([]),
         provideMockStore({
@@ -474,6 +497,112 @@ describe('DocumentSearchEffects', () => {
   });
 
   // <<SPEC-EXTENSIONS-MARKER-!!!-DO-NOT-REMOVE-!!!>>
+
+  describe('deleteButtonClicked$', () => {
+    let portalDialogService: jest.Mocked<PortalDialogService>;
+
+    beforeEach(() => {
+      portalDialogService = TestBed.inject(
+        PortalDialogService
+      ) as jest.Mocked<PortalDialogService>;
+    });
+
+    it('should dispatch deleteDocumentCancelled when dialog button is secondary', (done) => {
+      portalDialogService.openDialog = jest
+        .fn()
+        .mockReturnValue(of({ button: 'secondary' }));
+
+      effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
+        expect(action).toEqual(DocumentSearchActions.deleteDocumentCancelled());
+        done();
+      });
+
+      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '1' }));
+    });
+
+    it('should dispatch deleteDocumentCancelled when dialog result is null', (done) => {
+      portalDialogService.openDialog = jest.fn().mockReturnValue(of(null));
+
+      effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
+        expect(action).toEqual(DocumentSearchActions.deleteDocumentCancelled());
+        done();
+      });
+
+      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '1' }));
+    });
+
+    it('should dispatch deleteDocumentSucceeded and call messageService.success when delete API succeeds', (done) => {
+      portalDialogService.openDialog = jest
+        .fn()
+        .mockReturnValue(of({ button: 'primary' }));
+      documentService.deleteDocumentById = jest.fn().mockReturnValue(of({}));
+
+      effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
+        expect(action).toEqual(DocumentSearchActions.deleteDocumentSucceeded());
+        expect(messageService.success).toHaveBeenCalledWith({
+          summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS',
+        });
+        done();
+      });
+
+      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '42' }));
+    });
+
+    it('should dispatch deleteDocumentFailed and call messageService.error when delete API fails', (done) => {
+      const error = 'server error';
+      portalDialogService.openDialog = jest
+        .fn()
+        .mockReturnValue(of({ button: 'primary' }));
+      documentService.deleteDocumentById = jest
+        .fn()
+        .mockReturnValue(throwError(() => error));
+
+      effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
+        expect(action).toEqual(
+          DocumentSearchActions.deleteDocumentFailed({ error })
+        );
+        expect(messageService.error).toHaveBeenCalledWith({
+          summaryKey: 'DOCUMENT_DETAILS.DELETE.ERROR',
+        });
+        done();
+      });
+
+      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '42' }));
+    });
+  });
+
+  describe('deleteDocumentSucceeded$', () => {
+    it('should dispatch performSearch with current criteria after delete succeeds', (done) => {
+      store.overrideSelector(
+        documentSearchSelectors.selectCriteria,
+        mockCriteria
+      );
+      store.refreshState();
+
+      effects.deleteDocumentSucceeded$.pipe(take(1)).subscribe((action) => {
+        expect(action).toEqual(
+          DocumentSearchActions.performSearch({ searchCriteria: mockCriteria })
+        );
+        done();
+      });
+
+      actions$.next(DocumentSearchActions.deleteDocumentSucceeded());
+    });
+
+    it('should dispatch performSearch with empty criteria when no criteria is set', (done) => {
+      store.overrideSelector(documentSearchSelectors.selectCriteria, {});
+      store.refreshState();
+
+      effects.deleteDocumentSucceeded$.pipe(take(1)).subscribe((action) => {
+        expect(action).toEqual(
+          DocumentSearchActions.performSearch({ searchCriteria: {} })
+        );
+        done();
+      });
+
+      actions$.next(DocumentSearchActions.deleteDocumentSucceeded());
+    });
+  });
 
   describe('performSearch$ with null/undefined stream fields', () => {
     it('should default stream to [] when API returns undefined stream', (done) => {

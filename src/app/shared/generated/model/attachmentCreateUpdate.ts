@@ -16,7 +16,7 @@ export interface AttachmentCreateUpdate {
     description?: string;
     type?: string;
     validFor?: TimePeriod;
-    mimeTypeId?: string;
+    mimeType?: string;
     file?: string;
     fileName?: string;
 }

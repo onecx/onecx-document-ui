@@ -501,7 +501,7 @@ export class DocumentDetailsEffects {
         description: attachmentFormValue.description!,
         type: attachment.type,
         validFor: attachment.validFor,
-        mimeTypeId: attachment.mimeType?.id,
+        mimeType: attachment.mimeType,
         fileName: attachment.fileName,
       };
     });

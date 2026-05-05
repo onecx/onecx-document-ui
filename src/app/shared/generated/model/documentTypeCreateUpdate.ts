@@ -11,5 +11,7 @@
 
 export interface DocumentTypeCreateUpdate { 
     name: string;
+    description?: string;
+    activeStatus?: boolean;
 }
 

@@ -1,7 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { createChildSelectors } from '@onecx/ngrx-accelerator';
 import { selectBackNavigationPossible } from 'src/app/shared/selectors/onecx.selectors';
-import { DocumentDetail, SupportedMimeType } from '../../../shared/generated';
+import { DocumentDetail } from '../../../shared/generated';
 import { documentFeature } from '../../document.reducers';
 import { documentCreateOperationsSelectors } from '../../operations/document-create-operations.selectors';
 import { initialState } from './document-details.reducers';
@@ -24,10 +24,10 @@ export const selectDocumentTypes = createSelector(
 
 export const selectMimeTypes = createSelector(
   documentCreateOperationsSelectors.selectAvailableMimeTypes,
-  (mimeTypes: SupportedMimeType[]): SelectItem[] =>
+  (mimeTypes: string[]): SelectItem[] =>
     mimeTypes.map((mimeType) => ({
-      label: mimeType.name,
-      value: mimeType.id,
+      label: mimeType,
+      value: mimeType,
     }))
 );
 

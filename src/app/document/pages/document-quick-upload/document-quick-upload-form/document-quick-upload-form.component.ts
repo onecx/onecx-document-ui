@@ -170,7 +170,7 @@ export class DocumentQuickUploadFormComponent implements OnInit {
       return results.label === uploadFileMimetype;
     });
     if (arr.length) {
-      attachmntObj.mimeTypeId = arr[0].value;
+      attachmntObj.mimeType = arr[0].value;
     }
     attachmntObj.isValid = this.isValidFile(attachmntObj);
     this.attachmentArray.reverse();
@@ -186,8 +186,8 @@ export class DocumentQuickUploadFormComponent implements OnInit {
    */
   private isValidFile(file: AttachmentData): boolean {
     const fileSize = file.fileData.size ?? 0;
-    const mimeTypeId = file.mimeTypeId;
-    return !!(mimeTypeId && fileSize && fileSize <= 2097152);
+    const mimeType = file.mimeType;
+    return !!(mimeType && fileSize && fileSize <= 2097152);
   }
 
   /**

@@ -1,4 +1,8 @@
 {
+  "ACTION": {
+    "VIEW": "Anzeigen",
+    "DELETE": "Löschen"
+  },
   "DOCUMENT_DETAILS": {
     "HELP_ARTICLE_ID": "Hilfeartikel",
     "BREADCRUMB": "Details",
@@ -144,7 +148,7 @@
     },
     "HEADER_ACTIONS": {
       "QUICK_UPLOAD": "Schnell hochladen",
-      "CREATE_NEW_DOCUMENT": "Neues Dokument erstellen",
+      "CREATE_NEW_DOCUMENT": "Erstellen",
       "EXPORT_ALL": "Alles exportieren",
       "SHOW_CHART": "Diagramm anzeigen",
       "HIDE_CHART": "Diagramm ausblenden",
@@ -331,6 +335,41 @@
     "REMOVE": "Entfernen",
     "NO": "Nein",
     "YES": "Ja"
+  },
+  "DOCUMENT_TYPE_SEARCH": {
+    "HELP_ARTICLE_ID": "Hilfeartikel",
+    "BREADCRUMB": "Dokumenttypen",
+    "HEADER": "Dokumenttypen",
+    "SUB_HEADER": "Dokumenttypen verwalten",
+    "ARIA-LABEL": "Seitenkopf für Dokumenttypen",
+    "EMPTY_RESULTS": "Keine Dokumenttypen gefunden.",
+    "HEADER_ACTIONS": {
+      "CREATE": "Erstellen"
+    },
+    "RESULTS": {
+      "NAME": "Dokumenttypen",
+      "NAME_COLUMN": "Name",
+      "DESCRIPTION_COLUMN": "Beschreibung",
+      "ACTIVE_STATUS_COLUMN": "Aktiv"
+    },
+    "DIALOG": {
+      "CREATE_HEADER": "Dokumenttyp erstellen",
+      "EDIT_HEADER": "Dokumenttyp bearbeiten",
+      "NAME_LABEL": "Name",
+      "DESCRIPTION_LABEL": "Beschreibung",
+      "ACTIVE_STATUS_LABEL": "Aktiv"
+    },
+    "ERROR_MESSAGES": {
+      "LOAD_FAILED": "Laden der Dokumenttypen fehlgeschlagen.",
+      "CREATE_FAILED": "Erstellen des Dokumenttyps fehlgeschlagen.",
+      "UPDATE_FAILED": "Aktualisieren des Dokumenttyps fehlgeschlagen.",
+      "DELETE_FAILED": "Löschen des Dokumenttyps fehlgeschlagen."
+    },
+    "SUCCESS_MESSAGES": {
+      "CREATE_SUCCESS": "Dokumenttyp erfolgreich erstellt.",
+      "UPDATE_SUCCESS": "Dokumenttyp erfolgreich aktualisiert.",
+      "DELETE_SUCCESS": "Dokumenttyp erfolgreich gelöscht."
+    }
   },
   "OnecxDocumentUi": {
     "ARIA-LABEL": "OnecxDocumentUi App"

@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 README.md
 api.base.service.ts
 api.module.ts
@@ -48,8 +47,6 @@ model/relatedPartyRefCreateUpdate.ts
 model/restException.ts
 model/status.ts
 model/storageUploadAudit.ts
-model/supportedMimeType.ts
-model/supportedMimeTypeCreateUpdate.ts
 model/timePeriod.ts
 model/traceable.ts
 model/updateFileMetadataRequest.ts

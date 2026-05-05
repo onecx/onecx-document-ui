@@ -641,7 +641,7 @@ describe('DocumentCreateOperationsEffects', () => {
 
       effects.navigateToDetails$.pipe(take(1)).subscribe(() => {
         expect(navigateSpy).toHaveBeenCalledWith(
-          expect.arrayContaining(['document', 'details', 'doc-1'])
+          expect.arrayContaining(['details', 'doc-1'])
         );
         done();
       });

@@ -42,7 +42,7 @@ export class DocumentCreateAttachmentsComponent implements OnInit {
     const draft: AttachmentDraft = {
       name: file.name,
       description: null,
-      mimeTypeId: mimeItem.value,
+      mimeType: mimeItem.value,
       validForEnd: null,
       fileName: file.name,
       file,
@@ -81,15 +81,14 @@ export class DocumentCreateAttachmentsComponent implements OnInit {
 
   private addFormEntry(draft: AttachmentDraft): void {
     const mimeType =
-      this.supportedMimeTypes.find((m) => m.value === draft.mimeTypeId)
-        ?.label ?? draft.mimeTypeId;
+      this.supportedMimeTypes.find((m) => m.value === draft.mimeType)?.label ??
+      draft.mimeType;
     const group: AttachmentFormGroup = new FormGroup({
       name: new FormControl<string | null>(draft.name, [
         Validators.required,
         Validators.maxLength(255),
       ]),
-      mimeTypeId: new FormControl<string | null>(draft.mimeTypeId),
-      mimeTypeName: new FormControl<string | null>({
+      mimeType: new FormControl<string | null>({
         value: mimeType,
         disabled: true,
       }),
@@ -105,7 +104,7 @@ export class DocumentCreateAttachmentsComponent implements OnInit {
     return this.attachmentForms.controls.map((form, index) => ({
       name: form.controls.name.value,
       description: form.controls.description.value,
-      mimeTypeId: form.controls.mimeTypeId.value,
+      mimeType: form.controls.mimeType.value,
       validForEnd: form.controls.validForEnd.value,
       fileName: this.files[index].name,
       file: this.files[index],

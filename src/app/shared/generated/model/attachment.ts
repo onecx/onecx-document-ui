@@ -9,7 +9,6 @@
  */
 import { TimePeriod } from './timePeriod';
 import { AttachmentUnit } from './attachmentUnit';
-import { SupportedMimeType } from './supportedMimeType';
 
 
 export interface Attachment { 
@@ -27,7 +26,7 @@ export interface Attachment {
     validFor?: TimePeriod;
     storage?: string;
     externalStorageURL?: string;
-    mimeType?: SupportedMimeType;
+    mimeType?: string;
     fileName?: string;
     storageUploadStatus?: boolean;
 }

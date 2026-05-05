@@ -768,7 +768,7 @@ describe('DocumentDetailsEffects', () => {
             id: 'att-1',
             type: 'pdf',
             validFor: null,
-            mimeType: { id: 'mime-1' },
+            mimeType: 'mime-1',
             fileName: 'doc.pdf',
           },
         ],
@@ -796,7 +796,7 @@ describe('DocumentDetailsEffects', () => {
                   id: 'att-1',
                   name: 'Attachment Name',
                   description: 'A description',
-                  mimeTypeId: 'mime-1',
+                  mimeType: 'mime-1',
                   fileName: 'doc.pdf',
                 }),
               ],
@@ -1243,7 +1243,7 @@ describe('DocumentDetailsEffects', () => {
       );
     });
 
-    it('should set mimeTypeId=undefined when attachment.mimeType is null', (done) => {
+    it('should set mimeType=undefined when attachment.mimeType is null', (done) => {
       const prevDetails = {
         id: 'doc-1',
         modificationCount: 0,
@@ -1274,7 +1274,7 @@ describe('DocumentDetailsEffects', () => {
             'doc-1',
             expect.objectContaining({
               attachments: expect.arrayContaining([
-                expect.objectContaining({ mimeTypeId: undefined }),
+                expect.objectContaining({ mimeType: null }),
               ]),
             })
           );

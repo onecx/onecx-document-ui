@@ -22,10 +22,12 @@ describe('DocumentCreateSelectors', () => {
   });
 
   describe('selectCreateMimeTypes', () => {
-    it('should map SupportedMimeType[] to SelectItem[] with label=name and value=id', () => {
-      const mimeTypes = [{ id: 'm1', name: 'application/pdf' }] as any;
+    it('should map String[] to SelectItem[] with label=name and value=name', () => {
+      const mimeTypes = ['application/pdf'] as any;
       const result = selectCreateMimeTypes.projector(mimeTypes);
-      expect(result).toEqual([{ label: 'application/pdf', value: 'm1' }]);
+      expect(result).toEqual([
+        { label: 'application/pdf', value: 'application/pdf' },
+      ]);
     });
 
     it('should return empty array when no mime types available', () => {

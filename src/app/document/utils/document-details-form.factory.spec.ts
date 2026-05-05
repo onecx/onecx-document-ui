@@ -268,7 +268,7 @@ describe('document-details-form.factory', () => {
         type: 'application/pdf',
         size: 1024,
         sizeUnit: 'KB',
-        mimeType: { name: 'application/pdf' },
+        mimeType: 'application/pdf',
         storageUploadStatus: true,
       } as any;
 
@@ -278,7 +278,7 @@ describe('document-details-form.factory', () => {
       expect(group.get('id')!.value).toBe('att-1');
       expect(group.get('name')!.value).toBe('doc.pdf');
       expect(group.get('description')!.value).toBe('A description');
-      expect(group.get('mimeTypeName')!.value).toBe('application/pdf');
+      expect(group.get('mimeType')!.value).toBe('application/pdf');
       expect(group.get('storageUploadStatus')!.value).toBe(true);
     });
 
@@ -291,7 +291,7 @@ describe('document-details-form.factory', () => {
       const group = getAttachmentFormArray(form).at(0);
       expect(group.get('id')!.value).toBeNull();
       expect(group.get('name')!.value).toBeNull();
-      expect(group.get('mimeTypeName')!.value).toBeNull();
+      expect(group.get('mimeType')!.value).toBeNull();
       expect(group.get('storageUploadStatus')!.value).toBe(false);
     });
   });

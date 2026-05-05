@@ -6,10 +6,13 @@ import { routerNavigatedAction } from '@ngrx/router-store';
 import { Action, Store } from '@ngrx/store';
 import { filterForNavigatedTo } from '@onecx/ngrx-accelerator';
 import {
+  DialogState,
   ExportDataService,
   PortalMessageService,
 } from '@onecx/portal-integration-angular';
+import { PortalDialogService } from '@onecx/portal-integration-angular';
 import equal from 'fast-deep-equal';
+import { PrimeIcons } from 'primeng/api';
 import { catchError, forkJoin, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { selectUrl } from 'src/app/shared/selectors/router.selectors';
 import {
@@ -34,7 +37,8 @@ export class DocumentSearchEffects {
     private readonly store: Store,
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService,
-    private readonly documentTypeService: DocumentTypeController
+    private readonly documentTypeService: DocumentTypeController,
+    private readonly portalDialogService: PortalDialogService
   ) {}
 
   syncParamsToUrl$ = createEffect(
@@ -82,6 +86,53 @@ export class DocumentSearchEffects {
     },
     { dispatch: false }
   );
+
+  deleteButtonClicked$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DocumentSearchActions.deleteButtonClicked),
+      mergeMap(({ id }) =>
+        this.portalDialogService
+          .openDialog<unknown>(
+            'DOCUMENT_DETAILS.DELETE.HEADER',
+            'DOCUMENT_DETAILS.DELETE.MESSAGE',
+            { key: 'DOCUMENT_DETAILS.DELETE.CONFIRM', icon: PrimeIcons.CHECK },
+            { key: 'DOCUMENT_DETAILS.DELETE.CANCEL', icon: PrimeIcons.TIMES }
+          )
+          .pipe(map((state): [DialogState<unknown>, string] => [state, id]))
+      ),
+      switchMap(([dialogResult, id]) => {
+        if (!dialogResult || dialogResult.button === 'secondary') {
+          return of(DocumentSearchActions.deleteDocumentCancelled());
+        }
+        return this.documentService.deleteDocumentById(id).pipe(
+          map(() => {
+            this.messageService.success({
+              summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS',
+            });
+            return DocumentSearchActions.deleteDocumentSucceeded();
+          }),
+          catchError((error) => {
+            this.messageService.error({
+              summaryKey: 'DOCUMENT_DETAILS.DELETE.ERROR',
+            });
+            return of(DocumentSearchActions.deleteDocumentFailed({ error }));
+          })
+        );
+      })
+    );
+  });
+
+  deleteDocumentSucceeded$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(DocumentSearchActions.deleteDocumentSucceeded),
+      concatLatestFrom(() =>
+        this.store.select(documentSearchSelectors.selectCriteria)
+      ),
+      map(([, searchCriteria]) =>
+        DocumentSearchActions.performSearch({ searchCriteria })
+      )
+    );
+  });
 
   searchByUrl$ = createEffect(() => {
     return this.actions$.pipe(

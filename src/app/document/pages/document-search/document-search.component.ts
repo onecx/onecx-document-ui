@@ -6,10 +6,12 @@ import {
   Action,
   BreadcrumbService,
   buildSearchCriteria,
+  DataAction,
   DataSortDirection,
   InteractiveDataViewComponentState,
   RowListGridData,
   SearchHeaderComponentState,
+  UserService,
 } from '@onecx/portal-integration-angular';
 import { PrimeIcons, SelectItem } from 'primeng/api';
 import { map, Observable } from 'rxjs';
@@ -37,6 +39,10 @@ export class DocumentSearchComponent implements OnInit {
   headerActions$: Observable<Action[]>;
   lifeCycleStates: SelectItem[];
   public documentSearchFormGroup: FormGroup;
+  additionalActions: DataAction[] = [];
+  deleteEnabled = false;
+  public hasEditPermission = false;
+  public hasViewPermission = false;
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
@@ -44,13 +50,18 @@ export class DocumentSearchComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     @Inject(LOCALE_ID) public readonly locale: string,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly userService: UserService
   ) {
     this.viewModel$ = this.store.select(selectDocumentSearchViewModel);
     this.defaultDataSortDirection = DataSortDirection.NONE;
     this.headerActions$ = this.buildHeaderActions();
     this.lifeCycleStates = this.buildLifeCycleStates();
     this.documentSearchFormGroup = this.buildSearchFormGroup();
+    if (this.userService.hasPermission('DOCUMENT#WRITE'))
+      this.hasEditPermission = true;
+    if (this.userService.hasPermission('DOCUMENT#READ'))
+      this.hasViewPermission = true;
   }
 
   ngOnInit() {
@@ -64,6 +75,28 @@ export class DocumentSearchComponent implements OnInit {
     this.viewModel$.subscribe((vm) => {
       this.documentSearchFormGroup.patchValue(vm.searchCriteria);
     });
+    this.prepareAdditionalActions();
+  }
+
+  public prepareAdditionalActions(): void {
+    if (!this.hasViewPermission) return;
+    this.additionalActions = [
+      {
+        id: 'view',
+        labelKey: 'ACTION.VIEW',
+        icon: 'pi pi-eye',
+        permission: 'DOCUMENT#READ',
+        callback: (event) => this.details(event),
+      },
+      {
+        id: 'delete',
+        labelKey: 'ACTION.DELETE',
+        icon: 'pi pi-trash',
+        classes: ['p-button-danger'],
+        permission: 'DOCUMENT#DELETE',
+        callback: (event) => this.onDelete(event),
+      },
+    ];
   }
 
   resultComponentStateChanged(state: InteractiveDataViewComponentState) {
@@ -96,6 +129,12 @@ export class DocumentSearchComponent implements OnInit {
   resetSearch() {
     this.documentSearchFormGroup.reset();
     this.store.dispatch(DocumentSearchActions.resetButtonClicked());
+  }
+
+  onDelete(data: RowListGridData) {
+    this.store.dispatch(
+      DocumentSearchActions.deleteButtonClicked({ id: data.id as string })
+    );
   }
 
   quickUpload() {

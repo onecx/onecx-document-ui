@@ -1,8 +1,8 @@
-import { DocumentType, SupportedMimeType } from 'src/app/shared/generated';
+import { DocumentType } from 'src/app/shared/generated';
 
 export interface DocumentCreateOperationsState {
   availableDocumentTypes: DocumentType[];
-  availableMimeTypes: SupportedMimeType[];
+  availableMimeTypes: string[];
   pendingAttachmentUploads: number;
   successfulAttachmentIds: string[];
   failedAttachmentIds: string[];

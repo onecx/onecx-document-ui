@@ -29,8 +29,7 @@ export interface StorageUploadAudit {
     fileName?: string;
     name?: string;
     attachmentDescription?: string;
-    mimeTypeId?: string;
-    mimeTypeName?: string;
+    mimeType?: string;
     specificationId?: string;
     specificationName?: string;
     relatedObjectId?: string;

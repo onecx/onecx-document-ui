@@ -46,5 +46,9 @@ export const DocumentSearchActions = createActionGroup({
     'Diagram component state changed':
       props<GroupByCountDiagramComponentState>(),
     'Chart visibility toggled': emptyProps(),
+    'Delete button clicked': props<{ id: string }>(),
+    'Delete document cancelled': emptyProps(),
+    'Delete document succeeded': emptyProps(),
+    'Delete document failed': props<{ error: string | null }>(),
   },
 });
