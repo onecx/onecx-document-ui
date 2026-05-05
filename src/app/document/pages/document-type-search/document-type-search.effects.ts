@@ -37,9 +37,7 @@ export class DocumentTypeSearchEffects {
           ),
           catchError((error) =>
             of(
-              DocumentTypeSearchActions.documentTypesLoadingFailed({
-                error: error?.message ?? null,
-              })
+              DocumentTypeSearchActions.documentTypesLoadingFailed(error)
             )
           )
         )
@@ -59,9 +57,7 @@ export class DocumentTypeSearchEffects {
             ),
             catchError((error) =>
               of(
-                DocumentTypeSearchActions.documentTypeCreationFailed({
-                  error: error?.message ?? null,
-                })
+                DocumentTypeSearchActions.documentTypeCreationFailed(error)
               )
             )
           )
@@ -81,9 +77,7 @@ export class DocumentTypeSearchEffects {
             ),
             catchError((error) =>
               of(
-                DocumentTypeSearchActions.documentTypeUpdateFailed({
-                  error: error?.message ?? null,
-                })
+                DocumentTypeSearchActions.documentTypeUpdateFailed(error)
               )
             )
           )
@@ -99,9 +93,7 @@ export class DocumentTypeSearchEffects {
           map(() => DocumentTypeSearchActions.documentTypeDeleted({ id })),
           catchError((error) =>
             of(
-              DocumentTypeSearchActions.documentTypeDeletionFailed({
-                error: error?.message ?? null,
-              })
+              DocumentTypeSearchActions.documentTypeDeletionFailed(error)
             )
           )
         )

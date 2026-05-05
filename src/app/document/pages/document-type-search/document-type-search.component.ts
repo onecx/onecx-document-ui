@@ -19,7 +19,6 @@ import { DocumentTypeSearchViewModel } from './document-type-search.viewmodel';
 @Component({
   selector: 'app-document-type-search',
   templateUrl: './document-type-search.component.html',
-  styleUrls: ['./document-type-search.component.scss'],
 })
 export class DocumentTypeSearchComponent implements OnInit {
   viewModel$: Observable<DocumentTypeSearchViewModel>;

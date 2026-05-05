@@ -9,8 +9,8 @@ import {
   DialogState,
   ExportDataService,
   PortalMessageService,
+  PortalDialogService,
 } from '@onecx/portal-integration-angular';
-import { PortalDialogService } from '@onecx/portal-integration-angular';
 import equal from 'fast-deep-equal';
 import { PrimeIcons } from 'primeng/api';
 import { catchError, forkJoin, map, mergeMap, of, switchMap, tap } from 'rxjs';
