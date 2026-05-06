@@ -145,7 +145,7 @@ export class DocumentDetailsComponent implements OnInit, OnDestroy {
             show: 'always',
             icon: PrimeIcons.PENCIL,
             conditional: true,
-            permission: 'DOCUMENT#WRITE',
+            permission: 'DOCUMENT#EDIT',
             showCondition: !vm.editMode,
             actionCallback: () => {
               this.edit();

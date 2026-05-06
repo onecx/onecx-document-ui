@@ -479,11 +479,11 @@ describe('DocumentSearchComponent', () => {
       });
     });
 
-    it('should set quickUpload action as show=always with DOCUMENT#WRITE permission', (done) => {
+    it('should set quickUpload action as show=always with DOCUMENT#CREATE permission', (done) => {
       component.headerActions$.subscribe((actions) => {
         const action = actions[0];
         expect(action.show).toBe('always');
-        expect(action.permission).toBe('DOCUMENT#WRITE');
+        expect(action.permission).toBe('DOCUMENT#CREATE');
         done();
       });
     });
@@ -556,11 +556,11 @@ describe('DocumentSearchComponent', () => {
       expect(component.additionalActions).toHaveLength(2);
     });
 
-    it('should set the view action with DOCUMENT#READ permission', () => {
+    it('should set the view action with DOCUMENT#VIEW permission', () => {
       component.hasViewPermission = true;
       component.prepareAdditionalActions();
       const viewAction = component.additionalActions[0];
-      expect(viewAction.permission).toBe('DOCUMENT#READ');
+      expect(viewAction.permission).toBe('DOCUMENT#VIEW');
     });
 
     it('should set the delete action with DOCUMENT#DELETE permission and danger class', () => {

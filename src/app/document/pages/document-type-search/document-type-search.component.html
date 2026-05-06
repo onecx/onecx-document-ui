@@ -1,5 +1,5 @@
 <ocx-portal-page
-  permission="DOCUMENT#READ"
+  permission="DOCUMENT#SEARCH"
   [helpArticleId]="'DOCUMENT_TYPE_SEARCH.HELP_ARTICLE_ID' | translate"
   *ngrxLet="viewModel$; let vm"
 >
@@ -19,7 +19,7 @@
       <ocx-interactive-data-view
         (viewItem)="editItem($event)"
         (deleteItem)="deleteItem($event)"
-        viewPermission="DOCUMENT#READ"
+        viewPermission="DOCUMENT#EDIT"
         deletePermission="DOCUMENT#DELETE"
         [data]="vm.results"
         [columns]="vm.columns"

@@ -58,9 +58,9 @@ export class DocumentSearchComponent implements OnInit {
     this.headerActions$ = this.buildHeaderActions();
     this.lifeCycleStates = this.buildLifeCycleStates();
     this.documentSearchFormGroup = this.buildSearchFormGroup();
-    if (this.userService.hasPermission('DOCUMENT#WRITE'))
+    if (this.userService.hasPermission('DOCUMENT#EDIT'))
       this.hasEditPermission = true;
-    if (this.userService.hasPermission('DOCUMENT#READ'))
+    if (this.userService.hasPermission('DOCUMENT#VIEW'))
       this.hasViewPermission = true;
   }
 
@@ -85,7 +85,7 @@ export class DocumentSearchComponent implements OnInit {
         id: 'view',
         labelKey: 'ACTION.VIEW',
         icon: 'pi pi-eye',
-        permission: 'DOCUMENT#READ',
+        permission: 'DOCUMENT#VIEW',
         callback: (event) => this.details(event),
       },
       {
@@ -157,7 +157,7 @@ export class DocumentSearchComponent implements OnInit {
           icon: PrimeIcons.UPLOAD,
           titleKey: 'DOCUMENT_SEARCH.HEADER_ACTIONS.QUICK_UPLOAD',
           show: 'always' as const,
-          permission: 'DOCUMENT#WRITE',
+          permission: 'DOCUMENT#CREATE',
           actionCallback: () => this.quickUpload(),
         },
         {
@@ -165,7 +165,7 @@ export class DocumentSearchComponent implements OnInit {
           icon: PrimeIcons.PLUS,
           titleKey: 'DOCUMENT_SEARCH.HEADER_ACTIONS.CREATE_NEW_DOCUMENT',
           show: 'always' as const,
-          permission: 'DOCUMENT#WRITE',
+          permission: 'DOCUMENT#CREATE',
           actionCallback: () => this.createNewDocument(),
         },
         {
