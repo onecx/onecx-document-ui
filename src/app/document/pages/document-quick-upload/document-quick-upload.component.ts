@@ -259,7 +259,7 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
     return this.attachmentArray.map((element) => ({
       name: element.name!,
       description: element.description!,
-      mimeTypeId: element.mimeTypeId!,
+      mimeType: element.mimeType!,
       validFor: {
         startDateTime: undefined,
         endDateTime: element.validFor?.endDateTime,

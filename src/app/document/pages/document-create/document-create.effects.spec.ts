@@ -76,7 +76,7 @@ describe('DocumentCreateEffects', () => {
       actions$.next(
         DocumentCreateActions.attachmentMimeTypeNotSupported({
           fileName: 'test.exe',
-        }),
+        })
       );
     });
   });
@@ -94,7 +94,7 @@ describe('DocumentCreateEffects', () => {
           {
             name: 'file.pdf',
             description: null,
-            mimeTypeId: 'mime-1',
+            mimeType: 'mime-1',
             validForEnd: null,
             fileName: 'file.pdf',
             file: new File(['content'], 'file.pdf'),
@@ -104,13 +104,13 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any,
+        source as any
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action) => {
         expect(action.type).toBe(
-          DocumentCreateOperationsActions.startDocumentCreation.type,
+          DocumentCreateOperationsActions.startDocumentCreation.type
         );
         done();
       });
@@ -126,7 +126,7 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any,
+        source as any
       );
       store.refreshState();
 
@@ -134,7 +134,7 @@ describe('DocumentCreateEffects', () => {
         expect(action).toEqual(
           DocumentCreateActions.stepValidationFailed({
             error: 'DOCUMENT_CREATE.ERROR_MESSAGES.SUBMIT_VALIDATION',
-          }),
+          })
         );
         done();
       });
@@ -150,13 +150,13 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any,
+        source as any
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action) => {
         expect(action.type).toBe(
-          DocumentCreateActions.stepValidationFailed.type,
+          DocumentCreateActions.stepValidationFailed.type
         );
         done();
       });
@@ -168,13 +168,13 @@ describe('DocumentCreateEffects', () => {
       const source = { details: null, attachments: [], characteristics: [] };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any,
+        source as any
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action) => {
         expect(action.type).toBe(
-          DocumentCreateActions.stepValidationFailed.type,
+          DocumentCreateActions.stepValidationFailed.type
         );
         done();
       });
@@ -195,7 +195,7 @@ describe('DocumentCreateEffects', () => {
       actions$.next(
         DocumentCreateOperationsActions.documentCreationCompleted({
           documentId: 'doc-1',
-        }),
+        })
       );
     });
   });
@@ -223,7 +223,7 @@ describe('DocumentCreateEffects', () => {
       actions$.next(
         DocumentCreateOperationsActions.documentCreationFinalStepFailed({
           documentId: 'doc-1',
-        }),
+        })
       );
     });
   });
@@ -261,7 +261,7 @@ describe('DocumentCreateEffects', () => {
       actions$.next(
         DocumentCreateOperationsActions.documentCreationCompleted({
           documentId: 'doc-1',
-        }),
+        })
       );
     });
   });
@@ -321,7 +321,7 @@ describe('DocumentCreateEffects', () => {
           {
             name: 'file.pdf',
             description: 'attach desc',
-            mimeTypeId: 'mime-1',
+            mimeType: 'mime-1',
             validForEnd: '2025-12-31',
             fileName: 'file.pdf',
             file: new File(['content'], 'file.pdf'),
@@ -334,13 +334,13 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any,
+        source as any
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action: any) => {
         expect(action.type).toBe(
-          DocumentCreateOperationsActions.startDocumentCreation.type,
+          DocumentCreateOperationsActions.startDocumentCreation.type
         );
         expect(action.docRequest.attachments[0].validFor).toEqual({
           endDateTime: '2025-12-31',
@@ -361,13 +361,13 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any,
+        source as any
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action: any) => {
         expect(action.type).toBe(
-          DocumentCreateActions.stepValidationFailed.type,
+          DocumentCreateActions.stepValidationFailed.type
         );
         done();
       });
@@ -393,7 +393,7 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any,
+        source as any
       );
       store.refreshState();
 
@@ -409,7 +409,7 @@ describe('DocumentCreateEffects', () => {
       actions$.next(DocumentCreateActions.submitClicked());
     });
 
-    it('should use undefined for mimeTypeId when attachment mimeTypeId is null', (done) => {
+    it('should use undefined for mimeType when attachment mimeType is null', (done) => {
       const source = {
         details: {
           name: 'Doc',
@@ -426,7 +426,7 @@ describe('DocumentCreateEffects', () => {
           {
             name: null,
             description: null,
-            mimeTypeId: null,
+            mimeType: null,
             validForEnd: null,
             fileName: 'file.pdf',
             file: new File(['content'], 'file.pdf'),
@@ -436,12 +436,12 @@ describe('DocumentCreateEffects', () => {
       };
       store.overrideSelector(
         selectDocumentCreateSubmissionSource,
-        source as any,
+        source as any
       );
       store.refreshState();
 
       effects.submitDocumentCreation$.pipe(take(1)).subscribe((action: any) => {
-        expect(action.docRequest.attachments[0].mimeTypeId).toBeUndefined();
+        expect(action.docRequest.attachments[0].mimeType).toBeUndefined();
         expect(action.docRequest.characteristics[0].id).toBe('existing-id');
         done();
       });

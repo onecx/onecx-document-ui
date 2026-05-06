@@ -20,7 +20,7 @@ export interface DocumentAttachmentFormValue {
   type: string | null;
   size: number | null;
   sizeUnit: string | null;
-  mimeTypeName: string | null;
+  mimeType: string | null;
   storageUploadStatus: boolean;
 }
 
@@ -87,7 +87,7 @@ export type DocumentCreateDetailsStepData = Omit<
 export type AttachmentDraft = {
   name: string | null;
   description: string | null;
-  mimeTypeId: string | null;
+  mimeType: string | null;
   validForEnd: string | null;
   fileName: string;
   file: File;

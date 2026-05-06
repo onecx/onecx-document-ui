@@ -30,7 +30,7 @@
     <ocx-content class="w-full">
       <ocx-interactive-data-view
         (viewItem)="details($event)"
-        viewPermission="DOCUMENT#READ"
+        [additionalActions]="additionalActions"
         [data]="vm.results"
         [columns]="vm.columns"
         [emptyResultsMessage]="'DOCUMENT_SEARCH.EMPTY_RESULTS' | translate"

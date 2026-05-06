@@ -23,7 +23,7 @@
         >
           {{
             form.controls.name.value ||
-              form.controls.mimeTypeName.value ||
+              form.controls.mimeType.value ||
               ('DOCUMENT_CREATE.ATTACHMENTS.UNNAMED' | translate)
           }}
         </span>
@@ -75,13 +75,13 @@
         <span class="p-float-label">
           <input
             pInputText
-            id="mimeTypeName"
+            id="mimeType"
             type="text"
             class="w-full"
-            formControlName="mimeTypeName"
+            formControlName="mimeType"
             [attr.disabled]="true"
           />
-          <label for="mimeTypeName">
+          <label for="mimeType">
             {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.MIME_TYPE.LABEL' | translate }}
           </label>
         </span>
@@ -149,7 +149,6 @@
     <button
       pButton
       type="button"
-      class="p-button-secondary"
       [label]="'DOCUMENT_DETAILS.GENERAL.BACK' | translate"
       [attr.aria-label]="'DOCUMENT_DETAILS.GENERAL.BACK' | translate"
       (click)="onBack()"
@@ -160,6 +159,7 @@
       type="button"
       [label]="'DOCUMENT_DETAILS.GENERAL.NEXT' | translate"
       [attr.aria-label]="'DOCUMENT_DETAILS.GENERAL.NEXT' | translate"
+      [disabled]="!isFormValid()"
       (click)="onNext()"
     ></button>
   </div>

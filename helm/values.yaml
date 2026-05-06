@@ -26,6 +26,8 @@ app:
               path: /document/create-document
             - name: Document details
               path: /document/details/{documentId}
+            - name: Document type search
+              path: /document/document-types
     permission:
       enabled: true
       spec:

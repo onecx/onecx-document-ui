@@ -22,7 +22,7 @@ describe('DocumentCreateAttachmentsComponent', () => {
         {
           name: 'doc.pdf',
           description: null,
-          mimeTypeId: 'mime-pdf',
+          mimeType: 'mime-pdf',
           validForEnd: null,
           fileName: 'doc.pdf',
           file,
@@ -45,7 +45,7 @@ describe('DocumentCreateAttachmentsComponent', () => {
         {
           name: 'doc.pdf',
           description: null,
-          mimeTypeId: 'mime-pdf',
+          mimeType: 'mime-pdf',
           validForEnd: null,
           fileName: 'doc.pdf',
           file,
@@ -67,8 +67,8 @@ describe('DocumentCreateAttachmentsComponent', () => {
 
       expect(component.attachmentForms.length).toBe(1);
       expect(component.files).toHaveLength(1);
-      expect(component.attachmentForms.at(0).controls.mimeTypeId.value).toBe(
-        'mime-png'
+      expect(component.attachmentForms.at(0).controls.mimeType.value).toBe(
+        'image/png'
       );
     });
 
@@ -229,12 +229,12 @@ describe('DocumentCreateAttachmentsComponent', () => {
   });
 
   describe('addFormEntry mimeType label fallback', () => {
-    it('should use draft.mimeTypeId as label when mimeType is not found in supportedMimeTypes', () => {
+    it('should use draft.mimeType as label when mimeType is not found in supportedMimeTypes', () => {
       component.attachments = [
         {
           name: 'doc.pdf',
           description: null,
-          mimeTypeId: 'unknown/type',
+          mimeType: 'unknown/type',
           validForEnd: null,
           fileName: 'doc.pdf',
           file: new File(['c'], 'doc.pdf'),
@@ -243,7 +243,7 @@ describe('DocumentCreateAttachmentsComponent', () => {
       component.ngOnInit();
 
       const form = component.attachmentForms.at(0);
-      expect(form.controls.mimeTypeName.value).toBe('unknown/type');
+      expect(form.controls.mimeType.value).toBe('unknown/type');
     });
   });
 });

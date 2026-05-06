@@ -155,9 +155,7 @@ function createAttachmentFormGroup(
     type: new FormControl<string | null>(attachment.type ?? null),
     size: new FormControl<number | null>(attachment.size ?? null),
     sizeUnit: new FormControl<string | null>(attachment.sizeUnit ?? null),
-    mimeTypeName: new FormControl<string | null>(
-      attachment.mimeType?.name ?? null
-    ),
+    mimeType: new FormControl<string | null>(attachment.mimeType ?? null),
     storageUploadStatus: new FormControl<boolean>(
       attachment.storageUploadStatus ?? false,
       { nonNullable: true }

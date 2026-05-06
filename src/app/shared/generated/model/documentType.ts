@@ -17,5 +17,7 @@ export interface DocumentType {
     modificationUser?: string;
     id?: string;
     name?: string;
+    description?: string;
+    activeStatus?: boolean;
 }
 

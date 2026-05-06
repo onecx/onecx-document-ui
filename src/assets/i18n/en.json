@@ -1,4 +1,8 @@
 {
+  "ACTION": {
+    "VIEW": "View",
+    "DELETE": "Delete"
+  },
   "DOCUMENT_DETAILS": {
     "HELP_ARTICLE_ID": "Help Article",
     "BREADCRUMB": "Details",
@@ -149,7 +153,7 @@
     },
     "HEADER_ACTIONS": {
       "QUICK_UPLOAD": "Quick upload",
-      "CREATE_NEW_DOCUMENT": "Create new document",
+      "CREATE_NEW_DOCUMENT": "Create",
       "EXPORT_ALL": "Export all",
       "SHOW_CHART": "Show chart",
       "HIDE_CHART": "Hide chart",
@@ -336,6 +340,41 @@
     "REMOVE": "Remove",
     "NO": "No",
     "YES": "Yes"
+  },
+  "DOCUMENT_TYPE_SEARCH": {
+    "HELP_ARTICLE_ID": "Help Article",
+    "BREADCRUMB": "Document Types",
+    "HEADER": "Document Types",
+    "SUB_HEADER": "Manage Document Types",
+    "ARIA-LABEL": "Page Header for Document Types",
+    "EMPTY_RESULTS": "No document types found.",
+    "HEADER_ACTIONS": {
+      "CREATE": "Create"
+    },
+    "RESULTS": {
+      "NAME": "Document Types",
+      "NAME_COLUMN": "Name",
+      "DESCRIPTION_COLUMN": "Description",
+      "ACTIVE_STATUS_COLUMN": "Active"
+    },
+    "DIALOG": {
+      "CREATE_HEADER": "Create Document Type",
+      "EDIT_HEADER": "Edit Document Type",
+      "NAME_LABEL": "Name",
+      "DESCRIPTION_LABEL": "Description",
+      "ACTIVE_STATUS_LABEL": "Active"
+    },
+    "ERROR_MESSAGES": {
+      "LOAD_FAILED": "Loading document types failed.",
+      "CREATE_FAILED": "Creating document type failed.",
+      "UPDATE_FAILED": "Updating document type failed.",
+      "DELETE_FAILED": "Deleting document type failed."
+    },
+    "SUCCESS_MESSAGES": {
+      "CREATE_SUCCESS": "Document type created successfully.",
+      "UPDATE_SUCCESS": "Document type updated successfully.",
+      "DELETE_SUCCESS": "Document type deleted successfully."
+    }
   },
   "OnecxDocumentUi": {
     "ARIA-LABEL": "OnecxDocumentUi App"

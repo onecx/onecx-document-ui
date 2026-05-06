@@ -1,0 +1,122 @@
+<ocx-portal-page
+  permission="DOCUMENT#READ"
+  [helpArticleId]="'DOCUMENT_TYPE_SEARCH.HELP_ARTICLE_ID' | translate"
+  *ngrxLet="viewModel$; let vm"
+>
+  <ocx-loading-indicator *ngIf="vm.loadingIndicator"></ocx-loading-indicator>
+  <ocx-search-header
+    [headline]="'DOCUMENT_TYPE_SEARCH.HEADER' | translate"
+    [subheader]="'DOCUMENT_TYPE_SEARCH.SUB_HEADER' | translate"
+    [manualBreadcrumbs]="true"
+    [actions]="(headerActions$ | async) ?? []"
+    (componentStateChanged)="searchHeaderComponentStateChanged($event)"
+    [viewMode]="vm.searchHeaderComponentState?.activeViewMode ?? 'basic'"
+    [attr.aria-label]="'DOCUMENT_TYPE_SEARCH.ARIA-LABEL' | translate"
+  >
+  </ocx-search-header>
+  <ocx-content-container layout="horizontal">
+    <ocx-content class="w-full">
+      <ocx-interactive-data-view
+        (viewItem)="editItem($event)"
+        (deleteItem)="deleteItem($event)"
+        viewPermission="DOCUMENT#READ"
+        deletePermission="DOCUMENT#DELETE"
+        [data]="vm.results"
+        [columns]="vm.columns"
+        [emptyResultsMessage]="'DOCUMENT_TYPE_SEARCH.EMPTY_RESULTS' | translate"
+        (componentStateChanged)="resultComponentStateChanged($event)"
+        [layout]="vm.resultComponentState?.layout ?? 'table'"
+        [displayedColumns]="vm.resultComponentState?.displayedColumns ?? []"
+        [supportedViewLayouts]="['list', 'table']"
+        [page]="vm.resultComponentState?.activePage ?? 0"
+        [pageSize]="vm.resultComponentState?.pageSize"
+        [filters]="vm.resultComponentState?.filters ?? []"
+        [sortField]="vm.resultComponentState?.sorting?.sortColumn"
+        [sortDirection]="
+          vm.resultComponentState?.sorting?.sortDirection ??
+          defaultDataSortDirection
+        "
+        [selectedRows]="vm.resultComponentState?.selectedRows ?? []"
+        [defaultGroupKey]="vm.resultComponentState?.activeColumnGroupKey ?? ''"
+        [actionColumnPosition]="
+          vm.resultComponentState?.actionColumnConfig?.position ?? 'right'
+        "
+        [frozenActionColumn]="
+          vm.resultComponentState?.actionColumnConfig?.frozen ?? false
+        "
+        [attr.aria-label]="'DOCUMENT_TYPE_SEARCH.RESULTS.NAME' | translate"
+      >
+      </ocx-interactive-data-view>
+    </ocx-content>
+  </ocx-content-container>
+
+  <p-dialog
+    [header]="
+      vm.editingDocumentType
+        ? ('DOCUMENT_TYPE_SEARCH.DIALOG.EDIT_HEADER' | translate)
+        : ('DOCUMENT_TYPE_SEARCH.DIALOG.CREATE_HEADER' | translate)
+    "
+    [visible]="vm.dialogVisible"
+    [modal]="true"
+    [style]="{ width: '400px' }"
+    [draggable]="false"
+    [resizable]="false"
+    (visibleChange)="!$event && closeDialog()"
+    (onShow)="onDialogShow(vm.editingDocumentType)"
+  >
+    <form [formGroup]="documentTypeFormGroup">
+      <div class="field">
+        <label for="documentTypeName">
+          {{ 'DOCUMENT_TYPE_SEARCH.DIALOG.NAME_LABEL' | translate }}
+        </label>
+        <input
+          id="documentTypeName"
+          type="text"
+          pInputText
+          class="w-full"
+          formControlName="name"
+          [attr.aria-label]="
+            'DOCUMENT_TYPE_SEARCH.DIALOG.NAME_LABEL' | translate
+          "
+        />
+      </div>
+      <div class="field">
+        <label for="documentTypeDescription">
+          {{ 'DOCUMENT_TYPE_SEARCH.DIALOG.DESCRIPTION_LABEL' | translate }}
+        </label>
+        <textarea
+          id="documentTypeDescription"
+          pInputTextarea
+          class="w-full"
+          formControlName="description"
+          [attr.aria-label]="
+            'DOCUMENT_TYPE_SEARCH.DIALOG.DESCRIPTION_LABEL' | translate
+          "
+        ></textarea>
+      </div>
+      <div class="field flex align-items-center gap-2">
+        <p-checkbox
+          inputId="documentTypeActiveStatus"
+          formControlName="activeStatus"
+          [binary]="true"
+        ></p-checkbox>
+        <label for="documentTypeActiveStatus">
+          {{ 'DOCUMENT_TYPE_SEARCH.DIALOG.ACTIVE_STATUS_LABEL' | translate }}
+        </label>
+      </div>
+    </form>
+    <ng-template pTemplate="footer">
+      <button pButton type="button" (click)="closeDialog()">
+        {{ 'GENERAL.CANCEL' | translate }}
+      </button>
+      <button
+        pButton
+        type="button"
+        [disabled]="isFormInvalid()"
+        (click)="saveDocumentType(vm.editingDocumentType)"
+      >
+        {{ 'GENERAL.CREATE' | translate }}
+      </button>
+    </ng-template>
+  </p-dialog>
+</ocx-portal-page>

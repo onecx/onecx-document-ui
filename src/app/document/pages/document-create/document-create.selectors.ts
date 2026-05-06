@@ -24,8 +24,8 @@ export const selectCreateMimeTypes = createSelector(
   documentCreateOperationsSelectors.selectAvailableMimeTypes,
   (mimeTypes): SelectItem[] =>
     mimeTypes.map((mimeType) => ({
-      label: mimeType.name,
-      value: mimeType.id,
+      label: mimeType,
+      value: mimeType,
     }))
 );
 

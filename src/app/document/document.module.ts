@@ -23,6 +23,8 @@ import { StepsModule } from 'primeng/steps';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { TooltipModule } from 'primeng/tooltip';
+import { DialogModule } from 'primeng/dialog';
+import { CheckboxModule } from 'primeng/checkbox';
 import { SharedModule } from '../shared/shared.module';
 import { documentFeature } from './document.reducers';
 import { routes } from './document.routes';
@@ -43,6 +45,8 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { DocumentDetailsFormComponent } from './components/document-details-form/document-details-form.component';
 import { DocumentDetailsCharacteristicsComponent } from './pages/document-details/components/document-details-characteristics/document-details-characteristics.component';
 import { RetryFileUploadDialogComponent } from './pages/document-details/dialog/retry-file-upload-dialog/retry-file-upload-dialog.component';
+import { DocumentTypeSearchComponent } from './pages/document-type-search/document-type-search.component';
+import { DocumentTypeSearchEffects } from './pages/document-type-search/document-type-search.effects';
 
 @NgModule({
   providers: [providePortalDialogService()],
@@ -61,6 +65,7 @@ import { RetryFileUploadDialogComponent } from './pages/document-details/dialog/
     DocumentDetailsCharacteristicsComponent,
     FileUploadComponent,
     RetryFileUploadDialogComponent,
+    DocumentTypeSearchComponent,
   ],
   imports: [
     CommonModule,
@@ -80,12 +85,15 @@ import { RetryFileUploadDialogComponent } from './pages/document-details/dialog/
     TabViewModule,
     TooltipModule,
     InputTextareaModule,
+    DialogModule,
+    CheckboxModule,
     StoreModule.forFeature(documentFeature),
     EffectsModule.forFeature([
       DocumentCreateEffects,
       DocumentDetailsEffects,
       DocumentSearchEffects,
       DocumentCreateOperationsEffects,
+      DocumentTypeSearchEffects,
     ]),
     TranslateModule,
   ],

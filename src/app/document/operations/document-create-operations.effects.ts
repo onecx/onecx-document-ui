@@ -264,7 +264,6 @@ export class DocumentCreateOperationsEffects {
             map((mfe) => {
               this.router.navigate([
                 `/${mfe.baseHref}`,
-                'document',
                 'details',
                 action.documentId,
               ]);

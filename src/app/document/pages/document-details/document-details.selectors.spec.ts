@@ -24,16 +24,13 @@ describe('DocumentDetails selectors', () => {
 
   describe('selectMimeTypes projector', () => {
     it('should map SupportedMimeType[] to SelectItem[] with label=name and value=id', () => {
-      const mimeTypes = [
-        { id: 'm1', name: 'application/pdf' },
-        { id: 'm2', name: 'image/png' },
-      ] as any;
+      const mimeTypes = ['application/pdf', 'image/png'] as any;
 
       const result = selectors.selectMimeTypes.projector(mimeTypes);
 
       expect(result).toEqual([
-        { label: 'application/pdf', value: 'm1' },
-        { label: 'image/png', value: 'm2' },
+        { label: 'application/pdf', value: 'application/pdf' },
+        { label: 'image/png', value: 'image/png' },
       ]);
     });
 

@@ -5,6 +5,7 @@ import { documentCreateReducer } from './pages/document-create/document-create.r
 import { documentDetailsReducer } from './pages/document-details/document-details.reducers';
 import { documentQuickUploadReducer } from './pages/document-quick-upload/document-quick-upload.reducers';
 import { documentSearchReducer } from './pages/document-search/document-search.reducers';
+import { documentTypeSearchReducer } from './pages/document-type-search/document-type-search.reducers';
 
 export const documentFeature = createFeature({
   name: 'document',
@@ -14,5 +15,6 @@ export const documentFeature = createFeature({
     details: documentDetailsReducer,
     search: documentSearchReducer,
     quickUpload: documentQuickUploadReducer,
+    documentTypes: documentTypeSearchReducer,
   }),
 });

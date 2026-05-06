@@ -33,8 +33,6 @@ export * from './relatedPartyRefCreateUpdate';
 export * from './restException';
 export * from './status';
 export * from './storageUploadAudit';
-export * from './supportedMimeType';
-export * from './supportedMimeTypeCreateUpdate';
 export * from './timePeriod';
 export * from './traceable';
 export * from './updateFileMetadataRequest';

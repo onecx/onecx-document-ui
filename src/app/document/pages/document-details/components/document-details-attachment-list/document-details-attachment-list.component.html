@@ -69,7 +69,7 @@
             {{ formatBytes(attachmentFormGroup.get('size')?.value) }}
           </td>
           <td>
-            {{ attachmentFormGroup.get('mimeTypeName')?.value || '-' }}
+            {{ attachmentFormGroup.get('mimeType')?.value || '-' }}
           </td>
           <td>
             {{ getUploadStatusKey(attachmentFormGroup) | translate }}

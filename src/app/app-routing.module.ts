@@ -10,6 +10,11 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./document/document.module').then((mod) => mod.DocumentModule),
   },
+  {
+    matcher: startsWith('document-types'),
+    loadChildren: () =>
+      import('./document/document.module').then((mod) => mod.DocumentModule),
+  },
 ];
 
 @NgModule({

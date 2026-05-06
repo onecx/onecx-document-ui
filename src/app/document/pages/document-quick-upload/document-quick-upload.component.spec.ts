@@ -32,7 +32,6 @@ describe('DocumentQuickUploadComponent', () => {
 
   const mockActivatedRoute = { snapshot: { data: {} } };
 
-   
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -289,7 +288,7 @@ describe('DocumentQuickUploadComponent', () => {
       {
         name: 'file.pdf',
         description: '',
-        mimeTypeId: 'mime-1',
+        mimeType: 'mime-1',
         fileName: 'file.pdf',
         validFor: undefined,
         fileData: new File(['c'], 'file.pdf'),
@@ -329,7 +328,7 @@ describe('DocumentQuickUploadComponent', () => {
       {
         name: 'file.pdf',
         description: 'desc',
-        mimeTypeId: 'mime-1',
+        mimeType: 'mime-1',
         fileName: 'file.pdf',
         fileData: new File(['content'], 'file.pdf'),
         validFor: { endDateTime: '2025-12-31' },
@@ -344,7 +343,7 @@ describe('DocumentQuickUploadComponent', () => {
         type: DocumentCreateOperationsActions.startDocumentCreation.type,
         docRequest: expect.objectContaining({
           attachments: [
-            expect.objectContaining({ name: 'file.pdf', mimeTypeId: 'mime-1' }),
+            expect.objectContaining({ name: 'file.pdf', mimeType: 'mime-1' }),
           ],
         }),
       })

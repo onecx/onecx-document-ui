@@ -54,7 +54,6 @@ describe('DocumentSearchComponent', () => {
   };
 
   window.postMessage = (m: any) => {
-     
     listeners.forEach((l) =>
       l({
         data: m,
@@ -542,6 +541,58 @@ describe('DocumentSearchComponent', () => {
     });
   });
   // <<SPEC-EXTENSIONS-MARKER-!!!-DO-NOT-REMOVE-!!!>>
+
+  describe('prepareAdditionalActions', () => {
+    it('should set additionalActions to empty and return early when hasViewPermission is false', () => {
+      component.hasViewPermission = false;
+      component.additionalActions = [];
+      component.prepareAdditionalActions();
+      expect(component.additionalActions).toEqual([]);
+    });
+
+    it('should set two additionalActions when hasViewPermission is true', () => {
+      component.hasViewPermission = true;
+      component.prepareAdditionalActions();
+      expect(component.additionalActions).toHaveLength(2);
+    });
+
+    it('should set the view action with DOCUMENT#READ permission', () => {
+      component.hasViewPermission = true;
+      component.prepareAdditionalActions();
+      const viewAction = component.additionalActions[0];
+      expect(viewAction.permission).toBe('DOCUMENT#READ');
+    });
+
+    it('should set the delete action with DOCUMENT#DELETE permission and danger class', () => {
+      component.hasViewPermission = true;
+      component.prepareAdditionalActions();
+      const deleteAction = component.additionalActions[1];
+      expect(deleteAction.permission).toBe('DOCUMENT#DELETE');
+      expect(deleteAction.classes).toContain('p-button-danger');
+    });
+
+    it('should dispatch detailsButtonClicked when view action callback is invoked', () => {
+      component.hasViewPermission = true;
+      component.prepareAdditionalActions();
+      const viewAction = component.additionalActions[0];
+      const row: RowListGridData = { id: 'row-1', imagePath: '' };
+      if (viewAction.callback) viewAction.callback(row);
+      expect(store.dispatch).toHaveBeenCalledWith(
+        DocumentSearchActions.detailsButtonClicked({ id: 'row-1' })
+      );
+    });
+
+    it('should dispatch deleteButtonClicked when delete action callback is invoked', () => {
+      component.hasViewPermission = true;
+      component.prepareAdditionalActions();
+      const deleteAction = component.additionalActions[1];
+      const row: RowListGridData = { id: 'row-2', imagePath: '' };
+      if (deleteAction.callback) deleteAction.callback(row);
+      expect(store.dispatch).toHaveBeenCalledWith(
+        DocumentSearchActions.deleteButtonClicked({ id: 'row-2' })
+      );
+    });
+  });
 
   describe('headerActions$ callbacks', () => {
     it('should navigate to quick-upload when quickUpload action callback is invoked', (done) => {

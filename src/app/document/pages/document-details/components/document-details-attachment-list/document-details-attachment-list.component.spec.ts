@@ -15,9 +15,7 @@ describe('DocumentDetailsAttachmentListComponent', () => {
       type: new FormControl(overrides['type'] ?? null),
       size: new FormControl(overrides['size'] ?? 1024),
       sizeUnit: new FormControl(overrides['sizeUnit'] ?? null),
-      mimeTypeName: new FormControl(
-        overrides['mimeTypeName'] ?? 'application/pdf'
-      ),
+      mimeType: new FormControl(overrides['mimeType'] ?? 'application/pdf'),
       storageUploadStatus: new FormControl(
         overrides['storageUploadStatus'] ?? true
       ),
@@ -76,7 +74,7 @@ describe('DocumentDetailsAttachmentListComponent', () => {
         type: new FormControl(null),
         size: new FormControl(1024),
         sizeUnit: new FormControl(null),
-        mimeTypeName: new FormControl('application/pdf'),
+        mimeType: new FormControl('application/pdf'),
         storageUploadStatus: new FormControl(null),
       });
       expect(component.getUploadStatusKey(group)).toBe(
