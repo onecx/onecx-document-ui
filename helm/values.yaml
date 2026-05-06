@@ -33,6 +33,8 @@ app:
       spec:
         permissions:
           DOCUMENT:
-            READ: Read documents
-            WRITE: Write document data
+            CREATE: Create documents
+            EDIT: Edit documents
+            SEARCH: Search documents
+            VIEW: View document details
             DELETE: Delete document data

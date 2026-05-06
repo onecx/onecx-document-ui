@@ -337,7 +337,7 @@ describe('DocumentTypeSearchComponent', () => {
         expect(actions[0].labelKey).toBe(
           'DOCUMENT_TYPE_SEARCH.HEADER_ACTIONS.CREATE'
         );
-        expect(actions[0].permission).toBe('DOCUMENT#WRITE');
+        expect(actions[0].permission).toBe('DOCUMENT#CREATE');
         done();
       });
     });

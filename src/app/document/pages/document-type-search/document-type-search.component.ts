@@ -156,7 +156,7 @@ export class DocumentTypeSearchComponent implements OnInit {
           icon: PrimeIcons.PLUS,
           titleKey: 'DOCUMENT_TYPE_SEARCH.HEADER_ACTIONS.CREATE',
           show: 'always' as const,
-          permission: 'DOCUMENT#WRITE',
+          permission: 'DOCUMENT#CREATE',
           actionCallback: () => this.openCreateDialog(),
         },
       ])
