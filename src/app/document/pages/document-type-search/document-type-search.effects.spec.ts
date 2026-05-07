@@ -5,6 +5,8 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { routerNavigatedAction } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
+import { AppStateService } from '@onecx/angular-integration-interface';
+import { provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks';
 import { PortalMessageService } from '@onecx/portal-integration-angular';
 import { of, ReplaySubject, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -60,6 +62,7 @@ describe('DocumentTypeSearchEffects', () => {
         provideRouter([]),
         provideMockStore({}),
         provideMockActions(() => actions$),
+        provideAppStateServiceMock(),
         { provide: Router, useValue: router },
         { provide: DocumentTypeController, useValue: documentTypeService },
         { provide: PortalMessageService, useValue: messageService },
@@ -348,6 +351,20 @@ describe('DocumentTypeSearchEffects', () => {
         done();
       });
       actions$.next(DocumentTypeSearchActions.loadDocumentTypesTriggered());
+    });
+  });
+
+  describe('navigateBack$', () => {
+    it('should navigate to the mfe base href when navigateBackButtonClicked is dispatched', (done) => {
+      const appStateService = TestBed.inject(AppStateService);
+
+      effects.navigateBack$.pipe(take(1)).subscribe(() => {
+        expect(router.navigate).toHaveBeenCalledWith(['/test-base']);
+        done();
+      });
+
+      (appStateService.currentMfe$ as any).publish({ baseHref: 'test-base' });
+      actions$.next(DocumentTypeSearchActions.navigateBackButtonClicked());
     });
   });
 });

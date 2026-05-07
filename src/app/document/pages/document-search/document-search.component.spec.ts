@@ -227,14 +227,14 @@ describe('DocumentSearchComponent', () => {
     expect(doneFn).toHaveBeenCalledTimes(1);
   });
 
-  it('should have 1 overFlow header action', async () => {
+  it('should have 2 overFlow header action', async () => {
     const searchHeader = await documentSearch.getHeader();
     const pageHeader = await searchHeader.getPageHeader();
     const overflowActionButton = await pageHeader.getOverflowActionMenuButton();
     await overflowActionButton?.click();
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems();
-    expect(overflowMenuItems.length).toBe(1);
+    expect(overflowMenuItems.length).toBe(2);
 
     const exportAllActionItem = await pageHeader.getOverFlowMenuItem(
       'Export all'
@@ -472,9 +472,9 @@ describe('DocumentSearchComponent', () => {
   });
 
   describe('buildHeaderActions', () => {
-    it('should emit 3 header actions: quickUpload, createNewDocument, exportAll', (done) => {
+    it('should emit 4 header actions: quickUpload, createNewDocument, exportAll', (done) => {
       component.headerActions$.subscribe((actions) => {
-        expect(actions.length).toBe(3);
+        expect(actions.length).toBe(4);
         done();
       });
     });
@@ -618,6 +618,16 @@ describe('DocumentSearchComponent', () => {
         expect(router.navigate).toHaveBeenCalledWith(
           ['create-document'],
           expect.objectContaining({ relativeTo: expect.anything() })
+        );
+        done();
+      });
+    });
+
+    it('should dispatch navigateToTypesButtonClicked when navigateToTypes action callback is invoked', (done) => {
+      component.headerActions$.subscribe((actions) => {
+        actions[2].actionCallback();
+        expect(store.dispatch).toHaveBeenCalledWith(
+          DocumentSearchActions.navigateToTypesButtonClicked()
         );
         done();
       });
