@@ -4,6 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { routerNavigatedAction } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 import { filterForNavigatedTo } from '@onecx/ngrx-accelerator';
+import { AppStateService } from '@onecx/angular-integration-interface';
 import { PortalMessageService } from '@onecx/portal-integration-angular';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { DocumentTypeController } from '../../../shared/generated';
@@ -16,7 +17,8 @@ export class DocumentTypeSearchEffects {
     private readonly actions$: Actions,
     private readonly documentTypeService: DocumentTypeController,
     private readonly router: Router,
-    private readonly messageService: PortalMessageService
+    private readonly messageService: PortalMessageService,
+    private readonly appStateService: AppStateService
   ) {}
 
   loadOnNavigation$ = createEffect(() => {
@@ -27,6 +29,22 @@ export class DocumentTypeSearchEffects {
     );
   });
 
+  navigateBack$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(DocumentTypeSearchActions.navigateBackButtonClicked),
+        switchMap(() =>
+          this.appStateService.currentMfe$.asObservable().pipe(
+            map((mfe) => {
+              this.router.navigate([`/${mfe.baseHref}`]);
+            })
+          )
+        )
+      );
+    },
+    { dispatch: false }
+  );
+
   loadDocumentTypes$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(DocumentTypeSearchActions.loadDocumentTypesTriggered),
@@ -36,9 +54,7 @@ export class DocumentTypeSearchEffects {
             DocumentTypeSearchActions.documentTypesReceived({ documentTypes })
           ),
           catchError((error) =>
-            of(
-              DocumentTypeSearchActions.documentTypesLoadingFailed(error)
-            )
+            of(DocumentTypeSearchActions.documentTypesLoadingFailed(error))
           )
         )
       )
@@ -56,9 +72,7 @@ export class DocumentTypeSearchEffects {
               DocumentTypeSearchActions.documentTypeCreated({ documentType })
             ),
             catchError((error) =>
-              of(
-                DocumentTypeSearchActions.documentTypeCreationFailed(error)
-              )
+              of(DocumentTypeSearchActions.documentTypeCreationFailed(error))
             )
           )
       )
@@ -76,9 +90,7 @@ export class DocumentTypeSearchEffects {
               DocumentTypeSearchActions.documentTypeUpdated({ documentType })
             ),
             catchError((error) =>
-              of(
-                DocumentTypeSearchActions.documentTypeUpdateFailed(error)
-              )
+              of(DocumentTypeSearchActions.documentTypeUpdateFailed(error))
             )
           )
       )
@@ -92,9 +104,7 @@ export class DocumentTypeSearchEffects {
         this.documentTypeService.deleteDocumentTypeById(id).pipe(
           map(() => DocumentTypeSearchActions.documentTypeDeleted({ id })),
           catchError((error) =>
-            of(
-              DocumentTypeSearchActions.documentTypeDeletionFailed(error)
-            )
+            of(DocumentTypeSearchActions.documentTypeDeletionFailed(error))
           )
         )
       )

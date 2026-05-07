@@ -155,6 +155,7 @@
       "QUICK_UPLOAD": "Quick upload",
       "CREATE_NEW_DOCUMENT": "Create",
       "EXPORT_ALL": "Export all",
+      "NAVIGATE_TO_TYPES": "Document Types",
       "SHOW_CHART": "Show chart",
       "HIDE_CHART": "Hide chart",
       "CREATE_SEARCH_CONFIG": "Create search configuration",
@@ -349,7 +350,8 @@
     "ARIA-LABEL": "Page Header for Document Types",
     "EMPTY_RESULTS": "No document types found.",
     "HEADER_ACTIONS": {
-      "CREATE": "Create"
+      "CREATE": "Create",
+      "BACK": "Back"
     },
     "RESULTS": {
       "NAME": "Document Types",

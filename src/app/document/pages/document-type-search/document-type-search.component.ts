@@ -152,6 +152,14 @@ export class DocumentTypeSearchComponent implements OnInit {
     return this.viewModel$.pipe(
       map(() => [
         {
+          labelKey: 'DOCUMENT_TYPE_SEARCH.HEADER_ACTIONS.BACK',
+          icon: PrimeIcons.ARROW_LEFT,
+          titleKey: 'DOCUMENT_TYPE_SEARCH.HEADER_ACTIONS.BACK',
+          show: 'always' as const,
+          permission: 'DOCUMENT#VIEW',
+          actionCallback: () => this.navigateBack(),
+        },
+        {
           labelKey: 'DOCUMENT_TYPE_SEARCH.HEADER_ACTIONS.CREATE',
           icon: PrimeIcons.PLUS,
           titleKey: 'DOCUMENT_TYPE_SEARCH.HEADER_ACTIONS.CREATE',
@@ -161,6 +169,9 @@ export class DocumentTypeSearchComponent implements OnInit {
         },
       ])
     );
+  }
+  navigateBack(): void {
+    this.store.dispatch(DocumentTypeSearchActions.navigateBackButtonClicked());
   }
 
   private buildFormGroup(): FormGroup {

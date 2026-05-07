@@ -43,5 +43,6 @@ export const DocumentTypeSearchActions = createActionGroup({
       props<InteractiveDataViewComponentState>(),
     'Search header component state changed':
       props<SearchHeaderComponentState>(),
+    'Navigate back button clicked': emptyProps(),
   },
 });

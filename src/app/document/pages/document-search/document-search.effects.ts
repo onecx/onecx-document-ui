@@ -87,6 +87,22 @@ export class DocumentSearchEffects {
     { dispatch: false }
   );
 
+  navigateToTypes$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(DocumentSearchActions.navigateToTypesButtonClicked),
+        concatLatestFrom(() => this.store.select(selectUrl)),
+        tap(([, currentUrl]) => {
+          const urlTree = this.router.parseUrl(currentUrl);
+          urlTree.queryParams = {};
+          urlTree.fragment = null;
+          this.router.navigate([urlTree.toString(), 'document-types']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
   deleteButtonClicked$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(DocumentSearchActions.deleteButtonClicked),

@@ -150,6 +150,7 @@
       "QUICK_UPLOAD": "Schnell hochladen",
       "CREATE_NEW_DOCUMENT": "Erstellen",
       "EXPORT_ALL": "Alles exportieren",
+      "NAVIGATE_TO_TYPES": "Dokumenttypen",
       "SHOW_CHART": "Diagramm anzeigen",
       "HIDE_CHART": "Diagramm ausblenden",
       "CREATE_SEARCH_CONFIG": "Suchkonfiguration erstellen",
@@ -344,7 +345,8 @@
     "ARIA-LABEL": "Seitenkopf für Dokumenttypen",
     "EMPTY_RESULTS": "Keine Dokumenttypen gefunden.",
     "HEADER_ACTIONS": {
-      "CREATE": "Erstellen"
+      "CREATE": "Erstellen",
+      "BACK": "Zurück"
     },
     "RESULTS": {
       "NAME": "Dokumenttypen",
