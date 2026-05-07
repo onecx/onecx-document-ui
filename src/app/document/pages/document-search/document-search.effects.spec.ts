@@ -24,6 +24,7 @@ import {
   documentSearchSelectors,
   selectDocumentSearchViewModel,
 } from './document-search.selectors';
+import { selectUrl } from 'src/app/shared/selectors/router.selectors';
 import { DialogService } from 'primeng/dynamicdialog';
 
 jest.mock('@onecx/ngrx-accelerator', () => {
@@ -601,6 +602,38 @@ describe('DocumentSearchEffects', () => {
       });
 
       actions$.next(DocumentSearchActions.deleteDocumentSucceeded());
+    });
+  });
+
+  describe('navigateToTypes$', () => {
+    it('should navigate to document-types when navigateToTypesButtonClicked is dispatched', (done) => {
+      store.overrideSelector(selectUrl, '/document/search');
+      store.refreshState();
+
+      effects.navigateToTypes$.pipe(take(1)).subscribe(() => {
+        expect(router.navigate).toHaveBeenCalledWith([
+          '/document/search',
+          'document-types',
+        ]);
+        done();
+      });
+
+      actions$.next(DocumentSearchActions.navigateToTypesButtonClicked());
+    });
+
+    it('should strip query params from the current URL before navigating', (done) => {
+      store.overrideSelector(selectUrl, '/document/search?name=test&type=1');
+      store.refreshState();
+
+      effects.navigateToTypes$.pipe(take(1)).subscribe(() => {
+        expect(router.navigate).toHaveBeenCalledWith([
+          '/document/search',
+          'document-types',
+        ]);
+        done();
+      });
+
+      actions$.next(DocumentSearchActions.navigateToTypesButtonClicked());
     });
   });
 

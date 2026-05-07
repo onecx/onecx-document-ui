@@ -5,6 +5,8 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { routerNavigatedAction } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
+import { AppStateService } from '@onecx/angular-integration-interface';
+import { provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks';
 import { PortalMessageService } from '@onecx/portal-integration-angular';
 import { of, ReplaySubject, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -27,7 +29,12 @@ describe('DocumentTypeSearchEffects', () => {
   let messageService: jest.Mocked<PortalMessageService>;
   let router: jest.Mocked<Router>;
 
-  const mockDocumentType = { id: '1', name: 'Invoice', description: 'Desc', activeStatus: true };
+  const mockDocumentType = {
+    id: '1',
+    name: 'Invoice',
+    description: 'Desc',
+    activeStatus: true,
+  };
 
   beforeEach(async () => {
     actions$ = new ReplaySubject(1);
@@ -55,6 +62,7 @@ describe('DocumentTypeSearchEffects', () => {
         provideRouter([]),
         provideMockStore({}),
         provideMockActions(() => actions$),
+        provideAppStateServiceMock(),
         { provide: Router, useValue: router },
         { provide: DocumentTypeController, useValue: documentTypeService },
         { provide: PortalMessageService, useValue: messageService },
@@ -71,21 +79,34 @@ describe('DocumentTypeSearchEffects', () => {
   describe('loadOnNavigation$', () => {
     it('should dispatch loadDocumentTypesTriggered when navigated to the page', (done) => {
       effects.loadOnNavigation$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentTypeSearchActions.loadDocumentTypesTriggered());
+        expect(action).toEqual(
+          DocumentTypeSearchActions.loadDocumentTypesTriggered()
+        );
         done();
       });
 
-      actions$.next(routerNavigatedAction({ payload: { routerState: { url: '/document-types' }, event: {} } as any }));
+      actions$.next(
+        routerNavigatedAction({
+          payload: {
+            routerState: { url: '/document-types' },
+            event: {},
+          } as any,
+        })
+      );
     });
   });
 
   describe('loadDocumentTypes$', () => {
     it('should dispatch documentTypesReceived when API succeeds', (done) => {
-      documentTypeService.getAllTypesOfDocument.mockReturnValue(of([mockDocumentType]) as any);
+      documentTypeService.getAllTypesOfDocument.mockReturnValue(
+        of([mockDocumentType]) as any
+      );
 
       effects.loadDocumentTypes$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
-          DocumentTypeSearchActions.documentTypesReceived({ documentTypes: [mockDocumentType] })
+          DocumentTypeSearchActions.documentTypesReceived({
+            documentTypes: [mockDocumentType],
+          })
         );
         done();
       });
@@ -100,7 +121,9 @@ describe('DocumentTypeSearchEffects', () => {
 
       effects.loadDocumentTypes$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
-          DocumentTypeSearchActions.documentTypesLoadingFailed({ error: 'load error' })
+          DocumentTypeSearchActions.documentTypesLoadingFailed({
+            error: 'load error',
+          })
         );
         done();
       });
@@ -111,11 +134,15 @@ describe('DocumentTypeSearchEffects', () => {
 
   describe('createDocumentType$', () => {
     it('should dispatch documentTypeCreated when API succeeds', (done) => {
-      documentTypeService.createDocumentType.mockReturnValue(of(mockDocumentType) as any);
+      documentTypeService.createDocumentType.mockReturnValue(
+        of(mockDocumentType) as any
+      );
 
       effects.createDocumentType$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
-          DocumentTypeSearchActions.documentTypeCreated({ documentType: mockDocumentType })
+          DocumentTypeSearchActions.documentTypeCreated({
+            documentType: mockDocumentType,
+          })
         );
         done();
       });
@@ -136,13 +163,17 @@ describe('DocumentTypeSearchEffects', () => {
 
       effects.createDocumentType$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
-          DocumentTypeSearchActions.documentTypeCreationFailed({ error: 'create error' })
+          DocumentTypeSearchActions.documentTypeCreationFailed({
+            error: 'create error',
+          })
         );
         done();
       });
 
       actions$.next(
-        DocumentTypeSearchActions.createDocumentTypeButtonClicked({ name: 'Invoice' })
+        DocumentTypeSearchActions.createDocumentTypeButtonClicked({
+          name: 'Invoice',
+        })
       );
     });
   });
@@ -150,11 +181,15 @@ describe('DocumentTypeSearchEffects', () => {
   describe('updateDocumentType$', () => {
     it('should dispatch documentTypeUpdated when API succeeds', (done) => {
       const updated = { ...mockDocumentType, name: 'Updated' };
-      documentTypeService.updateDocumentTypeById.mockReturnValue(of(updated) as any);
+      documentTypeService.updateDocumentTypeById.mockReturnValue(
+        of(updated) as any
+      );
 
       effects.updateDocumentType$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
-          DocumentTypeSearchActions.documentTypeUpdated({ documentType: updated })
+          DocumentTypeSearchActions.documentTypeUpdated({
+            documentType: updated,
+          })
         );
         done();
       });
@@ -176,20 +211,27 @@ describe('DocumentTypeSearchEffects', () => {
 
       effects.updateDocumentType$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
-          DocumentTypeSearchActions.documentTypeUpdateFailed({ error: 'update error' })
+          DocumentTypeSearchActions.documentTypeUpdateFailed({
+            error: 'update error',
+          })
         );
         done();
       });
 
       actions$.next(
-        DocumentTypeSearchActions.updateDocumentTypeButtonClicked({ id: '1', name: 'Invoice' })
+        DocumentTypeSearchActions.updateDocumentTypeButtonClicked({
+          id: '1',
+          name: 'Invoice',
+        })
       );
     });
   });
 
   describe('deleteDocumentType$', () => {
     it('should dispatch documentTypeDeleted when API succeeds', (done) => {
-      documentTypeService.deleteDocumentTypeById.mockReturnValue(of(void 0 as any));
+      documentTypeService.deleteDocumentTypeById.mockReturnValue(
+        of(void 0 as any)
+      );
 
       effects.deleteDocumentType$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
@@ -198,7 +240,9 @@ describe('DocumentTypeSearchEffects', () => {
         done();
       });
 
-      actions$.next(DocumentTypeSearchActions.deleteDocumentTypeButtonClicked({ id: '1' }));
+      actions$.next(
+        DocumentTypeSearchActions.deleteDocumentTypeButtonClicked({ id: '1' })
+      );
     });
 
     it('should dispatch documentTypeDeletionFailed when API fails', (done) => {
@@ -208,31 +252,39 @@ describe('DocumentTypeSearchEffects', () => {
 
       effects.deleteDocumentType$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
-          DocumentTypeSearchActions.documentTypeDeletionFailed({ error: 'delete error' })
+          DocumentTypeSearchActions.documentTypeDeletionFailed({
+            error: 'delete error',
+          })
         );
         done();
       });
 
-      actions$.next(DocumentTypeSearchActions.deleteDocumentTypeButtonClicked({ id: '1' }));
+      actions$.next(
+        DocumentTypeSearchActions.deleteDocumentTypeButtonClicked({ id: '1' })
+      );
     });
   });
 
   describe('displayError$', () => {
     const errorCases = [
       {
-        action: () => DocumentTypeSearchActions.documentTypesLoadingFailed({ error: 'e' }),
+        action: () =>
+          DocumentTypeSearchActions.documentTypesLoadingFailed({ error: 'e' }),
         key: 'DOCUMENT_TYPE_SEARCH.ERROR_MESSAGES.LOAD_FAILED',
       },
       {
-        action: () => DocumentTypeSearchActions.documentTypeCreationFailed({ error: 'e' }),
+        action: () =>
+          DocumentTypeSearchActions.documentTypeCreationFailed({ error: 'e' }),
         key: 'DOCUMENT_TYPE_SEARCH.ERROR_MESSAGES.CREATE_FAILED',
       },
       {
-        action: () => DocumentTypeSearchActions.documentTypeUpdateFailed({ error: 'e' }),
+        action: () =>
+          DocumentTypeSearchActions.documentTypeUpdateFailed({ error: 'e' }),
         key: 'DOCUMENT_TYPE_SEARCH.ERROR_MESSAGES.UPDATE_FAILED',
       },
       {
-        action: () => DocumentTypeSearchActions.documentTypeDeletionFailed({ error: 'e' }),
+        action: () =>
+          DocumentTypeSearchActions.documentTypeDeletionFailed({ error: 'e' }),
         key: 'DOCUMENT_TYPE_SEARCH.ERROR_MESSAGES.DELETE_FAILED',
       },
     ];
@@ -240,7 +292,9 @@ describe('DocumentTypeSearchEffects', () => {
     errorCases.forEach(({ action, key }) => {
       it(`should call messageService.error with ${key}`, (done) => {
         effects.displayError$.pipe(take(1)).subscribe(() => {
-          expect(messageService.error).toHaveBeenCalledWith({ summaryKey: key });
+          expect(messageService.error).toHaveBeenCalledWith({
+            summaryKey: key,
+          });
           done();
         });
         actions$.next(action());
@@ -259,15 +313,22 @@ describe('DocumentTypeSearchEffects', () => {
   describe('displaySuccess$', () => {
     const successCases = [
       {
-        action: () => DocumentTypeSearchActions.documentTypeCreated({ documentType: mockDocumentType }),
+        action: () =>
+          DocumentTypeSearchActions.documentTypeCreated({
+            documentType: mockDocumentType,
+          }),
         key: 'DOCUMENT_TYPE_SEARCH.SUCCESS_MESSAGES.CREATE_SUCCESS',
       },
       {
-        action: () => DocumentTypeSearchActions.documentTypeUpdated({ documentType: mockDocumentType }),
+        action: () =>
+          DocumentTypeSearchActions.documentTypeUpdated({
+            documentType: mockDocumentType,
+          }),
         key: 'DOCUMENT_TYPE_SEARCH.SUCCESS_MESSAGES.UPDATE_SUCCESS',
       },
       {
-        action: () => DocumentTypeSearchActions.documentTypeDeleted({ id: '1' }),
+        action: () =>
+          DocumentTypeSearchActions.documentTypeDeleted({ id: '1' }),
         key: 'DOCUMENT_TYPE_SEARCH.SUCCESS_MESSAGES.DELETE_SUCCESS',
       },
     ];
@@ -275,7 +336,9 @@ describe('DocumentTypeSearchEffects', () => {
     successCases.forEach(({ action, key }) => {
       it(`should call messageService.success with ${key}`, (done) => {
         effects.displaySuccess$.pipe(take(1)).subscribe(() => {
-          expect(messageService.success).toHaveBeenCalledWith({ summaryKey: key });
+          expect(messageService.success).toHaveBeenCalledWith({
+            summaryKey: key,
+          });
           done();
         });
         actions$.next(action());
@@ -288,6 +351,20 @@ describe('DocumentTypeSearchEffects', () => {
         done();
       });
       actions$.next(DocumentTypeSearchActions.loadDocumentTypesTriggered());
+    });
+  });
+
+  describe('navigateBack$', () => {
+    it('should navigate to the mfe base href when navigateBackButtonClicked is dispatched', (done) => {
+      const appStateService = TestBed.inject(AppStateService);
+
+      effects.navigateBack$.pipe(take(1)).subscribe(() => {
+        expect(router.navigate).toHaveBeenCalledWith(['/test-base']);
+        done();
+      });
+
+      (appStateService.currentMfe$ as any).publish({ baseHref: 'test-base' });
+      actions$.next(DocumentTypeSearchActions.navigateBackButtonClicked());
     });
   });
 });

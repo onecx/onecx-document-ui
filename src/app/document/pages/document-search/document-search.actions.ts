@@ -50,5 +50,6 @@ export const DocumentSearchActions = createActionGroup({
     'Delete document cancelled': emptyProps(),
     'Delete document succeeded': emptyProps(),
     'Delete document failed': props<{ error: string | null }>(),
+    'Navigate to types button clicked': emptyProps(),
   },
 });

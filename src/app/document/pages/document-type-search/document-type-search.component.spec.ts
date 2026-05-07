@@ -333,11 +333,22 @@ describe('DocumentTypeSearchComponent', () => {
   describe('headerActions$', () => {
     it('should emit a single create action with the correct labelKey and permission', (done) => {
       component.headerActions$.subscribe((actions) => {
-        expect(actions).toHaveLength(1);
-        expect(actions[0].labelKey).toBe(
+        expect(actions).toHaveLength(2);
+        expect(actions[1].labelKey).toBe(
           'DOCUMENT_TYPE_SEARCH.HEADER_ACTIONS.CREATE'
         );
-        expect(actions[0].permission).toBe('DOCUMENT#CREATE');
+        expect(actions[1].permission).toBe('DOCUMENT#CREATE');
+        done();
+      });
+    });
+
+    it('should navigate back when back action callback is invoked', (done) => {
+      const dispatchSpy = jest.spyOn(store, 'dispatch');
+      component.headerActions$.subscribe((actions) => {
+        (actions[0] as any).actionCallback();
+        expect(dispatchSpy).toHaveBeenCalledWith(
+          DocumentTypeSearchActions.navigateBackButtonClicked()
+        );
         done();
       });
     });
@@ -345,7 +356,7 @@ describe('DocumentTypeSearchComponent', () => {
     it('should call openCreateDialog when create action callback is invoked', (done) => {
       const dispatchSpy = jest.spyOn(store, 'dispatch');
       component.headerActions$.subscribe((actions) => {
-        (actions[0] as any).actionCallback();
+        (actions[1] as any).actionCallback();
         expect(dispatchSpy).toHaveBeenCalledWith(
           DocumentTypeSearchActions.createDialogOpened()
         );

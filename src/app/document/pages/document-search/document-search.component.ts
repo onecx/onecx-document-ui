@@ -169,6 +169,14 @@ export class DocumentSearchComponent implements OnInit {
           actionCallback: () => this.createNewDocument(),
         },
         {
+          labelKey: 'DOCUMENT_SEARCH.HEADER_ACTIONS.NAVIGATE_TO_TYPES',
+          icon: PrimeIcons.SEARCH_PLUS,
+          titleKey: 'DOCUMENT_SEARCH.HEADER_ACTIONS.NAVIGATE_TO_TYPES',
+          show: 'asOverflow' as const,
+          permission: 'DOCUMENT#VIEW',
+          actionCallback: () => this.navigateToTypes(),
+        },
+        {
           labelKey: 'DOCUMENT_SEARCH.HEADER_ACTIONS.EXPORT_ALL',
           icon: PrimeIcons.DOWNLOAD,
           titleKey: 'DOCUMENT_SEARCH.HEADER_ACTIONS.EXPORT_ALL',
@@ -177,6 +185,10 @@ export class DocumentSearchComponent implements OnInit {
         },
       ])
     );
+  }
+
+  navigateToTypes() {
+    this.store.dispatch(DocumentSearchActions.navigateToTypesButtonClicked());
   }
 
   private buildLifeCycleStates(): SelectItem[] {
