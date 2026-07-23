@@ -9,7 +9,7 @@ const config = withModuleFederationPlugin({
   name: 'onecx-document-ui-app',
   filename: 'remoteEntry.js',
   exposes: {
-    './OnecxDocumentUiModule': './src/main.ts',
+    './OneCXDocumentModule': './src/main.ts',
   },
   shared: share({
     '@angular/core': {

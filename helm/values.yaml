@@ -10,7 +10,7 @@ app:
       enabled: true
       specs:
         main:
-          exposedModule: ./OnecxDocumentUiModule
+          exposedModule: ./OneCXDocumentModule
           description: OneCX OnecxDocumentUi Module
           note: OneCX OnecxDocumentUi UI module auto import via MF operator
           type: MODULE
@@ -35,6 +35,6 @@ app:
           DOCUMENT:
             CREATE: Create documents
             EDIT: Edit documents
+            DELETE: Delete document data
             SEARCH: Search documents
             VIEW: View document details
-            DELETE: Delete document data
