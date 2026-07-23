@@ -4,19 +4,19 @@ app:
     repository: onecx/onecx-document-ui
   routing:
     enabled: true
-    path: /mfe/onecxDocumentUi/
+    path: /mfe/document/
   operator:
     microfrontend:
       enabled: true
       specs:
         main:
           exposedModule: ./OneCXDocumentModule
-          description: OneCX OnecxDocumentUi Module
-          note: OneCX OnecxDocumentUi UI module auto import via MF operator
+          description: OneCX Document UI
+          note: OneCX Document UI auto import via MF operator
           type: MODULE
           technology: WEBCOMPONENTMODULE
-          remoteName: onecx-document-ui
-          tagName: onecx-document-ui-webcomponent
+          remoteName: onecx-document
+          tagName: onecx-document-component
           endpoints:
             - name: Document search
               path: /document
