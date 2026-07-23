@@ -31,14 +31,14 @@ export interface DocumentDetail {
     lifeCycleState?: LifeCycleState;
     documentVersion?: string;
     channel?: Channel;
-    tags?: Set<string>;
+    tags?: Array<string>;
     type?: DocumentType;
     specification?: DocumentSpecification;
-    documentRelationships?: Set<DocumentRelationship>;
-    characteristics?: Set<DocumentCharacteristic>;
-    relatedParties?: Set<RelatedPartyRef>;
+    documentRelationships?: Array<DocumentRelationship>;
+    characteristics?: Array<DocumentCharacteristic>;
+    relatedParties?: Array<RelatedPartyRef>;
     relatedObject?: RelatedObjectRef;
-    categories?: Set<Category>;
+    categories?: Array<Category>;
     attachments?: Array<Attachment>;
 }
 

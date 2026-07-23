@@ -1,24 +1,37 @@
 {
   "name": "onecx-document-ui",
+  "private": true,
   "version": "0.0.0",
-  "license": "MIT",
+  "license": "Apache-2.0",
+  "contributors": [
+    "OneCX Development Team <onecx_dev@1000kit.org>"
+  ],
+  "config": {
+    "openapiYaml": "src/assets/api/openapi-bff.yaml",
+    "openapiOutput": "src/app/shared/generated"
+  },
   "scripts": {
-    "apigen": "openapi-generator-cli generate -i src/assets/swagger/openapi-bff.yaml -c apigen.yaml -o src/app/shared/generated -g typescript-angular --type-mappings AnyType=object",
     "start": "nx serve",
     "build": "nx build",
     "postbuild": "mv \"$(find dist/onecx-document-ui -maxdepth 1 -type f -name 'styles.*.css' | head -n 1)\" dist/onecx-document-ui/styles.css",
-    "format": "nx format:write --uncommitted",
-    "lint": "nx lint",
-    "lint:fix": "nx lint --fix",
     "test": "nx test",
+    "clean": "npm cache clean --force && ng cache clean && rm -rf *.log dist reports .angular .eslintcache ./node_modules/.cache/prettier/.prettier-cache",
+    "lint": "nx lint --cache=true && npx prettier -c --cache .",
+    "eslint": "eslint --quiet --ext .js,.ts src",
+    "format": "nx format:write --uncommitted",
+    "audit": "npm audit --audit-level=high",
+    "browser": "npx browserslist",
+    "prepare": "husky || true",
     "test:ci": "nx test --watch=false --browsers=ChromeHeadless --code-coverage",
     "sonar": "npx sonar-scanner",
-    "prepare": "husky"
+    "apigen-cleanup": "rm -rf $npm_package_config_openapiOutput",
+    "apigen-format": "npx prettier $npm_package_config_openapiYaml --write && npx prettier $npm_package_config_openapiOutput/**/* --write",
+    "apigen-generate": "openapi-generator-cli generate -i $npm_package_config_openapiYaml -g typescript-angular -c apigen.yaml -o $npm_package_config_openapiOutput --type-mappings=AnyType=object,set=Array",
+    "apigen": "npm run apigen-cleanup && npm run apigen-generate && npm run apigen-format"
   },
   "jestSonar": {
     "reportPath": "reports"
   },
-  "private": true,
   "dependencies": {
     "@angular-architects/module-federation": "^18.0.4",
     "@angular/animations": "~18.2.0",
@@ -107,6 +120,6 @@
     "tslib": "^2.3.0",
     "typescript": "~5.5.4",
     "typescript-eslint": "^8.0.0",
-    "webpack": "5.94.0"
+    "webpack": "5.95.0"
   }
 }
