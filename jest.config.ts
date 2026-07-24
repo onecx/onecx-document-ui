@@ -13,8 +13,6 @@ const ignoredPathPatterns: string[] = [
 
 const config: Config = {
   displayName: 'onecx-document-ui',
-  silent: true,
-  verbose: false,
   testEnvironment: 'jsdom',
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
@@ -40,22 +38,8 @@ const config: Config = {
     ]
   },
   // reporting
-  collectCoverage: true,
   coverageDirectory: '<rootDir>/reports/coverage/',
-  coveragePathIgnorePatterns: ignoredPathPatterns,
-  coverageReporters: ['json', 'text', 'lcov', 'text-summary'],
-  testResultsProcessor: 'jest-sonar-reporter',
-  reporters: [
-    'default',
-    [
-      'jest-sonar',
-      {
-        outputDirectory: 'reports',
-        outputName: 'sonarqube_report.xml',
-        reportedFilePath: 'absolute'
-      }
-    ]
-  ]
+  coveragePathIgnorePatterns: ignoredPathPatterns
 }
 
 export default config
