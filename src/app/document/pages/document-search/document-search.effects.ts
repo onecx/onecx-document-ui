@@ -227,13 +227,15 @@ export class DocumentSearchEffects {
   private performSearch(searchCriteria: Record<string, unknown>) {
     return this.documentService
       .getDocumentByCriteria({
-        ...Object.entries(searchCriteria).reduce(
-          (acc, [key, value]) => ({
-            ...acc,
-            [key]: value instanceof Date ? value.toISOString() : value
-          }),
-          {} as Record<string, unknown>
-        )
+        documentSearchCriteria: {
+          ...Object.entries(searchCriteria).reduce(
+            (acc, [key, value]) => ({
+              ...acc,
+              [key]: value instanceof Date ? value.toISOString() : value
+            }),
+            {} as Record<string, unknown>
+          )
+        }
       })
       .pipe(
         map(({ stream, size, number, totalElements, totalPages }) =>
