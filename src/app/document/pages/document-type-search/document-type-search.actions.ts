@@ -1,9 +1,8 @@
-import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import {
-  InteractiveDataViewComponentState,
-  SearchHeaderComponentState,
-} from '@onecx/portal-integration-angular';
-import { DocumentType } from '../../../shared/generated';
+import { createActionGroup, emptyProps, props } from '@ngrx/store'
+
+import { InteractiveDataViewComponentState, SearchHeaderComponentState } from '@onecx/portal-integration-angular'
+
+import { DocumentType } from 'src/app/shared/generated'
 
 export const DocumentTypeSearchActions = createActionGroup({
   source: 'DocumentTypeSearch',
@@ -13,21 +12,21 @@ export const DocumentTypeSearchActions = createActionGroup({
     'Document types loading failed': props<{ error: string | null }>(),
 
     'Create document type button clicked': props<{
-      name: string;
-      description?: string;
-      activeStatus?: boolean;
+      name: string
+      description?: string
+      activeStatus?: boolean
     }>(),
     'Document type created': props<{ documentType: DocumentType }>(),
     'Document type creation failed': props<{ error: string | null }>(),
 
     'Edit document type button clicked': props<{
-      documentType: DocumentType;
+      documentType: DocumentType
     }>(),
     'Update document type button clicked': props<{
-      id: string;
-      name: string;
-      description?: string;
-      activeStatus?: boolean;
+      id: string
+      name: string
+      description?: string
+      activeStatus?: boolean
     }>(),
     'Document type updated': props<{ documentType: DocumentType }>(),
     'Document type update failed': props<{ error: string | null }>(),
@@ -39,10 +38,8 @@ export const DocumentTypeSearchActions = createActionGroup({
     'Create dialog opened': emptyProps(),
     'Dialog closed': emptyProps(),
 
-    'Result component state changed':
-      props<InteractiveDataViewComponentState>(),
-    'Search header component state changed':
-      props<SearchHeaderComponentState>(),
-    'Navigate back button clicked': emptyProps(),
-  },
-});
+    'Result component state changed': props<InteractiveDataViewComponentState>(),
+    'Search header component state changed': props<SearchHeaderComponentState>(),
+    'Navigate back button clicked': emptyProps()
+  }
+})

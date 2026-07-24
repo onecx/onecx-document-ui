@@ -1,5 +1,10 @@
+# .husky/pre-commit
 
-# lint
-echo "[Husky] Running lint check on staged files:"
-npx lint-staged
+bash << EOF
 
+echo "[Husky] Running lint check on changed files:"
+npm run lint
+echo "[Husky] Running prettier check on changed files:"
+npx prettier -c --cache .
+
+EOF

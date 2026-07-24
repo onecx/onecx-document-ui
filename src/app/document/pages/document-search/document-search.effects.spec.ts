@@ -1,288 +1,254 @@
-import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { provideRouter } from '@angular/router';
-import { provideMockActions } from '@ngrx/effects/testing';
-import { routerNavigatedAction } from '@ngrx/router-store';
-import { Action, Store } from '@ngrx/store';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import {
-  ExportDataService,
-  PortalDialogService,
-  PortalMessageService,
-} from '@onecx/portal-integration-angular';
-import { of, ReplaySubject, throwError } from 'rxjs';
-import { take } from 'rxjs/operators';
-import {
-  DocumentController,
-  DocumentTypeController,
-} from '../../../shared/generated';
-import { DocumentSearchActions } from './document-search.actions';
-import { DocumentSearchEffects } from './document-search.effects';
-import { DocumentSearchCriteriaSchema } from './document-search.parameters';
-import { initialState } from './document-search.reducers';
-import {
-  documentSearchSelectors,
-  selectDocumentSearchViewModel,
-} from './document-search.selectors';
-import { selectUrl } from 'src/app/shared/selectors/router.selectors';
-import { DialogService } from 'primeng/dynamicdialog';
+import { TestBed } from '@angular/core/testing'
+import { provideMockActions } from '@ngrx/effects/testing'
+import { ActivatedRoute, Router, provideRouter } from '@angular/router'
+import { routerNavigatedAction } from '@ngrx/router-store'
+import { Action, Store } from '@ngrx/store'
+import { MockStore, provideMockStore } from '@ngrx/store/testing'
+
+import { DialogService } from 'primeng/dynamicdialog'
+
+import { of, ReplaySubject, throwError } from 'rxjs'
+import { take } from 'rxjs/operators'
+
+import { ExportDataService, PortalDialogService, PortalMessageService } from '@onecx/portal-integration-angular'
+
+import { DocumentControllerAPIService, DocumentTypeControllerAPIService } from 'src/app/shared/generated'
+
+import { DocumentSearchActions } from './document-search.actions'
+import { DocumentSearchEffects } from './document-search.effects'
+import { DocumentSearchCriteriaSchema } from './document-search.parameters'
+import { initialState } from './document-search.reducers'
+import { documentSearchSelectors, selectDocumentSearchViewModel } from './document-search.selectors'
+import { selectUrl } from 'src/app/shared/selectors/router.selectors'
 
 jest.mock('@onecx/ngrx-accelerator', () => {
-  const actual = jest.requireActual('@onecx/ngrx-accelerator');
+  const actual = jest.requireActual('@onecx/ngrx-accelerator')
   return {
     ...actual,
     filterForNavigatedTo: () => (source: any) => source,
-    filterOutQueryParamsHaveNotChanged: () => (source: any) => source,
-  };
-});
+    filterOutQueryParamsHaveNotChanged: () => (source: any) => source
+  }
+})
 
 describe('DocumentSearchEffects', () => {
-  let actions$: ReplaySubject<Action>;
-  let effects: DocumentSearchEffects;
-  let store: MockStore<Store>;
-  let router: jest.Mocked<Router>;
-  let route: ActivatedRoute;
-  let documentService: jest.Mocked<DocumentController>;
-  let documentTypeService: jest.Mocked<DocumentTypeController>;
-  let messageService: jest.Mocked<PortalMessageService>;
-  let exportDataService: jest.Mocked<ExportDataService>;
+  let actions$: ReplaySubject<Action>
+  let effects: DocumentSearchEffects
+  let store: MockStore<Store>
+  let router: jest.Mocked<Router>
+  let route: ActivatedRoute
+  let documentService: jest.Mocked<DocumentControllerAPIService>
+  let documentTypeService: jest.Mocked<DocumentTypeControllerAPIService>
+  let messageService: jest.Mocked<PortalMessageService>
+  let exportDataService: jest.Mocked<ExportDataService>
 
-  const mockCriteria: DocumentSearchCriteriaSchema = { name: 'test' };
+  const mockCriteria: DocumentSearchCriteriaSchema = { name: 'test' }
 
   beforeEach(async () => {
-    actions$ = new ReplaySubject(1);
+    actions$ = new ReplaySubject(1)
 
     documentService = {
       getDocumentByCriteria: jest.fn(),
-      getAllChannels: jest.fn(),
-    } as unknown as jest.Mocked<DocumentController>;
+      getAllChannels: jest.fn()
+    } as unknown as jest.Mocked<DocumentControllerAPIService>
 
     documentTypeService = {
-      getAllTypesOfDocument: jest.fn(),
-    } as unknown as jest.Mocked<DocumentTypeController>;
+      getAllTypesOfDocument: jest.fn()
+    } as unknown as jest.Mocked<DocumentTypeControllerAPIService>
 
     router = {
       navigate: jest.fn().mockReturnValue(Promise.resolve(true)),
       parseUrl: jest.fn(),
-      events: of(),
-    } as unknown as jest.Mocked<Router>;
+      events: of()
+    } as unknown as jest.Mocked<Router>
 
     messageService = {
       success: jest.fn(),
-      error: jest.fn(),
-    } as unknown as jest.Mocked<PortalMessageService>;
+      error: jest.fn()
+    } as unknown as jest.Mocked<PortalMessageService>
 
     exportDataService = {
-      exportCsv: jest.fn(),
-    } as unknown as jest.Mocked<ExportDataService>;
+      exportCsv: jest.fn()
+    } as unknown as jest.Mocked<ExportDataService>
 
     route = {
       queryParams: of({}),
-      snapshot: { queryParams: {} },
-    } as unknown as ActivatedRoute;
-    const createSpyObj = (
-      baseName: string,
-      methodNames: Array<string>
-    ): { [key: string]: any } => {
-      const obj: any = {};
+      snapshot: { queryParams: {} }
+    } as unknown as ActivatedRoute
+    const createSpyObj = (baseName: string, methodNames: Array<string>): { [key: string]: any } => {
+      const obj: any = {}
 
       for (let i = 0; i < methodNames.length; i++) {
-        obj[methodNames[i]] = jest.fn();
+        obj[methodNames[i]] = jest.fn()
       }
 
-      return obj;
-    };
+      return obj
+    }
 
-    const portalDialogSpy = createSpyObj('portalDialogService', [
-      'openDialog',
-    ]) as PortalDialogService;
+    const portalDialogSpy = createSpyObj('portalDialogService', ['openDialog']) as PortalDialogService
 
     await TestBed.configureTestingModule({
       providers: [
         DialogService,
         {
           provide: PortalDialogService,
-          useValue: portalDialogSpy,
+          useValue: portalDialogSpy
         },
         DocumentSearchEffects,
         provideRouter([]),
         provideMockStore({
-          initialState: { documentSearch: initialState },
+          initialState: { documentSearch: initialState }
         }),
         provideMockActions(() => actions$),
         { provide: ActivatedRoute, useValue: route },
         { provide: Router, useValue: router },
-        { provide: DocumentController, useValue: documentService },
-        { provide: DocumentTypeController, useValue: documentTypeService },
+        { provide: DocumentControllerAPIService, useValue: documentService },
+        { provide: DocumentTypeControllerAPIService, useValue: documentTypeService },
         { provide: PortalMessageService, useValue: messageService },
-        { provide: ExportDataService, useValue: exportDataService },
-      ],
-    }).compileComponents();
+        { provide: ExportDataService, useValue: exportDataService }
+      ]
+    }).compileComponents()
 
-    store = TestBed.inject(MockStore);
-    effects = TestBed.inject(DocumentSearchEffects);
-  });
+    store = TestBed.inject(MockStore)
+    effects = TestBed.inject(DocumentSearchEffects)
+  })
 
   beforeEach(() => {
-    jest.resetAllMocks();
-    (router.parseUrl as jest.Mock).mockImplementation(
+    jest.resetAllMocks()
+    ;(router.parseUrl as jest.Mock).mockImplementation(
       (url: string) =>
         ({
           toString: () => (url ? url.split('?')[0].split('#')[0] : '/search'),
           queryParams: {},
-          fragment: null,
-        } as any)
-    );
-  });
+          fragment: null
+        }) as any
+    )
+  })
 
   describe('syncParamsToUrl$', () => {
     beforeEach(() => {
-      store.overrideSelector(
-        documentSearchSelectors.selectCriteria,
-        mockCriteria
-      );
-      store.refreshState();
-    });
+      store.overrideSelector(documentSearchSelectors.selectCriteria, mockCriteria)
+      store.refreshState()
+    })
 
     it('should navigate to update URL when criteria differs from query params', (done) => {
-      const navigateSpy = jest.spyOn(router, 'navigate');
-      route.queryParams = of({ different: 'yes' }) as any;
+      const navigateSpy = jest.spyOn(router, 'navigate')
+      route.queryParams = of({ different: 'yes' }) as any
 
       effects.syncParamsToUrl$.pipe(take(1)).subscribe(() => {
-        expect(navigateSpy).toHaveBeenCalled();
-        done();
-      });
+        expect(navigateSpy).toHaveBeenCalled()
+        done()
+      })
 
       actions$.next(
         DocumentSearchActions.searchButtonClicked({
-          searchCriteria: mockCriteria,
+          searchCriteria: mockCriteria
         })
-      );
-    });
+      )
+    })
 
     it('should not navigate when criteria matches query params', (done) => {
-      const navigateSpy = jest.spyOn(router, 'navigate');
-      route.queryParams = of(mockCriteria as any) as any;
+      const navigateSpy = jest.spyOn(router, 'navigate')
+      route.queryParams = of(mockCriteria as any) as any
 
       effects.syncParamsToUrl$.pipe(take(1)).subscribe(() => {
-        expect(navigateSpy).not.toHaveBeenCalled();
-        done();
-      });
+        expect(navigateSpy).not.toHaveBeenCalled()
+        done()
+      })
 
       actions$.next(
         DocumentSearchActions.searchButtonClicked({
-          searchCriteria: mockCriteria,
+          searchCriteria: mockCriteria
         })
-      );
-    });
+      )
+    })
 
     it('should navigate when resetButtonClicked action is triggered', (done) => {
-      const navigateSpy = jest.spyOn(router, 'navigate');
-      route.queryParams = of({ something: 'else' }) as any;
+      const navigateSpy = jest.spyOn(router, 'navigate')
+      route.queryParams = of({ something: 'else' }) as any
 
       effects.syncParamsToUrl$.pipe(take(1)).subscribe(() => {
-        expect(navigateSpy).toHaveBeenCalled();
-        done();
-      });
+        expect(navigateSpy).toHaveBeenCalled()
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.resetButtonClicked());
-    });
-  });
+      actions$.next(DocumentSearchActions.resetButtonClicked())
+    })
+  })
 
   describe('searchByUrl$', () => {
     it('should dispatch loadAvailableCriteriaOptionsAndSearch when criteria options are not loaded', (done) => {
-      store.overrideSelector(
-        documentSearchSelectors.selectCriteria,
-        mockCriteria
-      );
-      store.overrideSelector(
-        documentSearchSelectors.selectCriteriaOptionsLoaded,
-        false
-      );
-      store.refreshState();
+      store.overrideSelector(documentSearchSelectors.selectCriteria, mockCriteria)
+      store.overrideSelector(documentSearchSelectors.selectCriteriaOptionsLoaded, false)
+      store.refreshState()
 
       effects.searchByUrl$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
           DocumentSearchActions.loadAvailableCriteriaOptionsAndSearch({
-            criteria: mockCriteria,
+            criteria: mockCriteria
           })
-        );
-        done();
-      });
+        )
+        done()
+      })
 
-      actions$.next({ type: routerNavigatedAction.type } as any);
-    });
+      actions$.next({ type: routerNavigatedAction.type } as any)
+    })
 
     it('should dispatch performSearch when criteria options are already loaded', (done) => {
-      store.overrideSelector(
-        documentSearchSelectors.selectCriteria,
-        mockCriteria
-      );
-      store.overrideSelector(
-        documentSearchSelectors.selectCriteriaOptionsLoaded,
-        true
-      );
-      store.refreshState();
+      store.overrideSelector(documentSearchSelectors.selectCriteria, mockCriteria)
+      store.overrideSelector(documentSearchSelectors.selectCriteriaOptionsLoaded, true)
+      store.refreshState()
 
       effects.searchByUrl$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(
-          DocumentSearchActions.performSearch({ searchCriteria: mockCriteria })
-        );
-        done();
-      });
+        expect(action).toEqual(DocumentSearchActions.performSearch({ searchCriteria: mockCriteria }))
+        done()
+      })
 
-      actions$.next({ type: routerNavigatedAction.type } as any);
-    });
-  });
+      actions$.next({ type: routerNavigatedAction.type } as any)
+    })
+  })
 
   describe('loadCriteriaOptions$', () => {
     it('should call getAllChannels and getAllTypesOfDocument then dispatch three actions', (done) => {
-      const channels = [{ id: 'ch1', name: 'Email' }];
-      const types = [{ id: 't1', name: 'Invoice' }];
-      documentService.getAllChannels.mockReturnValue(of(channels) as any);
-      documentTypeService.getAllTypesOfDocument.mockReturnValue(
-        of(types) as any
-      );
+      const channels = [{ id: 'ch1', name: 'Email' }]
+      const types = [{ id: 't1', name: 'Invoice' }]
+      documentService.getAllChannels.mockReturnValue(of(channels) as any)
+      documentTypeService.getAllTypesOfDocument.mockReturnValue(of(types) as any)
 
-      const dispatched: Action[] = [];
+      const dispatched: Action[] = []
       effects.loadCriteriaOptions$.pipe(take(3)).subscribe({
         next: (action) => dispatched.push(action),
         complete: () => {
-          expect(dispatched).toContainEqual(
-            DocumentSearchActions.availableChannelsRecived({ channels })
-          );
-          expect(dispatched).toContainEqual(
-            DocumentSearchActions.availableDocTypesRecived({ types })
-          );
+          expect(dispatched).toContainEqual(DocumentSearchActions.availableChannelsRecived({ channels }))
+          expect(dispatched).toContainEqual(DocumentSearchActions.availableDocTypesRecived({ types }))
           expect(dispatched).toContainEqual(
             DocumentSearchActions.performSearch({
-              searchCriteria: mockCriteria,
+              searchCriteria: mockCriteria
             })
-          );
-          done();
-        },
-      });
+          )
+          done()
+        }
+      })
 
       actions$.next(
         DocumentSearchActions.loadAvailableCriteriaOptionsAndSearch({
-          criteria: mockCriteria,
+          criteria: mockCriteria
         })
-      );
-    });
-  });
+      )
+    })
+  })
 
   describe('performSearch$', () => {
     it('should dispatch documentSearchResultsReceived on success', (done) => {
-      const stream = [{ id: '1', name: 'Doc A' }];
+      const stream = [{ id: '1', name: 'Doc A' }]
       documentService.getDocumentByCriteria.mockReturnValue(
         of({
           stream,
           size: 1,
           number: 0,
           totalElements: 1,
-          totalPages: 1,
+          totalPages: 1
         }) as any
-      );
+      )
 
       effects.performSearch$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
@@ -291,351 +257,302 @@ describe('DocumentSearchEffects', () => {
             size: 1,
             number: 0,
             totalElements: 1,
-            totalPages: 1,
+            totalPages: 1
           })
-        );
-        done();
-      });
+        )
+        done()
+      })
 
-      actions$.next(
-        DocumentSearchActions.performSearch({ searchCriteria: mockCriteria })
-      );
-    });
+      actions$.next(DocumentSearchActions.performSearch({ searchCriteria: mockCriteria }))
+    })
 
     it('should convert Date fields to ISO strings before calling the API', (done) => {
       const criteriaWithDate = {
         startDate: '2023-01-01',
-        endDate: '2023-12-31',
-      };
+        endDate: '2023-12-31'
+      }
       documentService.getDocumentByCriteria.mockReturnValue(
         of({
           stream: [],
           size: 0,
           number: 0,
           totalElements: 0,
-          totalPages: 0,
+          totalPages: 0
         }) as any
-      );
+      )
 
       effects.performSearch$.pipe(take(1)).subscribe(() => {
         expect(documentService.getDocumentByCriteria).toHaveBeenCalledWith(
           expect.objectContaining({
             startDate: '2023-01-01',
-            endDate: '2023-12-31',
+            endDate: '2023-12-31'
           })
-        );
-        done();
-      });
+        )
+        done()
+      })
 
       actions$.next(
         DocumentSearchActions.performSearch({
-          searchCriteria: criteriaWithDate,
+          searchCriteria: criteriaWithDate
         })
-      );
-    });
+      )
+    })
 
     it('should convert actual Date object values to ISO strings', (done) => {
-      const dateValue = new Date('2024-06-15T10:00:00.000Z');
+      const dateValue = new Date('2024-06-15T10:00:00.000Z')
       documentService.getDocumentByCriteria.mockReturnValue(
         of({
           stream: [],
           size: 0,
           number: 0,
           totalElements: 0,
-          totalPages: 0,
+          totalPages: 0
         }) as any
-      );
+      )
 
       effects.performSearch$.pipe(take(1)).subscribe(() => {
         expect(documentService.getDocumentByCriteria).toHaveBeenCalledWith(
           expect.objectContaining({ startDate: dateValue.toISOString() })
-        );
-        done();
-      });
+        )
+        done()
+      })
 
       actions$.next(
         DocumentSearchActions.performSearch({
-          searchCriteria: { startDate: dateValue as any },
+          searchCriteria: { startDate: dateValue as any }
         })
-      );
-    });
+      )
+    })
 
     it('should dispatch documentSearchResultsLoadingFailed on API error', (done) => {
-      const error = 'API failure';
-      documentService.getDocumentByCriteria.mockReturnValue(
-        throwError(() => error) as any
-      );
+      const error = 'API failure'
+      documentService.getDocumentByCriteria.mockReturnValue(throwError(() => error) as any)
 
       effects.performSearch$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(
-          DocumentSearchActions.documentSearchResultsLoadingFailed({ error })
-        );
-        done();
-      });
+        expect(action).toEqual(DocumentSearchActions.documentSearchResultsLoadingFailed({ error }))
+        done()
+      })
 
-      actions$.next(
-        DocumentSearchActions.performSearch({ searchCriteria: mockCriteria })
-      );
-    });
-  });
+      actions$.next(DocumentSearchActions.performSearch({ searchCriteria: mockCriteria }))
+    })
+  })
 
   describe('exportData$', () => {
     it('should export CSV with correct columns and results', (done) => {
-      const mockColumns = [{ field: 'name', header: 'Name' }];
-      const mockResults = [{ id: '1', name: 'Context 1' } as any];
+      const mockColumns = [{ field: 'name', header: 'Name' }]
+      const mockResults = [{ id: '1', name: 'Context 1' } as any]
       store.overrideSelector(selectDocumentSearchViewModel, {
         resultComponentState: { displayedColumns: mockColumns },
-        results: mockResults,
-      } as any);
+        results: mockResults
+      } as any)
 
       effects.exportData$.pipe(take(1)).subscribe(() => {
-        expect(exportDataService.exportCsv).toHaveBeenCalledWith(
-          mockColumns,
-          mockResults,
-          'Document.csv'
-        );
-        done();
-      });
+        expect(exportDataService.exportCsv).toHaveBeenCalledWith(mockColumns, mockResults, 'Document.csv')
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.exportButtonClicked());
-    });
+      actions$.next(DocumentSearchActions.exportButtonClicked())
+    })
 
     it('should pass empty array for columns when resultComponentState is null', (done) => {
-      const mockResults = [{ id: '1', name: 'Context 1' } as any];
+      const mockResults = [{ id: '1', name: 'Context 1' } as any]
       store.overrideSelector(selectDocumentSearchViewModel, {
         resultComponentState: null,
-        results: mockResults,
-      } as any);
+        results: mockResults
+      } as any)
 
       effects.exportData$.pipe(take(1)).subscribe(() => {
-        expect(exportDataService.exportCsv).toHaveBeenCalledWith(
-          [],
-          mockResults,
-          'Document.csv'
-        );
-        done();
-      });
+        expect(exportDataService.exportCsv).toHaveBeenCalledWith([], mockResults, 'Document.csv')
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.exportButtonClicked());
-    });
+      actions$.next(DocumentSearchActions.exportButtonClicked())
+    })
 
     it('should pass empty array for columns when displayedColumns is undefined', (done) => {
       store.overrideSelector(selectDocumentSearchViewModel, {
         resultComponentState: { displayedColumns: undefined },
-        results: [],
-      } as any);
+        results: []
+      } as any)
 
       effects.exportData$.pipe(take(1)).subscribe(() => {
-        expect(exportDataService.exportCsv).toHaveBeenCalledWith(
-          [],
-          [],
-          'Document.csv'
-        );
-        done();
-      });
+        expect(exportDataService.exportCsv).toHaveBeenCalledWith([], [], 'Document.csv')
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.exportButtonClicked());
-    });
-  });
+      actions$.next(DocumentSearchActions.exportButtonClicked())
+    })
+  })
 
   describe('displayError$', () => {
     it('should call messageService.error when documentSearchResultsLoadingFailed is dispatched', (done) => {
       effects.displayError$.pipe(take(1)).subscribe(() => {
-        expect(messageService.error).toHaveBeenCalled();
-        done();
-      });
+        expect(messageService.error).toHaveBeenCalled()
+        done()
+      })
 
       actions$.next(
         DocumentSearchActions.documentSearchResultsLoadingFailed({
-          error: 'Test error',
+          error: 'Test error'
         })
-      );
-    });
+      )
+    })
 
     it('should not call messageService.error for unrelated actions', (done) => {
       effects.displayError$.pipe(take(1)).subscribe(() => {
-        expect(messageService.error).not.toHaveBeenCalled();
-        done();
-      });
+        expect(messageService.error).not.toHaveBeenCalled()
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.resetButtonClicked());
-    });
-  });
+      actions$.next(DocumentSearchActions.resetButtonClicked())
+    })
+  })
 
   describe('navigateToOrderDetailsPage$', () => {
     it('should navigate to details page with id appended to current URL', (done) => {
-      const testId = 'test-123';
+      const testId = 'test-123'
 
       effects.navigateToOrderDetailsPage$.pipe(take(1)).subscribe(() => {
-        expect(router.navigate).toHaveBeenCalledWith([
-          '/search',
-          'details',
-          testId,
-        ]);
-        done();
-      });
+        expect(router.navigate).toHaveBeenCalledWith(['/search', 'details', testId])
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.detailsButtonClicked({ id: testId }));
-    });
+      actions$.next(DocumentSearchActions.detailsButtonClicked({ id: testId }))
+    })
 
     it('should clear query params and fragment before navigating', (done) => {
-      const testId = 'test-456';
+      const testId = 'test-456'
       const mockUrlTree: any = {
         toString: jest.fn(() => '/search'),
         queryParams: { a: 1 },
-        fragment: 'frag',
-      };
-      (router.parseUrl as jest.Mock).mockReturnValue(mockUrlTree);
+        fragment: 'frag'
+      }
+      ;(router.parseUrl as jest.Mock).mockReturnValue(mockUrlTree)
 
       effects.navigateToOrderDetailsPage$.pipe(take(1)).subscribe(() => {
-        expect(mockUrlTree.queryParams).toEqual({});
-        expect(mockUrlTree.fragment).toBeNull();
-        done();
-      });
+        expect(mockUrlTree.queryParams).toEqual({})
+        expect(mockUrlTree.fragment).toBeNull()
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.detailsButtonClicked({ id: testId }));
-    });
-  });
+      actions$.next(DocumentSearchActions.detailsButtonClicked({ id: testId }))
+    })
+  })
 
   // <<SPEC-EXTENSIONS-MARKER-!!!-DO-NOT-REMOVE-!!!>>
 
   describe('deleteButtonClicked$', () => {
-    let portalDialogService: jest.Mocked<PortalDialogService>;
+    let portalDialogService: jest.Mocked<PortalDialogService>
 
     beforeEach(() => {
-      portalDialogService = TestBed.inject(
-        PortalDialogService
-      ) as jest.Mocked<PortalDialogService>;
-    });
+      portalDialogService = TestBed.inject(PortalDialogService) as jest.Mocked<PortalDialogService>
+    })
 
     it('should dispatch deleteDocumentCancelled when dialog button is secondary', (done) => {
-      portalDialogService.openDialog = jest
-        .fn()
-        .mockReturnValue(of({ button: 'secondary' }));
+      portalDialogService.openDialog = jest.fn().mockReturnValue(of({ button: 'secondary' }))
 
       effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentSearchActions.deleteDocumentCancelled());
-        done();
-      });
+        expect(action).toEqual(DocumentSearchActions.deleteDocumentCancelled())
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '1' }));
-    });
+      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '1' }))
+    })
 
     it('should dispatch deleteDocumentCancelled when dialog result is null', (done) => {
-      portalDialogService.openDialog = jest.fn().mockReturnValue(of(null));
+      portalDialogService.openDialog = jest.fn().mockReturnValue(of(null))
 
       effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentSearchActions.deleteDocumentCancelled());
-        done();
-      });
+        expect(action).toEqual(DocumentSearchActions.deleteDocumentCancelled())
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '1' }));
-    });
+      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '1' }))
+    })
 
     it('should dispatch deleteDocumentSucceeded and call messageService.success when delete API succeeds', (done) => {
-      portalDialogService.openDialog = jest
-        .fn()
-        .mockReturnValue(of({ button: 'primary' }));
-      documentService.deleteDocumentById = jest.fn().mockReturnValue(of({}));
+      portalDialogService.openDialog = jest.fn().mockReturnValue(of({ button: 'primary' }))
+      documentService.deleteDocumentById = jest.fn().mockReturnValue(of({}))
 
       effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(DocumentSearchActions.deleteDocumentSucceeded());
+        expect(action).toEqual(DocumentSearchActions.deleteDocumentSucceeded())
         expect(messageService.success).toHaveBeenCalledWith({
-          summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS',
-        });
-        done();
-      });
+          summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS'
+        })
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '42' }));
-    });
+      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '42' }))
+    })
 
     it('should dispatch deleteDocumentFailed and call messageService.error when delete API fails', (done) => {
-      const error = 'server error';
-      portalDialogService.openDialog = jest
-        .fn()
-        .mockReturnValue(of({ button: 'primary' }));
-      documentService.deleteDocumentById = jest
-        .fn()
-        .mockReturnValue(throwError(() => error));
+      const error = 'server error'
+      portalDialogService.openDialog = jest.fn().mockReturnValue(of({ button: 'primary' }))
+      documentService.deleteDocumentById = jest.fn().mockReturnValue(throwError(() => error))
 
       effects.deleteButtonClicked$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(
-          DocumentSearchActions.deleteDocumentFailed({ error })
-        );
+        expect(action).toEqual(DocumentSearchActions.deleteDocumentFailed({ error }))
         expect(messageService.error).toHaveBeenCalledWith({
-          summaryKey: 'DOCUMENT_DETAILS.DELETE.ERROR',
-        });
-        done();
-      });
+          summaryKey: 'DOCUMENT_DETAILS.DELETE.ERROR'
+        })
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '42' }));
-    });
-  });
+      actions$.next(DocumentSearchActions.deleteButtonClicked({ id: '42' }))
+    })
+  })
 
   describe('deleteDocumentSucceeded$', () => {
     it('should dispatch performSearch with current criteria after delete succeeds', (done) => {
-      store.overrideSelector(
-        documentSearchSelectors.selectCriteria,
-        mockCriteria
-      );
-      store.refreshState();
+      store.overrideSelector(documentSearchSelectors.selectCriteria, mockCriteria)
+      store.refreshState()
 
       effects.deleteDocumentSucceeded$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(
-          DocumentSearchActions.performSearch({ searchCriteria: mockCriteria })
-        );
-        done();
-      });
+        expect(action).toEqual(DocumentSearchActions.performSearch({ searchCriteria: mockCriteria }))
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.deleteDocumentSucceeded());
-    });
+      actions$.next(DocumentSearchActions.deleteDocumentSucceeded())
+    })
 
     it('should dispatch performSearch with empty criteria when no criteria is set', (done) => {
-      store.overrideSelector(documentSearchSelectors.selectCriteria, {});
-      store.refreshState();
+      store.overrideSelector(documentSearchSelectors.selectCriteria, {})
+      store.refreshState()
 
       effects.deleteDocumentSucceeded$.pipe(take(1)).subscribe((action) => {
-        expect(action).toEqual(
-          DocumentSearchActions.performSearch({ searchCriteria: {} })
-        );
-        done();
-      });
+        expect(action).toEqual(DocumentSearchActions.performSearch({ searchCriteria: {} }))
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.deleteDocumentSucceeded());
-    });
-  });
+      actions$.next(DocumentSearchActions.deleteDocumentSucceeded())
+    })
+  })
 
   describe('navigateToTypes$', () => {
     it('should navigate to document-types when navigateToTypesButtonClicked is dispatched', (done) => {
-      store.overrideSelector(selectUrl, '/document/search');
-      store.refreshState();
+      store.overrideSelector(selectUrl, '/document/search')
+      store.refreshState()
 
       effects.navigateToTypes$.pipe(take(1)).subscribe(() => {
-        expect(router.navigate).toHaveBeenCalledWith([
-          '/document/search',
-          'document-types',
-        ]);
-        done();
-      });
+        expect(router.navigate).toHaveBeenCalledWith(['/document/search', 'document-types'])
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.navigateToTypesButtonClicked());
-    });
+      actions$.next(DocumentSearchActions.navigateToTypesButtonClicked())
+    })
 
     it('should strip query params from the current URL before navigating', (done) => {
-      store.overrideSelector(selectUrl, '/document/search?name=test&type=1');
-      store.refreshState();
+      store.overrideSelector(selectUrl, '/document/search?name=test&type=1')
+      store.refreshState()
 
       effects.navigateToTypes$.pipe(take(1)).subscribe(() => {
-        expect(router.navigate).toHaveBeenCalledWith([
-          '/document/search',
-          'document-types',
-        ]);
-        done();
-      });
+        expect(router.navigate).toHaveBeenCalledWith(['/document/search', 'document-types'])
+        done()
+      })
 
-      actions$.next(DocumentSearchActions.navigateToTypesButtonClicked());
-    });
-  });
+      actions$.next(DocumentSearchActions.navigateToTypesButtonClicked())
+    })
+  })
 
   describe('performSearch$ with null/undefined stream fields', () => {
     it('should default stream to [] when API returns undefined stream', (done) => {
@@ -645,9 +562,9 @@ describe('DocumentSearchEffects', () => {
           size: undefined,
           number: undefined,
           totalElements: undefined,
-          totalPages: undefined,
+          totalPages: undefined
         }) as any
-      );
+      )
 
       effects.performSearch$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(
@@ -656,15 +573,13 @@ describe('DocumentSearchEffects', () => {
             size: 0,
             number: 0,
             totalElements: 0,
-            totalPages: 0,
+            totalPages: 0
           })
-        );
-        done();
-      });
+        )
+        done()
+      })
 
-      actions$.next(
-        DocumentSearchActions.performSearch({ searchCriteria: {} })
-      );
-    });
-  });
-});
+      actions$.next(DocumentSearchActions.performSearch({ searchCriteria: {} }))
+    })
+  })
+})

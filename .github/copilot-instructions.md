@@ -23,7 +23,7 @@ npx nx test --testFile="path/to/file.spec.ts"
 
 ## Architecture
 
-This is an **Angular 18 micro-frontend** built with NX 19. It runs embedded in the OneCX portal shell via **Module Federation** — the entry point is `src/main.ts`, which exposes `OnecxDocumentUiModule`.
+This is an **Angular 18 micro-frontend** built with NX 19. It runs embedded in the OneCX portal shell via **Module Federation** — the entry point is `src/main.ts`, which exposes `OneCXDocumentModule`.
 
 **Feature structure** (`src/app/document/`): one lazy-loaded feature module with four pages. Each page is a self-contained slice:
 
@@ -72,7 +72,7 @@ Uses traditional **NgModule-based** architecture. Components are declared in the
 
 ### HTTP / API Services
 
-Generated services (`DocumentController`, `FileController`, etc.) are injected directly. The `ExternalFileHandlerService` uses `HttpBackend` directly (bypasses interceptors) for file upload/download with retry logic (3 retries).
+Generated services (`DocumentControllerAPIService`, `FileController`, etc.) are injected directly. The `ExternalFileHandlerService` uses `HttpBackend` directly (bypasses interceptors) for file upload/download with retry logic (3 retries).
 
 API base URL is configured via `apiConfigProvider()` in `shared/utils/apiConfigProvider.utils.ts`, which reads from `ConfigurationService` and `AppStateService`.
 

@@ -1,8 +1,13 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
+    "strict": true,
+    "baseUrl": "./",
+    "rootDir": "",
     "sourceMap": true,
+    "composite": false,
     "declaration": false,
+    "declarationMap": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -12,31 +17,29 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
     "paths": {},
-    "esModuleInterop": true,
+    "useDefineForClassFields": false,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true
   },
   "files": [],
   "include": [],
+  "exclude": ["node_modules", "tmp"],
   "references": [
-    {
-      "path": "./tsconfig.editor.json"
-    },
     {
       "path": "./tsconfig.app.json"
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.editor.json"
     }
   ],
-  "compileOnSave": false,
-  "exclude": ["node_modules", "tmp"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

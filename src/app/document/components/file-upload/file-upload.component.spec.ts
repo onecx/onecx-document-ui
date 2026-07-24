@@ -1,138 +1,138 @@
-import { FileUploadComponent } from './file-upload.component';
+import { FileUploadComponent } from './file-upload.component'
 
 describe('FileUploadComponent', () => {
-  let component: FileUploadComponent;
+  let component: FileUploadComponent
 
   beforeEach(() => {
-    component = new FileUploadComponent();
-  });
+    component = new FileUploadComponent()
+  })
 
   describe('allowDrop', () => {
     it('should call preventDefault on dragover event', () => {
-      const event = { preventDefault: jest.fn() } as any;
-      component.allowDrop(event);
-      expect(event.preventDefault).toHaveBeenCalled();
-    });
-  });
+      const event = { preventDefault: jest.fn() } as any
+      component.allowDrop(event)
+      expect(event.preventDefault).toHaveBeenCalled()
+    })
+  })
 
   describe('onDrop', () => {
     it('should emit filesSelected with dropped files when multiple=true', () => {
-      component.multiple = true;
-      const emitted: File[][] = [];
-      component.filesSelected.subscribe((f) => emitted.push(f));
+      component.multiple = true
+      const emitted: File[][] = []
+      component.filesSelected.subscribe((f) => emitted.push(f))
 
-      const file1 = new File(['a'], 'a.pdf');
-      const file2 = new File(['b'], 'b.pdf');
+      const file1 = new File(['a'], 'a.pdf')
+      const file2 = new File(['b'], 'b.pdf')
       const event = {
         preventDefault: jest.fn(),
-        dataTransfer: { files: [file1, file2] },
-      } as any;
+        dataTransfer: { files: [file1, file2] }
+      } as any
 
-      component.onDrop(event);
+      component.onDrop(event)
 
-      expect(emitted).toHaveLength(1);
-      expect(emitted[0]).toEqual([file1, file2]);
-    });
+      expect(emitted).toHaveLength(1)
+      expect(emitted[0]).toEqual([file1, file2])
+    })
 
     it('should emit fileSelected with first file when multiple=false', () => {
-      component.multiple = false;
-      const emitted: File[] = [];
-      component.fileSelected.subscribe((f) => emitted.push(f));
+      component.multiple = false
+      const emitted: File[] = []
+      component.fileSelected.subscribe((f) => emitted.push(f))
 
-      const file = new File(['a'], 'a.pdf');
+      const file = new File(['a'], 'a.pdf')
       const event = {
         preventDefault: jest.fn(),
-        dataTransfer: { files: [file] },
-      } as any;
+        dataTransfer: { files: [file] }
+      } as any
 
-      component.onDrop(event);
+      component.onDrop(event)
 
-      expect(emitted).toEqual([file]);
-    });
+      expect(emitted).toEqual([file])
+    })
 
     it('should not emit when dataTransfer has no files', () => {
-      const emittedSingle: File[] = [];
-      const emittedMultiple: File[][] = [];
-      component.fileSelected.subscribe((f) => emittedSingle.push(f));
-      component.filesSelected.subscribe((f) => emittedMultiple.push(f));
+      const emittedSingle: File[] = []
+      const emittedMultiple: File[][] = []
+      component.fileSelected.subscribe((f) => emittedSingle.push(f))
+      component.filesSelected.subscribe((f) => emittedMultiple.push(f))
 
       const event = {
         preventDefault: jest.fn(),
-        dataTransfer: { files: [] },
-      } as any;
+        dataTransfer: { files: [] }
+      } as any
 
-      component.onDrop(event);
+      component.onDrop(event)
 
-      expect(emittedSingle).toHaveLength(0);
-      expect(emittedMultiple).toHaveLength(0);
-    });
+      expect(emittedSingle).toHaveLength(0)
+      expect(emittedMultiple).toHaveLength(0)
+    })
 
     it('should not emit when dataTransfer is null on drop event', () => {
-      const emittedSingle: File[] = [];
-      const emittedMultiple: File[][] = [];
-      component.fileSelected.subscribe((f) => emittedSingle.push(f));
-      component.filesSelected.subscribe((f) => emittedMultiple.push(f));
+      const emittedSingle: File[] = []
+      const emittedMultiple: File[][] = []
+      component.fileSelected.subscribe((f) => emittedSingle.push(f))
+      component.filesSelected.subscribe((f) => emittedMultiple.push(f))
 
       const event = {
         preventDefault: jest.fn(),
-        dataTransfer: null,
-      } as any;
+        dataTransfer: null
+      } as any
 
-      component.onDrop(event);
+      component.onDrop(event)
 
-      expect(emittedSingle).toHaveLength(0);
-      expect(emittedMultiple).toHaveLength(0);
-    });
-  });
+      expect(emittedSingle).toHaveLength(0)
+      expect(emittedMultiple).toHaveLength(0)
+    })
+  })
 
   describe('onFileInputChange', () => {
     it('should emit filesSelected when multiple=true', () => {
-      component.multiple = true;
-      const emitted: File[][] = [];
-      component.filesSelected.subscribe((f) => emitted.push(f));
+      component.multiple = true
+      const emitted: File[][] = []
+      component.filesSelected.subscribe((f) => emitted.push(f))
 
-      const file = new File(['c'], 'c.pdf');
-      const input = { files: [file], value: '' };
-      const event = { target: input } as any;
+      const file = new File(['c'], 'c.pdf')
+      const input = { files: [file], value: '' }
+      const event = { target: input } as any
 
-      component.onFileInputChange(event);
+      component.onFileInputChange(event)
 
-      expect(emitted[0]).toEqual([file]);
-    });
+      expect(emitted[0]).toEqual([file])
+    })
 
     it('should emit fileSelected when multiple=false', () => {
-      component.multiple = false;
-      const emitted: File[] = [];
-      component.fileSelected.subscribe((f) => emitted.push(f));
+      component.multiple = false
+      const emitted: File[] = []
+      component.fileSelected.subscribe((f) => emitted.push(f))
 
-      const file = new File(['c'], 'c.pdf');
-      const input = { files: [file], value: 'some/path' };
-      const event = { target: input } as any;
+      const file = new File(['c'], 'c.pdf')
+      const input = { files: [file], value: 'some/path' }
+      const event = { target: input } as any
 
-      component.onFileInputChange(event);
+      component.onFileInputChange(event)
 
-      expect(emitted).toEqual([file]);
-      expect(input.value).toBe('');
-    });
+      expect(emitted).toEqual([file])
+      expect(input.value).toBe('')
+    })
 
     it('should not emit when input has no files', () => {
-      const emitted: File[] = [];
-      component.fileSelected.subscribe((f) => emitted.push(f));
+      const emitted: File[] = []
+      component.fileSelected.subscribe((f) => emitted.push(f))
 
-      const event = { target: { files: [] } } as any;
-      component.onFileInputChange(event);
+      const event = { target: { files: [] } } as any
+      component.onFileInputChange(event)
 
-      expect(emitted).toHaveLength(0);
-    });
+      expect(emitted).toHaveLength(0)
+    })
 
     it('should not emit when input.files is null', () => {
-      const emitted: File[] = [];
-      component.fileSelected.subscribe((f) => emitted.push(f));
+      const emitted: File[] = []
+      component.fileSelected.subscribe((f) => emitted.push(f))
 
-      const event = { target: { files: null } } as any;
-      component.onFileInputChange(event);
+      const event = { target: { files: null } } as any
+      component.onFileInputChange(event)
 
-      expect(emitted).toHaveLength(0);
-    });
-  });
-});
+      expect(emitted).toHaveLength(0)
+    })
+  })
+})

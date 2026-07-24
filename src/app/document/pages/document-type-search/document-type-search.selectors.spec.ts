@@ -1,14 +1,14 @@
-import { ColumnType } from '@onecx/angular-accelerator';
-import * as selectors from './document-type-search.selectors';
-import { selectResults } from './document-type-search.selectors';
+import { ColumnType } from '@onecx/angular-accelerator'
+import * as selectors from './document-type-search.selectors'
+import { selectResults } from './document-type-search.selectors'
 
 const mockColumns = [
   {
     id: 'name',
     nameKey: 'DOCUMENT_TYPE_SEARCH.RESULTS.NAME_COLUMN',
-    columnType: ColumnType.STRING,
-  },
-];
+    columnType: ColumnType.STRING
+  }
+]
 
 describe('DocumentTypeSearch selectors', () => {
   describe('selectResults projector', () => {
@@ -19,11 +19,11 @@ describe('DocumentTypeSearch selectors', () => {
           id: '2',
           name: 'Contract',
           description: 'Other',
-          activeStatus: false,
-        },
-      ] as any;
+          activeStatus: false
+        }
+      ] as any
 
-      const result = selectResults.projector(input);
+      const result = selectResults.projector(input)
 
       expect(result).toEqual([
         {
@@ -31,34 +31,34 @@ describe('DocumentTypeSearch selectors', () => {
           id: '1',
           name: 'Invoice',
           description: 'Desc',
-          activeStatus: true,
+          activeStatus: true
         },
         {
           imagePath: '',
           id: '2',
           name: 'Contract',
           description: 'Other',
-          activeStatus: false,
-        },
-      ]);
-    });
+          activeStatus: false
+        }
+      ])
+    })
 
     it('should return empty array when results is empty', () => {
-      const result = selectResults.projector([]);
-      expect(result).toEqual([]);
-    });
+      const result = selectResults.projector([])
+      expect(result).toEqual([])
+    })
 
     it('should use item.id as the id in RowListGridData', () => {
-      const input = [{ id: 'abc', name: 'Test' }] as any;
-      const result = selectResults.projector(input);
-      expect(result[0].id).toBe('abc');
-    });
-  });
+      const input = [{ id: 'abc', name: 'Test' }] as any
+      const result = selectResults.projector(input)
+      expect(result[0].id).toBe('abc')
+    })
+  })
 
   describe('selectDocumentTypeSearchViewModel projector', () => {
     it('should combine all selector results into DocumentTypeSearchViewModel', () => {
-      const results = [{ imagePath: '', id: '1', name: 'Invoice' }] as any;
-      const editingDocumentType = { id: '1', name: 'Invoice' } as any;
+      const results = [{ imagePath: '', id: '1', name: 'Invoice' }] as any
+      const editingDocumentType = { id: '1', name: 'Invoice' } as any
 
       const result = selectors.selectDocumentTypeSearchViewModel.projector(
         mockColumns,
@@ -68,7 +68,7 @@ describe('DocumentTypeSearch selectors', () => {
         null,
         true,
         editingDocumentType
-      );
+      )
 
       expect(result).toEqual({
         columns: mockColumns,
@@ -77,9 +77,9 @@ describe('DocumentTypeSearch selectors', () => {
         resultComponentState: null,
         searchHeaderComponentState: null,
         dialogVisible: true,
-        editingDocumentType,
-      });
-    });
+        editingDocumentType
+      })
+    })
 
     it('should set dialogVisible to false and editingDocumentType to null when no dialog is open', () => {
       const result = selectors.selectDocumentTypeSearchViewModel.projector(
@@ -90,15 +90,15 @@ describe('DocumentTypeSearch selectors', () => {
         null,
         false,
         null
-      );
+      )
 
-      expect(result.dialogVisible).toBe(false);
-      expect(result.editingDocumentType).toBeNull();
-    });
+      expect(result.dialogVisible).toBe(false)
+      expect(result.editingDocumentType).toBeNull()
+    })
 
     it('should pass resultComponentState and searchHeaderComponentState through', () => {
-      const resultComponentState = { layout: 'list' } as any;
-      const searchHeaderComponentState = { activeViewMode: 'basic' } as any;
+      const resultComponentState = { layout: 'list' } as any
+      const searchHeaderComponentState = { activeViewMode: 'basic' } as any
 
       const result = selectors.selectDocumentTypeSearchViewModel.projector(
         mockColumns,
@@ -108,13 +108,11 @@ describe('DocumentTypeSearch selectors', () => {
         searchHeaderComponentState,
         false,
         null
-      );
+      )
 
-      expect(result.resultComponentState).toEqual(resultComponentState);
-      expect(result.searchHeaderComponentState).toEqual(
-        searchHeaderComponentState
-      );
-    });
+      expect(result.resultComponentState).toEqual(resultComponentState)
+      expect(result.searchHeaderComponentState).toEqual(searchHeaderComponentState)
+    })
 
     it('should pass loadingIndicator=false when not loading', () => {
       const result = selectors.selectDocumentTypeSearchViewModel.projector(
@@ -125,9 +123,9 @@ describe('DocumentTypeSearch selectors', () => {
         null,
         false,
         null
-      );
+      )
 
-      expect(result.loadingIndicator).toBe(false);
-    });
-  });
-});
+      expect(result.loadingIndicator).toBe(false)
+    })
+  })
+})

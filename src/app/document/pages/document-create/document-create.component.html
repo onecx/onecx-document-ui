@@ -23,9 +23,7 @@
           [supportedMimeTypes]="(mimeTypes$ | async) || []"
           (back)="onAttachmentsBack(vm, $event)"
           (next)="onAttachmentsNext(vm, $event)"
-          (attachmentMimeTypeNotSupported)="
-            onAttachmentMimeTypeNotSupported($event)
-          "
+          (attachmentMimeTypeNotSupported)="onAttachmentMimeTypeNotSupported($event)"
         ></app-document-create-attachments>
 
         <app-document-create-characteristics

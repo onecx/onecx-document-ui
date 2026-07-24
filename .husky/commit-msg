@@ -1,3 +1,1 @@
-# commitlint
-echo "[Husky] Running commitlint check:"
 npx --no-install commitlint --edit $1

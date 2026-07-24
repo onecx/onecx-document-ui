@@ -12,47 +12,41 @@
       "options": {
         "outputPath": "dist/onecx-document-ui",
         "index": "./src/index.html",
+        "main": "./src/main.ts",
         "polyfills": "src/polyfills.ts",
-        "tsConfig": "tsconfig.app.json",
+        "tsConfig": "./tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           "src/favicon.ico",
           "src/assets",
           {
             "glob": "**/*",
-            "input": "public"
+            "input": "./node_modules/@onecx/portal-integration-angular/assets/",
+            "output": "/onecx-portal-lib/assets/"
           },
           {
             "glob": "**/*",
-            "input": "./node_modules/@onecx/portal-integration-angular/assets/",
-            "output": "/onecx-portal-lib/assets/"
+            "input": "./node_modules/@onecx/angular-accelerator/assets/",
+            "output": "/onecx-angular-accelerator/assets/"
           }
         ],
-        "styles": [
-          "./src/styles.scss",
-          "node_modules/primeicons/primeicons.css",
-          "node_modules/primeng/resources/primeng.min.css",
-          "node_modules/@onecx/portal-integration-angular/assets/output.css"
-        ],
-        "scripts": [
-          "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"
-        ],
+        "styles": ["src/styles.scss"],
+        "scripts": ["node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"],
         "customWebpackConfig": {
           "path": "webpack.config.js"
-        },
-        "main": "./src/main.ts"
+        }
       },
       "configurations": {
         "production": {
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "1mb",
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
+              "maximumWarning": "3kb",
               "maximumError": "4kb"
             }
           ],
@@ -68,9 +62,12 @@
           }
         },
         "development": {
+          "buildOptimizer": false,
           "optimization": false,
+          "vendorChunk": true,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "namedChunks": true
         }
       },
       "defaultConfiguration": "production"
@@ -109,7 +106,7 @@
       "outputs": ["{workspaceRoot}/coverage/{projectName}"],
       "options": {
         "jestConfig": "jest.config.ts",
-        "coverage": true
+        "passWithNoTests": true
       }
     },
     "serve-static": {

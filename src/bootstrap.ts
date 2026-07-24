@@ -1,5 +1,6 @@
-import { bootstrapModule } from '@onecx/angular-webcomponents';
-import { environment } from 'src/environments/environment';
-import { OnecxDocumentUiModule } from './app/onecx-document-ui-app.remote.module';
+import { bootstrapModule } from '@onecx/angular-webcomponents'
 
-bootstrapModule(OnecxDocumentUiModule, 'microfrontend', environment.production);
+import { environment } from 'src/environments/environment'
+import { OneCXDocumentModule } from './app/onecx-document.remote.module'
+
+bootstrapModule(OneCXDocumentModule, 'microfrontend', environment.production)

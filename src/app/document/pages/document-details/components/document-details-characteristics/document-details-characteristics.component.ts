@@ -1,27 +1,27 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormArray } from '@angular/forms';
-import { DocumentCharacteristicsFormGroup } from 'src/app/document/types/document-create.types';
+import { Component, Input, Output, EventEmitter } from '@angular/core'
+import { FormArray } from '@angular/forms'
+import { DocumentCharacteristicsFormGroup } from 'src/app/document/types/document-create.types'
 
 @Component({
   selector: 'app-document-details-characteristics',
-  templateUrl: './document-details-characteristics.component.html',
+  templateUrl: './document-details-characteristics.component.html'
 })
 export class DocumentDetailsCharacteristicsComponent {
-  @Input() characteristics!: FormArray<DocumentCharacteristicsFormGroup>;
-  @Input() editMode = false;
+  @Input() characteristics!: FormArray<DocumentCharacteristicsFormGroup>
+  @Input() editMode = false
 
-  @Output() characteristicAdded: EventEmitter<void> = new EventEmitter();
-  @Output() characteristicRemoved: EventEmitter<number> = new EventEmitter();
+  @Output() characteristicAdded: EventEmitter<void> = new EventEmitter()
+  @Output() characteristicRemoved: EventEmitter<number> = new EventEmitter()
 
   trackByIndex(index: number): number {
-    return index;
+    return index
   }
 
   onRowDelete(index: number) {
-    this.characteristicRemoved.emit(index);
+    this.characteristicRemoved.emit(index)
   }
 
   onAddRow() {
-    this.characteristicAdded.emit();
+    this.characteristicAdded.emit()
   }
 }

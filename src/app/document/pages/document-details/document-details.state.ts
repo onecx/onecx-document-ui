@@ -1,9 +1,9 @@
-import { DocumentDetail } from '../../../shared/generated';
+import { DocumentDetail } from 'src/app/shared/generated'
 
 export interface DocumentDetailsState {
-  details: DocumentDetail | undefined;
-  detailsLoadingIndicator: boolean;
-  detailsLoaded: boolean;
-  editMode: boolean;
-  isSubmitting: boolean;
+  details: DocumentDetail | undefined
+  detailsLoadingIndicator: boolean
+  detailsLoaded: boolean
+  editMode: boolean
+  isSubmitting: boolean
 }

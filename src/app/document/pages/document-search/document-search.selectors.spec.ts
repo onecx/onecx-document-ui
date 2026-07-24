@@ -1,20 +1,22 @@
-import { ColumnType } from '@onecx/angular-accelerator';
-import { TestBed } from '@angular/core/testing';
-import { Store, StoreModule } from '@ngrx/store';
-import { take } from 'rxjs/operators';
-import { documentFeature } from '../../document.reducers';
-import * as selectors from './document-search.selectors';
-import { DocumentSearchActions } from './document-search.actions';
+import { TestBed } from '@angular/core/testing'
+import { Store, StoreModule } from '@ngrx/store'
+import { take } from 'rxjs/operators'
+
+import { ColumnType } from '@onecx/angular-accelerator'
+
+import { documentFeature } from '../../document.reducers'
+import * as selectors from './document-search.selectors'
+import { DocumentSearchActions } from './document-search.actions'
 
 describe('DocumentSearch selectors', () => {
   describe('selectResults projector', () => {
     it('should map results to RowListGridData[] with imagePath and typeName', () => {
       const input = [
         { id: '1', name: 'A', type: { name: 'Invoice', id: 't1' } },
-        { id: '2', name: 'B', type: { name: 'Contract', id: 't2' } },
-      ] as any;
+        { id: '2', name: 'B', type: { name: 'Contract', id: 't2' } }
+      ] as any
 
-      const result = selectors.selectResults.projector(input);
+      const result = selectors.selectResults.projector(input)
 
       expect(result).toEqual([
         {
@@ -22,44 +24,42 @@ describe('DocumentSearch selectors', () => {
           id: '1',
           name: 'A',
           type: { name: 'Invoice', id: 't1' },
-          typeName: 'Invoice',
+          typeName: 'Invoice'
         },
         {
           imagePath: '',
           id: '2',
           name: 'B',
           type: { name: 'Contract', id: 't2' },
-          typeName: 'Contract',
-        },
-      ]);
-    });
+          typeName: 'Contract'
+        }
+      ])
+    })
 
     it('should use item.id directly when id is an empty string', () => {
-      const input = [{ id: '', name: 'A' }] as any;
+      const input = [{ id: '', name: 'A' }] as any
 
-      const result = selectors.selectResults.projector(input);
+      const result = selectors.selectResults.projector(input)
 
-      expect(result[0].id).toBe('');
-    });
+      expect(result[0].id).toBe('')
+    })
 
     it('should set typeName to undefined when type is not present', () => {
-      const input = [{ id: '1', name: 'A' }] as any;
+      const input = [{ id: '1', name: 'A' }] as any
 
-      const result = selectors.selectResults.projector(input);
+      const result = selectors.selectResults.projector(input)
 
-      expect(result[0]['typeName']).toBeUndefined();
-    });
-  });
+      expect(result[0]['typeName']).toBeUndefined()
+    })
+  })
 
   it('should combine all 12 selector results into DocumentSearchViewModel', () => {
-    const columns = [
-      { id: 'col1', nameKey: 'Col 1', columnType: ColumnType.STRING },
-    ];
-    const searchCriteria = { name: 'test' };
-    const results = [{ imagePath: '', id: '1', name: 'A' }] as any;
-    const chartVisible = true;
-    const availableDocumentTypes = [{ label: 'Invoice', value: 't1' }];
-    const availableChannels = [{ label: 'Email', value: 'c1' }];
+    const columns = [{ id: 'col1', nameKey: 'Col 1', columnType: ColumnType.STRING }]
+    const searchCriteria = { name: 'test' }
+    const results = [{ imagePath: '', id: '1', name: 'A' }] as any
+    const chartVisible = true
+    const availableDocumentTypes = [{ label: 'Invoice', value: 't1' }]
+    const availableChannels = [{ label: 'Email', value: 'c1' }]
 
     const result = selectors.selectDocumentSearchViewModel.projector(
       {
@@ -68,7 +68,7 @@ describe('DocumentSearch selectors', () => {
         results,
         resultComponentState: null,
         searchHeaderComponentState: null,
-        diagramComponentState: null,
+        diagramComponentState: null
       },
       {
         chartVisible,
@@ -76,9 +76,9 @@ describe('DocumentSearch selectors', () => {
         searchExecuted: true,
         criteriaOptionsLoaded: true,
         availableDocumentTypes,
-        avilableChannels: availableChannels,
+        avilableChannels: availableChannels
       }
-    );
+    )
 
     expect(result).toEqual({
       columns,
@@ -92,17 +92,17 @@ describe('DocumentSearch selectors', () => {
       searchExecuted: true,
       criteriaOptionsLoaded: true,
       availableDocumentTypes,
-      avilableChannels: availableChannels,
-    });
-  });
+      avilableChannels: availableChannels
+    })
+  })
 
   describe('selectDocumentSearchViewModel type mapping integration', () => {
     it('should map DocumentType[] to SelectItem[] with label=name and value=id', () => {
       const docTypes = [
         { id: 't1', name: 'Invoice' },
-        { id: 't2', name: 'Contract' },
-      ];
-      const channels = [{ id: 'c1', name: 'Email' }];
+        { id: 't2', name: 'Contract' }
+      ]
+      const channels = [{ id: 'c1', name: 'Email' }]
 
       // Pass raw DocumentType[] through the full 12-arg projector path:
       // selectDocumentTypes and selectChannels are private but tested via selectDocumentSearchViewModel
@@ -110,11 +110,11 @@ describe('DocumentSearch selectors', () => {
       // Here we verify the mapping that documentSearchSelectors.selectAvailableDocumentTypes feeds into selectDocumentTypes
 
       // The mapping: docTypes.map(t => ({ label: t.name, value: t.id }))
-      const mappedTypes = docTypes.map((t) => ({ label: t.name, value: t.id }));
+      const mappedTypes = docTypes.map((t) => ({ label: t.name, value: t.id }))
       const mappedChannels = channels.map((c) => ({
         label: c.name,
-        value: c.id,
-      }));
+        value: c.id
+      }))
 
       const result = selectors.selectDocumentSearchViewModel.projector(
         {
@@ -123,7 +123,7 @@ describe('DocumentSearch selectors', () => {
           results: [],
           resultComponentState: null,
           searchHeaderComponentState: null,
-          diagramComponentState: null,
+          diagramComponentState: null
         },
         {
           chartVisible: false,
@@ -131,18 +131,16 @@ describe('DocumentSearch selectors', () => {
           searchExecuted: false,
           criteriaOptionsLoaded: false,
           availableDocumentTypes: mappedTypes,
-          avilableChannels: mappedChannels,
+          avilableChannels: mappedChannels
         }
-      );
+      )
 
       expect(result.availableDocumentTypes).toEqual([
         { label: 'Invoice', value: 't1' },
-        { label: 'Contract', value: 't2' },
-      ]);
-      expect(result.avilableChannels).toEqual([
-        { label: 'Email', value: 'c1' },
-      ]);
-    });
+        { label: 'Contract', value: 't2' }
+      ])
+      expect(result.avilableChannels).toEqual([{ label: 'Email', value: 'c1' }])
+    })
 
     it('should return empty arrays when no types or channels are available', () => {
       const result = selectors.selectDocumentSearchViewModel.projector(
@@ -152,7 +150,7 @@ describe('DocumentSearch selectors', () => {
           results: [],
           resultComponentState: null,
           searchHeaderComponentState: null,
-          diagramComponentState: null,
+          diagramComponentState: null
         },
         {
           chartVisible: false,
@@ -160,24 +158,21 @@ describe('DocumentSearch selectors', () => {
           searchExecuted: false,
           criteriaOptionsLoaded: false,
           availableDocumentTypes: [],
-          avilableChannels: [],
+          avilableChannels: []
         }
-      );
+      )
 
-      expect(result.availableDocumentTypes).toEqual([]);
-      expect(result.avilableChannels).toEqual([]);
-    });
-  });
+      expect(result.availableDocumentTypes).toEqual([])
+      expect(result.avilableChannels).toEqual([])
+    })
+  })
 
   describe('internal selectDocumentTypes and selectChannels via full store chain', () => {
     it('should execute internal type and channel mapping projectors via real store', (done) => {
       TestBed.configureTestingModule({
-        imports: [
-          StoreModule.forRoot({}),
-          StoreModule.forFeature(documentFeature),
-        ],
-      });
-      const store = TestBed.inject(Store);
+        imports: [StoreModule.forRoot({}), StoreModule.forFeature(documentFeature)]
+      })
+      const store = TestBed.inject(Store)
 
       // Running store.select(selectDocumentSearchViewModel) chains through
       // selectDocumentTypes and selectChannels internal selectors
@@ -185,44 +180,37 @@ describe('DocumentSearch selectors', () => {
         .select(selectors.selectDocumentSearchViewModel)
         .pipe(take(1))
         .subscribe((vm) => {
-          expect(Array.isArray(vm.availableDocumentTypes)).toBe(true);
-          expect(Array.isArray(vm.avilableChannels)).toBe(true);
-          done();
-        });
-    });
+          expect(Array.isArray(vm.availableDocumentTypes)).toBe(true)
+          expect(Array.isArray(vm.avilableChannels)).toBe(true)
+          done()
+        })
+    })
 
     it('should map document types and channels to SelectItems when store is populated with non-empty data', (done) => {
       TestBed.configureTestingModule({
-        imports: [
-          StoreModule.forRoot({}),
-          StoreModule.forFeature(documentFeature),
-        ],
-      });
-      const store = TestBed.inject(Store);
+        imports: [StoreModule.forRoot({}), StoreModule.forFeature(documentFeature)]
+      })
+      const store = TestBed.inject(Store)
 
       store.dispatch(
         DocumentSearchActions.availableDocTypesRecived({
-          types: [{ id: 't1', name: 'Invoice' }] as any,
+          types: [{ id: 't1', name: 'Invoice' }] as any
         })
-      );
+      )
       store.dispatch(
         DocumentSearchActions.availableChannelsRecived({
-          channels: [{ id: 'c1', name: 'Email' }] as any,
+          channels: [{ id: 'c1', name: 'Email' }] as any
         })
-      );
+      )
 
       store
         .select(selectors.selectDocumentSearchViewModel)
         .pipe(take(1))
         .subscribe((vm) => {
-          expect(vm.availableDocumentTypes).toEqual([
-            { label: 'Invoice', value: 't1' },
-          ]);
-          expect(vm.avilableChannels).toEqual([
-            { label: 'Email', value: 'c1' },
-          ]);
-          done();
-        });
-    });
-  });
-});
+          expect(vm.availableDocumentTypes).toEqual([{ label: 'Invoice', value: 't1' }])
+          expect(vm.avilableChannels).toEqual([{ label: 'Email', value: 'c1' }])
+          done()
+        })
+    })
+  })
+})

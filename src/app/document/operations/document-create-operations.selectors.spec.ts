@@ -1,39 +1,36 @@
-import {
-  selectOperationsDocumentTypes,
-  selectOperationsMimeTypes,
-} from './document-create-operations.selectors';
+import { selectOperationsDocumentTypes, selectOperationsMimeTypes } from './document-create-operations.selectors'
 
 describe('DocumentCreateOperationsSelectors', () => {
   describe('selectOperationsDocumentTypes', () => {
     it('should map DocumentType[] to SelectItem[] with label=name and value=id', () => {
       const types = [
         { id: 't1', name: 'Invoice' },
-        { id: 't2', name: 'Contract' },
-      ] as any;
-      const result = selectOperationsDocumentTypes.projector(types);
+        { id: 't2', name: 'Contract' }
+      ] as any
+      const result = selectOperationsDocumentTypes.projector(types)
       expect(result).toEqual([
         { label: 'Invoice', value: 't1' },
-        { label: 'Contract', value: 't2' },
-      ]);
-    });
+        { label: 'Contract', value: 't2' }
+      ])
+    })
 
     it('should return empty array when types array is empty', () => {
-      expect(selectOperationsDocumentTypes.projector([])).toEqual([]);
-    });
-  });
+      expect(selectOperationsDocumentTypes.projector([])).toEqual([])
+    })
+  })
 
   describe('selectOperationsMimeTypes', () => {
     it('should map SupportedMimeType[] to SelectItem[] with label=name and value=id', () => {
-      const mimeTypes = ['application/pdf', 'image/png'] as any;
-      const result = selectOperationsMimeTypes.projector(mimeTypes);
+      const mimeTypes = ['application/pdf', 'image/png'] as any
+      const result = selectOperationsMimeTypes.projector(mimeTypes)
       expect(result).toEqual([
         { label: 'application/pdf', value: 'application/pdf' },
-        { label: 'image/png', value: 'image/png' },
-      ]);
-    });
+        { label: 'image/png', value: 'image/png' }
+      ])
+    })
 
     it('should return empty array when mimeTypes array is empty', () => {
-      expect(selectOperationsMimeTypes.projector([])).toEqual([]);
-    });
-  });
-});
+      expect(selectOperationsMimeTypes.projector([])).toEqual([])
+    })
+  })
+})

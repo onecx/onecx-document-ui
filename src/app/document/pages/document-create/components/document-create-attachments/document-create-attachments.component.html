@@ -2,9 +2,7 @@
   <!-- Left column: attachment list -->
   <div class="col-4">
     <div class="flex justify-content-between align-items-center mb-2">
-      <span class="font-semibold">{{
-        'DOCUMENT_CREATE.ATTACHMENTS.LIST_TITLE' | translate
-      }}</span>
+      <span class="font-semibold">{{ 'DOCUMENT_CREATE.ATTACHMENTS.LIST_TITLE' | translate }}</span>
     </div>
 
     <div
@@ -18,9 +16,7 @@
         (click)="selectAttachment(i)"
         [attr.aria-pressed]="i === selectedIndex"
       >
-        <span
-          class="text-sm overflow-hidden white-space-nowrap text-overflow-ellipsis block"
-        >
+        <span class="text-sm overflow-hidden white-space-nowrap text-overflow-ellipsis block">
           {{
             form.controls.name.value ||
               form.controls.mimeType.value ||
@@ -38,20 +34,13 @@
       ></button>
     </div>
 
-    <div
-      *ngIf="attachmentForms.length === 0"
-      class="text-sm text-color-secondary mt-2"
-    >
+    <div *ngIf="attachmentForms.length === 0" class="text-sm text-color-secondary mt-2">
       {{ 'DOCUMENT_CREATE.ATTACHMENTS.EMPTY' | translate }}
     </div>
   </div>
 
   <!-- Right column: metadata form + file upload -->
-  <div
-    class="col-6 col-offset-2"
-    *ngIf="selectedForm as form; else noSelection"
-    [formGroup]="form"
-  >
+  <div class="col-6 col-offset-2" *ngIf="selectedForm as form; else noSelection" [formGroup]="form">
     <div class="grid p-fluid">
       <!-- name: full width -->
       <div class="col-12">
@@ -114,38 +103,25 @@
             formControlName="description"
           ></textarea>
           <label for="attachmentDescription">
-            {{
-              'DOCUMENT_CREATE.ATTACHMENTS.FORM.DESCRIPTION.LABEL' | translate
-            }}
+            {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.DESCRIPTION.LABEL' | translate }}
           </label>
         </span>
       </div>
 
       <!-- file upload widget -->
       <div class="col-12 mt-2">
-        <app-file-upload
-          [multiple]="false"
-          (fileSelected)="onFileSelected($event)"
-        ></app-file-upload>
+        <app-file-upload [multiple]="false" (fileSelected)="onFileSelected($event)"></app-file-upload>
       </div>
     </div>
   </div>
 
   <ng-template #noSelection>
-    <div
-      class="col-6 col-offset-2 flex align-items-center justify-content-center"
-    >
-      <app-file-upload
-        class="w-full"
-        [multiple]="false"
-        (fileSelected)="onFileSelected($event)"
-      ></app-file-upload>
+    <div class="col-6 col-offset-2 flex align-items-center justify-content-center">
+      <app-file-upload class="w-full" [multiple]="false" (fileSelected)="onFileSelected($event)"></app-file-upload>
     </div>
   </ng-template>
 
-  <div
-    class="col-6 col-offset-6 column-gap-2 flex justify-content-between mt-3"
-  >
+  <div class="col-6 col-offset-6 column-gap-2 flex justify-content-between mt-3">
     <button
       pButton
       type="button"

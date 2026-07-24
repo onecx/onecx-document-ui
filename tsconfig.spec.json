@@ -1,16 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
-    "module": "commonjs",
+    "composite": false,
+    "declaration": false,
+    "outDir": "./dist/test",
+    "types": ["jest", "node"],
     "target": "es2016",
-    "types": ["jest", "node"]
+    "useDefineForClassFields": false
   },
   "files": ["src/test-setup.ts"],
-  "include": [
-    "jest.config.ts",
-    "src/**/*.test.ts",
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+  "exclude": ["src/app/shared/generated", "node_modules"],
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }
