@@ -1,4 +1,4 @@
-import { selectDocumentFeature } from './document.selectors';
+import { selectDocumentFeature } from './document.selectors'
 
 describe('document.selectors', () => {
   it('should select document feature slice when root state contains document key', () => {
@@ -7,13 +7,13 @@ describe('document.selectors', () => {
       details: {},
       operations: {},
       quickUpload: {},
-      search: {},
-    };
+      search: {}
+    }
 
     const state = {
-      document: documentState,
-    };
+      document: documentState
+    }
 
-    expect(selectDocumentFeature(state as any)).toBe(documentState);
-  });
-});
+    expect(selectDocumentFeature(state as any)).toBe(documentState)
+  })
+})

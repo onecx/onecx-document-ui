@@ -29,11 +29,28 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
+export interface CreateDocumentSpecificationRequestParams {
+    documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate;
+}
+
+export interface DeleteDocumentSpecificationByIdRequestParams {
+    id: string;
+}
+
+export interface GetDocumentSpecificationByIdRequestParams {
+    id: string;
+}
+
+export interface UpdateDocumentSpecificationByIdRequestParams {
+    id: string;
+    documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate;
+}
+
 
 @Injectable({
   providedIn: 'any'
 })
-export class DocumentSpecificationController extends BaseService {
+export class DocumentSpecificationControllerAPIService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
@@ -42,15 +59,16 @@ export class DocumentSpecificationController extends BaseService {
     /**
      * Creates specification of document
      * @endpoint post /document-specification
-     * @param documentSpecificationCreateUpdate 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createDocumentSpecification(documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<DocumentSpecification>;
-    public createDocumentSpecification(documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<DocumentSpecification>>;
-    public createDocumentSpecification(documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<DocumentSpecification>>;
-    public createDocumentSpecification(documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public createDocumentSpecification(requestParameters?: CreateDocumentSpecificationRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DocumentSpecification>;
+    public createDocumentSpecification(requestParameters?: CreateDocumentSpecificationRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DocumentSpecification>>;
+    public createDocumentSpecification(requestParameters?: CreateDocumentSpecificationRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DocumentSpecification>>;
+    public createDocumentSpecification(requestParameters?: CreateDocumentSpecificationRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const documentSpecificationCreateUpdate = requestParameters?.documentSpecificationCreateUpdate;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -62,6 +80,8 @@ export class DocumentSpecificationController extends BaseService {
         }
 
         const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
         // to determine the Content-Type header
@@ -94,6 +114,7 @@ export class DocumentSpecificationController extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -102,15 +123,16 @@ export class DocumentSpecificationController extends BaseService {
     /**
      * Deletes specification of document by id
      * @endpoint delete /document-specification/{id}
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deleteDocumentSpecificationById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public deleteDocumentSpecificationById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteDocumentSpecificationById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteDocumentSpecificationById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public deleteDocumentSpecificationById(requestParameters: DeleteDocumentSpecificationByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteDocumentSpecificationById(requestParameters: DeleteDocumentSpecificationByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteDocumentSpecificationById(requestParameters: DeleteDocumentSpecificationByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteDocumentSpecificationById(requestParameters: DeleteDocumentSpecificationByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteDocumentSpecificationById.');
         }
@@ -125,6 +147,8 @@ export class DocumentSpecificationController extends BaseService {
         }
 
         const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
@@ -147,6 +171,7 @@ export class DocumentSpecificationController extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -159,10 +184,10 @@ export class DocumentSpecificationController extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getAllDocumentSpecifications(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<DocumentSpecification>>;
-    public getAllDocumentSpecifications(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<DocumentSpecification>>>;
-    public getAllDocumentSpecifications(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<DocumentSpecification>>>;
-    public getAllDocumentSpecifications(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public getAllDocumentSpecifications(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<DocumentSpecification>>;
+    public getAllDocumentSpecifications(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<DocumentSpecification>>>;
+    public getAllDocumentSpecifications(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<DocumentSpecification>>>;
+    public getAllDocumentSpecifications(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -174,6 +199,8 @@ export class DocumentSpecificationController extends BaseService {
         }
 
         const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
@@ -196,6 +223,7 @@ export class DocumentSpecificationController extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -204,15 +232,16 @@ export class DocumentSpecificationController extends BaseService {
     /**
      * Gets document specification by id
      * @endpoint get /document-specification/{id}
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getDocumentSpecificationById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<DocumentSpecification>;
-    public getDocumentSpecificationById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<DocumentSpecification>>;
-    public getDocumentSpecificationById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<DocumentSpecification>>;
-    public getDocumentSpecificationById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public getDocumentSpecificationById(requestParameters: GetDocumentSpecificationByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DocumentSpecification>;
+    public getDocumentSpecificationById(requestParameters: GetDocumentSpecificationByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DocumentSpecification>>;
+    public getDocumentSpecificationById(requestParameters: GetDocumentSpecificationByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DocumentSpecification>>;
+    public getDocumentSpecificationById(requestParameters: GetDocumentSpecificationByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getDocumentSpecificationById.');
         }
@@ -227,6 +256,8 @@ export class DocumentSpecificationController extends BaseService {
         }
 
         const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
@@ -249,6 +280,7 @@ export class DocumentSpecificationController extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -257,19 +289,20 @@ export class DocumentSpecificationController extends BaseService {
     /**
      * Updates specification of document by id
      * @endpoint put /document-specification/{id}
-     * @param id 
-     * @param documentSpecificationCreateUpdate 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateDocumentSpecificationById(id: string, documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<DocumentSpecification>;
-    public updateDocumentSpecificationById(id: string, documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<DocumentSpecification>>;
-    public updateDocumentSpecificationById(id: string, documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<DocumentSpecification>>;
-    public updateDocumentSpecificationById(id: string, documentSpecificationCreateUpdate?: DocumentSpecificationCreateUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public updateDocumentSpecificationById(requestParameters: UpdateDocumentSpecificationByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DocumentSpecification>;
+    public updateDocumentSpecificationById(requestParameters: UpdateDocumentSpecificationByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DocumentSpecification>>;
+    public updateDocumentSpecificationById(requestParameters: UpdateDocumentSpecificationByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DocumentSpecification>>;
+    public updateDocumentSpecificationById(requestParameters: UpdateDocumentSpecificationByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling updateDocumentSpecificationById.');
         }
+        const documentSpecificationCreateUpdate = requestParameters?.documentSpecificationCreateUpdate;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -281,6 +314,8 @@ export class DocumentSpecificationController extends BaseService {
         }
 
         const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
         // to determine the Content-Type header
@@ -313,6 +348,7 @@ export class DocumentSpecificationController extends BaseService {
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );

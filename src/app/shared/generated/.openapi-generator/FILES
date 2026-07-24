@@ -54,5 +54,6 @@ model/updateFileMetadataRequest.ts
 model/uploadAttachmentPresignedUrlRequest.ts
 model/uploadAttachmentPresignedUrlResponse.ts
 param.ts
+provide-api.ts
 query.params.ts
 variables.ts

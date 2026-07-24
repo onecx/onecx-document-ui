@@ -22,9 +22,7 @@
             {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.MIME_TYPE' | translate }}
           </th>
           <th id="ATT_UPLOAD_COL">
-            {{
-              'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.UPLOAD_STATUS' | translate
-            }}
+            {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.UPLOAD_STATUS' | translate }}
           </th>
           <th class="text-center" id="ATT_ACTIONS_COL">
             {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.ACTIONS' | translate }}
@@ -40,9 +38,7 @@
                 type="text"
                 formControlName="name"
                 class="w-full"
-                [attr.aria-label]="
-                  'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate
-                "
+                [attr.aria-label]="'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate"
               />
             </ng-container>
             <ng-template #nameText>
@@ -56,9 +52,7 @@
                 type="text"
                 formControlName="description"
                 class="w-full"
-                [attr.aria-label]="
-                  'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.DESCRIPTION' | translate
-                "
+                [attr.aria-label]="'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.DESCRIPTION' | translate"
               />
             </ng-container>
             <ng-template #descriptionText>
@@ -76,21 +70,14 @@
           </td>
           <td class="text-center">
             <p-button
-              *ngIf="
-                attachmentFormGroup.get('storageUploadStatus')?.value === true;
-                else retryFileUpload
-              "
+              *ngIf="attachmentFormGroup.get('storageUploadStatus')?.value === true; else retryFileUpload"
               type="button"
               icon="pi pi-download"
               [text]="true"
               [rounded]="true"
-              [pTooltip]="
-                'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate
-              "
+              [pTooltip]="'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate"
               tooltipPosition="top"
-              [attr.aria-label]="
-                'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate
-              "
+              [attr.aria-label]="'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate"
               [disabled]="!attachmentFormGroup.get('id')?.value"
               (onClick)="onDownloadClicked(attachmentFormGroup)"
             ></p-button>
@@ -101,13 +88,9 @@
                 icon="pi pi-refresh"
                 [text]="true"
                 [rounded]="true"
-                [pTooltip]="
-                  'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate
-                "
+                [pTooltip]="'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate"
                 tooltipPosition="top"
-                [attr.aria-label]="
-                  'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate
-                "
+                [attr.aria-label]="'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate"
               >
               </p-button>
             </ng-template>

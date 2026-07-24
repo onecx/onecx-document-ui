@@ -1,75 +1,63 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { concatLatestFrom } from '@ngrx/operators';
-import { routerNavigatedAction } from '@ngrx/router-store';
-import { Action, Store } from '@ngrx/store';
-import { filterForNavigatedTo } from '@onecx/ngrx-accelerator';
+import { Injectable } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Actions, createEffect, ofType } from '@ngrx/effects'
+import { concatLatestFrom } from '@ngrx/operators'
+import { routerNavigatedAction } from '@ngrx/router-store'
+import { Action, Store } from '@ngrx/store'
+import { filterForNavigatedTo } from '@onecx/ngrx-accelerator'
 import {
   DialogState,
   ExportDataService,
   PortalMessageService,
-  PortalDialogService,
-} from '@onecx/portal-integration-angular';
-import equal from 'fast-deep-equal';
-import { PrimeIcons } from 'primeng/api';
-import { catchError, forkJoin, map, mergeMap, of, switchMap, tap } from 'rxjs';
-import { selectUrl } from 'src/app/shared/selectors/router.selectors';
-import {
-  DocumentController,
-  DocumentTypeController,
-} from '../../../shared/generated';
-import { DocumentSearchActions } from './document-search.actions';
-import { DocumentSearchComponent } from './document-search.component';
-import { documentSearchCriteriasSchema } from './document-search.parameters';
-import {
-  documentSearchSelectors,
-  selectDocumentSearchViewModel,
-} from './document-search.selectors';
+  PortalDialogService
+} from '@onecx/portal-integration-angular'
+import equal from 'fast-deep-equal'
+import { PrimeIcons } from 'primeng/api'
+import { catchError, forkJoin, map, mergeMap, of, switchMap, tap } from 'rxjs'
+import { selectUrl } from 'src/app/shared/selectors/router.selectors'
+import { DocumentControllerAPIService, DocumentTypeControllerAPIService } from 'src/app/shared/generated'
+import { DocumentSearchActions } from './document-search.actions'
+import { DocumentSearchComponent } from './document-search.component'
+import { documentSearchCriteriasSchema } from './document-search.parameters'
+import { documentSearchSelectors, selectDocumentSearchViewModel } from './document-search.selectors'
 
 @Injectable()
 export class DocumentSearchEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly route: ActivatedRoute,
-    private readonly documentService: DocumentController,
+    private readonly documentService: DocumentControllerAPIService,
     private readonly router: Router,
     private readonly store: Store,
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService,
-    private readonly documentTypeService: DocumentTypeController,
+    private readonly documentTypeService: DocumentTypeControllerAPIService,
     private readonly portalDialogService: PortalDialogService
   ) {}
 
   syncParamsToUrl$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(
-          DocumentSearchActions.searchButtonClicked,
-          DocumentSearchActions.resetButtonClicked
-        ),
-        concatLatestFrom(() => [
-          this.store.select(documentSearchSelectors.selectCriteria),
-          this.route.queryParams,
-        ]),
+        ofType(DocumentSearchActions.searchButtonClicked, DocumentSearchActions.resetButtonClicked),
+        concatLatestFrom(() => [this.store.select(documentSearchSelectors.selectCriteria), this.route.queryParams]),
         tap(([, criteria, queryParams]) => {
-          const results = documentSearchCriteriasSchema.safeParse(queryParams);
+          const results = documentSearchCriteriasSchema.safeParse(queryParams)
           if (!results.success || !equal(criteria, results.data)) {
             const params = {
-              ...criteria,
-            };
+              ...criteria
+            }
             this.router.navigate([], {
               relativeTo: this.route,
               queryParams: params,
               replaceUrl: true,
-              onSameUrlNavigation: 'ignore',
-            });
+              onSameUrlNavigation: 'ignore'
+            })
           }
         })
-      );
+      )
     },
     { dispatch: false }
-  );
+  )
 
   navigateToOrderDetailsPage$ = createEffect(
     () => {
@@ -77,15 +65,15 @@ export class DocumentSearchEffects {
         ofType(DocumentSearchActions.detailsButtonClicked),
         concatLatestFrom(() => this.store.select(selectUrl)),
         tap(([action, currentUrl]) => {
-          const urlTree = this.router.parseUrl(currentUrl);
-          urlTree.queryParams = {};
-          urlTree.fragment = null;
-          this.router.navigate([urlTree.toString(), 'details', action.id]);
+          const urlTree = this.router.parseUrl(currentUrl)
+          urlTree.queryParams = {}
+          urlTree.fragment = null
+          this.router.navigate([urlTree.toString(), 'details', action.id])
         })
-      );
+      )
     },
     { dispatch: false }
-  );
+  )
 
   navigateToTypes$ = createEffect(
     () => {
@@ -93,15 +81,15 @@ export class DocumentSearchEffects {
         ofType(DocumentSearchActions.navigateToTypesButtonClicked),
         concatLatestFrom(() => this.store.select(selectUrl)),
         tap(([, currentUrl]) => {
-          const urlTree = this.router.parseUrl(currentUrl);
-          urlTree.queryParams = {};
-          urlTree.fragment = null;
-          this.router.navigate([urlTree.toString(), 'document-types']);
+          const urlTree = this.router.parseUrl(currentUrl)
+          urlTree.queryParams = {}
+          urlTree.fragment = null
+          this.router.navigate([urlTree.toString(), 'document-types'])
         })
-      );
+      )
     },
     { dispatch: false }
-  );
+  )
 
   deleteButtonClicked$ = createEffect(() => {
     return this.actions$.pipe(
@@ -118,37 +106,33 @@ export class DocumentSearchEffects {
       ),
       switchMap(([dialogResult, id]) => {
         if (!dialogResult || dialogResult.button === 'secondary') {
-          return of(DocumentSearchActions.deleteDocumentCancelled());
+          return of(DocumentSearchActions.deleteDocumentCancelled())
         }
-        return this.documentService.deleteDocumentById(id).pipe(
+        return this.documentService.deleteDocumentById({ id: id }).pipe(
           map(() => {
             this.messageService.success({
-              summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS',
-            });
-            return DocumentSearchActions.deleteDocumentSucceeded();
+              summaryKey: 'DOCUMENT_DETAILS.DELETE.SUCCESS'
+            })
+            return DocumentSearchActions.deleteDocumentSucceeded()
           }),
           catchError((error) => {
             this.messageService.error({
-              summaryKey: 'DOCUMENT_DETAILS.DELETE.ERROR',
-            });
-            return of(DocumentSearchActions.deleteDocumentFailed({ error }));
+              summaryKey: 'DOCUMENT_DETAILS.DELETE.ERROR'
+            })
+            return of(DocumentSearchActions.deleteDocumentFailed({ error }))
           })
-        );
+        )
       })
-    );
-  });
+    )
+  })
 
   deleteDocumentSucceeded$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(DocumentSearchActions.deleteDocumentSucceeded),
-      concatLatestFrom(() =>
-        this.store.select(documentSearchSelectors.selectCriteria)
-      ),
-      map(([, searchCriteria]) =>
-        DocumentSearchActions.performSearch({ searchCriteria })
-      )
-    );
-  });
+      concatLatestFrom(() => this.store.select(documentSearchSelectors.selectCriteria)),
+      map(([, searchCriteria]) => DocumentSearchActions.performSearch({ searchCriteria }))
+    )
+  })
 
   searchByUrl$ = createEffect(() => {
     return this.actions$.pipe(
@@ -161,91 +145,84 @@ export class DocumentSearchEffects {
       // ),
       concatLatestFrom(() => [
         this.store.select(documentSearchSelectors.selectCriteria),
-        this.store.select(documentSearchSelectors.selectCriteriaOptionsLoaded),
+        this.store.select(documentSearchSelectors.selectCriteriaOptionsLoaded)
       ]),
       map(([, searchCriteria, criteriaOptionsLoaded]) => {
         if (criteriaOptionsLoaded) {
-          return DocumentSearchActions.performSearch({ searchCriteria });
+          return DocumentSearchActions.performSearch({ searchCriteria })
         }
         return DocumentSearchActions.loadAvailableCriteriaOptionsAndSearch({
-          criteria: searchCriteria,
-        });
+          criteria: searchCriteria
+        })
       })
-    );
-  });
+    )
+  })
 
   loadCriteriaOptions$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(DocumentSearchActions.loadAvailableCriteriaOptionsAndSearch),
       switchMap((action) =>
-        forkJoin([
-          this.documentService.getAllChannels(),
-          this.documentTypeService.getAllTypesOfDocument(),
-        ]).pipe(
+        forkJoin([this.documentService.getAllChannels(), this.documentTypeService.getAllTypesOfDocument()]).pipe(
           mergeMap(([channels, documentTypes]) => [
             DocumentSearchActions.availableChannelsRecived({ channels }),
             DocumentSearchActions.availableDocTypesRecived({
-              types: documentTypes,
+              types: documentTypes
             }),
             DocumentSearchActions.performSearch({
-              searchCriteria: action.criteria,
-            }),
+              searchCriteria: action.criteria
+            })
           ])
         )
       )
-    );
-  });
+    )
+  })
 
   performSearch$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(DocumentSearchActions.performSearch),
       switchMap((action) => {
-        return this.performSearch(action.searchCriteria);
+        return this.performSearch(action.searchCriteria)
       })
-    );
-  });
+    )
+  })
 
   exportData$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(DocumentSearchActions.exportButtonClicked),
-        concatLatestFrom(() =>
-          this.store.select(selectDocumentSearchViewModel)
-        ),
+        concatLatestFrom(() => this.store.select(selectDocumentSearchViewModel)),
         map(([, viewModel]) => {
           this.exportDataService.exportCsv(
             viewModel.resultComponentState?.displayedColumns ?? [],
             viewModel.results,
             'Document.csv'
-          );
+          )
         })
-      );
+      )
     },
     { dispatch: false }
-  );
+  )
 
   errorMessages: { action: Action; key: string }[] = [
     {
       action: DocumentSearchActions.documentSearchResultsLoadingFailed,
-      key: 'DOCUMENT_SEARCH.ERROR_MESSAGES.SEARCH_RESULTS_LOADING_FAILED',
-    },
-  ];
+      key: 'DOCUMENT_SEARCH.ERROR_MESSAGES.SEARCH_RESULTS_LOADING_FAILED'
+    }
+  ]
 
   displayError$ = createEffect(
     () => {
       return this.actions$.pipe(
         tap((action) => {
-          const e = this.errorMessages.find(
-            (e) => e.action.type === action.type
-          );
+          const e = this.errorMessages.find((e) => e.action.type === action.type)
           if (e) {
-            this.messageService.error({ summaryKey: e.key });
+            this.messageService.error({ summaryKey: e.key })
           }
         })
-      );
+      )
     },
     { dispatch: false }
-  );
+  )
 
   private performSearch(searchCriteria: Record<string, unknown>) {
     return this.documentService
@@ -253,10 +230,10 @@ export class DocumentSearchEffects {
         ...Object.entries(searchCriteria).reduce(
           (acc, [key, value]) => ({
             ...acc,
-            [key]: value instanceof Date ? value.toISOString() : value,
+            [key]: value instanceof Date ? value.toISOString() : value
           }),
           {} as Record<string, unknown>
-        ),
+        )
       })
       .pipe(
         map(({ stream, size, number, totalElements, totalPages }) =>
@@ -265,16 +242,16 @@ export class DocumentSearchEffects {
             size: size || 0,
             number: number || 0,
             totalElements: totalElements || 0,
-            totalPages: totalPages || 0,
+            totalPages: totalPages || 0
           })
         ),
         catchError((error) =>
           of(
             DocumentSearchActions.documentSearchResultsLoadingFailed({
-              error,
+              error
             })
           )
         )
-      );
+      )
   }
 }

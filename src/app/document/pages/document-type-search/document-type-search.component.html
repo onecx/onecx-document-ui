@@ -32,18 +32,11 @@
         [pageSize]="vm.resultComponentState?.pageSize"
         [filters]="vm.resultComponentState?.filters ?? []"
         [sortField]="vm.resultComponentState?.sorting?.sortColumn"
-        [sortDirection]="
-          vm.resultComponentState?.sorting?.sortDirection ??
-          defaultDataSortDirection
-        "
+        [sortDirection]="vm.resultComponentState?.sorting?.sortDirection ?? defaultDataSortDirection"
         [selectedRows]="vm.resultComponentState?.selectedRows ?? []"
         [defaultGroupKey]="vm.resultComponentState?.activeColumnGroupKey ?? ''"
-        [actionColumnPosition]="
-          vm.resultComponentState?.actionColumnConfig?.position ?? 'left'
-        "
-        [frozenActionColumn]="
-          vm.resultComponentState?.actionColumnConfig?.frozen ?? false
-        "
+        [actionColumnPosition]="vm.resultComponentState?.actionColumnConfig?.position ?? 'left'"
+        [frozenActionColumn]="vm.resultComponentState?.actionColumnConfig?.frozen ?? false"
         [attr.aria-label]="'DOCUMENT_TYPE_SEARCH.RESULTS.NAME' | translate"
       >
       </ocx-interactive-data-view>
@@ -75,9 +68,7 @@
           pInputText
           class="w-full"
           formControlName="name"
-          [attr.aria-label]="
-            'DOCUMENT_TYPE_SEARCH.DIALOG.NAME_LABEL' | translate
-          "
+          [attr.aria-label]="'DOCUMENT_TYPE_SEARCH.DIALOG.NAME_LABEL' | translate"
         />
       </div>
       <div class="field">
@@ -89,17 +80,11 @@
           pInputTextarea
           class="w-full"
           formControlName="description"
-          [attr.aria-label]="
-            'DOCUMENT_TYPE_SEARCH.DIALOG.DESCRIPTION_LABEL' | translate
-          "
+          [attr.aria-label]="'DOCUMENT_TYPE_SEARCH.DIALOG.DESCRIPTION_LABEL' | translate"
         ></textarea>
       </div>
       <div class="field flex align-items-center gap-2">
-        <p-checkbox
-          inputId="documentTypeActiveStatus"
-          formControlName="activeStatus"
-          [binary]="true"
-        ></p-checkbox>
+        <p-checkbox inputId="documentTypeActiveStatus" formControlName="activeStatus" [binary]="true"></p-checkbox>
         <label for="documentTypeActiveStatus">
           {{ 'DOCUMENT_TYPE_SEARCH.DIALOG.ACTIVE_STATUS_LABEL' | translate }}
         </label>
@@ -109,12 +94,7 @@
       <button pButton type="button" (click)="closeDialog()">
         {{ 'GENERAL.CANCEL' | translate }}
       </button>
-      <button
-        pButton
-        type="button"
-        [disabled]="isFormInvalid()"
-        (click)="saveDocumentType(vm.editingDocumentType)"
-      >
+      <button pButton type="button" [disabled]="isFormInvalid()" (click)="saveDocumentType(vm.editingDocumentType)">
         {{ 'GENERAL.CREATE' | translate }}
       </button>
     </ng-template>

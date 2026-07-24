@@ -1,55 +1,55 @@
-import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import {
   DocumentCreateUpdate,
   DocumentDetail,
   DocumentType,
-  UploadAttachmentPresignedUrlRequest,
-} from 'src/app/shared/generated';
-import { AttachmentFile } from '../types/document-create.types';
+  UploadAttachmentPresignedUrlRequest
+} from 'src/app/shared/generated'
+import { AttachmentFile } from '../types/document-create.types'
 
 export const DocumentCreateOperationsActions = createActionGroup({
   source: 'DocumentCreateOperationsActions',
   events: {
     'start document creation': props<{
-      docRequest: DocumentCreateUpdate;
-      files: AttachmentFile[];
+      docRequest: DocumentCreateUpdate
+      files: AttachmentFile[]
     }>(),
     'document creation failed': emptyProps(),
     'document created succesfully': props<{
-      createdDocument: DocumentDetail;
-      files: AttachmentFile[];
+      createdDocument: DocumentDetail
+      files: AttachmentFile[]
     }>(),
     'request document upload urls': props<{
-      createdDocument: DocumentDetail;
-      uploadRequests: UploadAttachmentPresignedUrlRequest[];
-      files: AttachmentFile[];
+      createdDocument: DocumentDetail
+      uploadRequests: UploadAttachmentPresignedUrlRequest[]
+      files: AttachmentFile[]
     }>(),
     'upload attachment': props<{
-      presignedUrl: string;
-      file: File;
-      documentId: string;
-      attachmentId: string;
+      presignedUrl: string
+      file: File
+      documentId: string
+      attachmentId: string
     }>(),
     'upload attachment success': props<{
-      documentId: string;
-      attachmentId: string;
+      documentId: string
+      attachmentId: string
     }>(),
     'ensure reference data loaded': emptyProps(),
     'load reference data failed': props<{ error: string | null }>(),
     'available document types received': props<{ types: DocumentType[] }>(),
     'available mime types received': props<{
-      mimeTypes: string[];
+      mimeTypes: string[]
     }>(),
     'attachment upload failed': props<{
-      documentId: string;
-      attachmentId: string;
+      documentId: string
+      attachmentId: string
     }>(),
     'all attachments uploaded': props<{
-      documentId: string;
-      successfulIds: string[];
-      failedIds: string[];
+      documentId: string
+      successfulIds: string[]
+      failedIds: string[]
     }>(),
     'document creation completed': props<{ documentId: string }>(),
-    'document creation final step failed': props<{ documentId: string }>(),
-  },
-});
+    'document creation final step failed': props<{ documentId: string }>()
+  }
+})

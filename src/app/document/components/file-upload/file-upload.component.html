@@ -17,12 +17,6 @@
       [attr.aria-label]="'FILE_UPLOAD.CHOOSE_BTN' | translate"
       [disabled]="disabled"
     ></button>
-    <input
-      type="file"
-      [multiple]="multiple"
-      [disabled]="disabled"
-      (change)="onFileInputChange($event)"
-      title
-    />
+    <input type="file" [multiple]="multiple" [disabled]="disabled" (change)="onFileInputChange($event)" title />
   </div>
 </div>

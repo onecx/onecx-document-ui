@@ -59,9 +59,7 @@
             [showClear]="true"
             formControlName="lifeCycleState"
           ></p-dropdown>
-          <label for="status">{{
-            'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_STATUS' | translate
-          }}</label>
+          <label for="status">{{ 'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_STATUS' | translate }}</label>
         </span>
       </div>
     </div>
@@ -72,14 +70,8 @@
         (filesSelected)="onFilesSelected($event)"
       ></app-file-upload>
       <div class="text-sm text-color-secondary mt-1">
-        {{
-          'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.ALLOWED_FILETYPE_MESSAGE'
-            | translate
-        }}
-        ({{
-          'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.ALLOWED_FILESIZE_MESSAGE'
-            | translate
-        }})
+        {{ 'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.ALLOWED_FILETYPE_MESSAGE' | translate }}
+        ({{ 'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.ALLOWED_FILESIZE_MESSAGE' | translate }})
       </div>
     </div>
   </div>

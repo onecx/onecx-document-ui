@@ -1,5 +1,6 @@
-import { DocumentSearchCriteria } from 'src/app/shared/generated';
-import { z, ZodTypeAny } from 'zod';
+import { z, ZodTypeAny } from 'zod'
+
+import { DocumentSearchCriteria } from 'src/app/shared/generated'
 
 export const documentSearchCriteriasSchema = z.object({
   id: z.string().optional(),
@@ -19,16 +20,14 @@ export const documentSearchCriteriasSchema = z.object({
   objectReferenceId: z.string().optional(),
   objectReferenceType: z.string().optional(),
   pageNumber: z.number().optional(),
-  pageSize: z.number().optional(),
-} satisfies Partial<Record<keyof DocumentSearchCriteria, ZodTypeAny>>);
+  pageSize: z.number().optional()
+} satisfies Partial<Record<keyof DocumentSearchCriteria, ZodTypeAny>>)
 
-export type DocumentSearchCriteriaSchema = z.infer<
-  typeof documentSearchCriteriasSchema
->;
+export type DocumentSearchCriteriaSchema = z.infer<typeof documentSearchCriteriasSchema>
 
 const getValueInArray = (val: unknown): unknown[] => {
   if (Array.isArray(val)) {
-    return val;
+    return val
   }
-  return [val];
-};
+  return [val]
+}

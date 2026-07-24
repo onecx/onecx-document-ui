@@ -1,11 +1,7 @@
 <div class="p-3" errorTailor>
   <div class="grid p-fluid mt-1">
     <div class="flex w-full justify-content-end mb-2">
-      <p-button
-        icon="pi pi-plus"
-        [text]="true"
-        (onClick)="onAddCharacteristic()"
-      ></p-button>
+      <p-button icon="pi pi-plus" [text]="true" (onClick)="onAddCharacteristic()"></p-button>
     </div>
 
     <div class="col-12">
@@ -37,9 +33,7 @@
                   type="text"
                   formControlName="name"
                   class="w-full"
-                  [attr.aria-label]="
-                    'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.NAME' | translate
-                  "
+                  [attr.aria-label]="'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.NAME' | translate"
                 />
                 <label for="characteristicName-{{ rowIndex }}">{{
                   'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.NAME' | translate
@@ -55,9 +49,7 @@
                   type="text"
                   formControlName="value"
                   class="w-full"
-                  [attr.aria-label]="
-                    'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.VALUE' | translate
-                  "
+                  [attr.aria-label]="'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.VALUE' | translate"
                 />
                 <label for="characteristicValue-{{ rowIndex }}">{{
                   'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.VALUE' | translate
@@ -70,9 +62,7 @@
                 icon="pi pi-trash"
                 [text]="true"
                 (onClick)="onRemoveCharacteristic(rowIndex)"
-                [attr.aria-label]="
-                  'DOCUMENT_CREATE.CHARACTERISTICS.ACTIONS.REMOVE' | translate
-                "
+                [attr.aria-label]="'DOCUMENT_CREATE.CHARACTERISTICS.ACTIONS.REMOVE' | translate"
               ></p-button>
             </td>
           </tr>
@@ -89,9 +79,7 @@
     </div>
   </div>
 
-  <div
-    class="col-6 col-offset-6 column-gap-2 flex justify-content-between mt-3"
-  >
+  <div class="col-6 col-offset-6 column-gap-2 flex justify-content-between mt-3">
     <button pButton class="w-full" type="button" (click)="onBackClick()">
       {{ 'DOCUMENT_DETAILS.GENERAL.BACK' | translate }}
     </button>

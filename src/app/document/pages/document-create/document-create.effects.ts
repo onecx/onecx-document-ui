@@ -1,28 +1,28 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { concatLatestFrom } from '@ngrx/operators';
-import { Store } from '@ngrx/store';
-import { routerNavigatedAction } from '@ngrx/router-store';
-import { filterForNavigatedTo } from '@onecx/ngrx-accelerator';
-import { PortalMessageService } from '@onecx/portal-integration-angular';
+import { Injectable } from '@angular/core'
+import { Router } from '@angular/router'
+import { Actions, createEffect, ofType } from '@ngrx/effects'
+import { concatLatestFrom } from '@ngrx/operators'
+import { Store } from '@ngrx/store'
+import { routerNavigatedAction } from '@ngrx/router-store'
+import { filterForNavigatedTo } from '@onecx/ngrx-accelerator'
+import { PortalMessageService } from '@onecx/portal-integration-angular'
 import {
   AttachmentCreateUpdate,
   DocumentCharacteristicCreateUpdate,
   DocumentCreateUpdate,
-  LifeCycleState,
-} from 'src/app/shared/generated';
-import { filter, map, mergeMap, tap } from 'rxjs';
-import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions';
+  LifeCycleState
+} from 'src/app/shared/generated'
+import { filter, map, mergeMap, tap } from 'rxjs'
+import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions'
 import {
   AttachmentDraft,
   AttachmentFile,
   DocumentCharacteristicFormValue,
-  DocumentCreateSubmissionSource,
-} from '../../types/document-create.types';
-import { DocumentCreateComponent } from './document-create.component';
-import { DocumentCreateActions } from './document-create.actions';
-import { selectDocumentCreateSubmissionSource } from './document-create.selectors';
+  DocumentCreateSubmissionSource
+} from '../../types/document-create.types'
+import { DocumentCreateComponent } from './document-create.component'
+import { DocumentCreateActions } from './document-create.actions'
+import { selectDocumentCreateSubmissionSource } from './document-create.selectors'
 
 @Injectable()
 export class DocumentCreateEffects {
@@ -38,8 +38,8 @@ export class DocumentCreateEffects {
       ofType(routerNavigatedAction),
       filterForNavigatedTo(this.router, DocumentCreateComponent),
       map(() => DocumentCreateActions.enteredPage())
-    );
-  });
+    )
+  })
 
   attachmentMimeTypeNotSupported$ = createEffect(
     () => {
@@ -47,39 +47,36 @@ export class DocumentCreateEffects {
         ofType(DocumentCreateActions.attachmentMimeTypeNotSupported),
         tap(() => {
           this.messageService.error({
-            summaryKey:
-              'DOCUMENT_CREATE.ATTACHMENTS.ERROR_MESSAGES.MIME_TYPE_NOT_SUPPORTED',
-          });
+            summaryKey: 'DOCUMENT_CREATE.ATTACHMENTS.ERROR_MESSAGES.MIME_TYPE_NOT_SUPPORTED'
+          })
         })
-      );
+      )
     },
     { dispatch: false }
-  );
+  )
 
   submitDocumentCreation$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(DocumentCreateActions.submitClicked),
-      concatLatestFrom(() =>
-        this.store.select(selectDocumentCreateSubmissionSource)
-      ),
+      concatLatestFrom(() => this.store.select(selectDocumentCreateSubmissionSource)),
       map(([, source]) => this.mapSubmitPayload(source)),
       mergeMap((payload) =>
         payload
           ? [
               DocumentCreateOperationsActions.startDocumentCreation({
                 docRequest: payload.docRequest,
-                files: payload.files,
-              }),
+                files: payload.files
+              })
             ]
           : [
               DocumentCreateActions.stepValidationFailed({
-                error: 'DOCUMENT_CREATE.ERROR_MESSAGES.SUBMIT_VALIDATION',
+                error: 'DOCUMENT_CREATE.ERROR_MESSAGES.SUBMIT_VALIDATION'
               }),
-              DocumentCreateActions.submitFinished(),
+              DocumentCreateActions.submitFinished()
             ]
       )
-    );
-  });
+    )
+  })
 
   onDocumentCreationCompleted$ = createEffect(
     () => {
@@ -87,13 +84,13 @@ export class DocumentCreateEffects {
         ofType(DocumentCreateOperationsActions.documentCreationCompleted),
         tap(() => {
           this.messageService.success({
-            summaryKey: 'DOCUMENT_CREATE.SUCCESS_MESSAGES.CREATE_SUCCESS',
-          });
+            summaryKey: 'DOCUMENT_CREATE.SUCCESS_MESSAGES.CREATE_SUCCESS'
+          })
         })
-      );
+      )
     },
     { dispatch: false }
-  );
+  )
 
   onDocumentCreationFailed$ = createEffect(
     () => {
@@ -104,13 +101,13 @@ export class DocumentCreateEffects {
         ),
         tap(() => {
           this.messageService.error({
-            summaryKey: 'DOCUMENT_CREATE.ERROR_MESSAGES.CREATE_ERROR',
-          });
+            summaryKey: 'DOCUMENT_CREATE.ERROR_MESSAGES.CREATE_ERROR'
+          })
         })
-      );
+      )
     },
     { dispatch: false }
-  );
+  )
 
   onDocumentCreationFinished$ = createEffect(() => {
     return this.actions$.pipe(
@@ -120,15 +117,15 @@ export class DocumentCreateEffects {
         DocumentCreateOperationsActions.documentCreationFinalStepFailed
       ),
       map(() => DocumentCreateActions.submitFinished())
-    );
-  });
+    )
+  })
 
   resetStateOnSubmitSuccess$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(DocumentCreateOperationsActions.documentCreationCompleted),
       map(() => DocumentCreateActions.resetClicked())
-    );
-  });
+    )
+  })
 
   resetStateWhenLeavingCreatePage$ = createEffect(() => {
     return this.actions$.pipe(
@@ -136,22 +133,22 @@ export class DocumentCreateEffects {
       map((action) => action.payload.routerState.url),
       filter((url) => !url.toLowerCase().includes('/create-document')),
       map(() => DocumentCreateActions.resetClicked())
-    );
-  });
+    )
+  })
 
   private mapSubmitPayload(
     source: DocumentCreateSubmissionSource
   ): { docRequest: DocumentCreateUpdate; files: AttachmentFile[] } | null {
-    const details = source.details;
+    const details = source.details
     if (!details?.name || !details.type || !details.channel) {
-      return null;
+      return null
     }
 
     const docRequest: DocumentCreateUpdate = {
       name: details.name,
       typeId: details.type,
       channel: {
-        name: details.channel,
+        name: details.channel
       },
       lifeCycleState: details.status as LifeCycleState,
       documentVersion: details.version ?? undefined,
@@ -160,45 +157,41 @@ export class DocumentCreateEffects {
       relatedObject: {
         involvement: details.involvement ?? undefined,
         objectReferenceType: details.objectReferenceType ?? undefined,
-        objectReferenceId: details.objectReferenceId ?? undefined,
+        objectReferenceId: details.objectReferenceId ?? undefined
       },
       tags: [],
       documentRelationships: [],
       relatedParties: [],
       categories: [],
       characteristics: this.mapCharacteristics(source.characteristics),
-      attachments: this.mapAttachments(source.attachments),
-    };
+      attachments: this.mapAttachments(source.attachments)
+    }
 
     const files = source.attachments.map((attachment) => ({
       file: attachment.file,
-      fileName: attachment.fileName,
-    }));
+      fileName: attachment.fileName
+    }))
 
-    return { docRequest, files };
+    return { docRequest, files }
   }
 
-  private mapAttachments(
-    attachments: AttachmentDraft[]
-  ): AttachmentCreateUpdate[] {
+  private mapAttachments(attachments: AttachmentDraft[]): AttachmentCreateUpdate[] {
     return attachments.map((attachment) => ({
       name: attachment.name ?? undefined,
       description: attachment.description ?? undefined,
       mimeType: attachment.mimeType ?? undefined,
       fileName: attachment.fileName,
-      validFor: { endDateTime: attachment.validForEnd || undefined },
-    }));
+      validFor: { endDateTime: attachment.validForEnd || undefined }
+    }))
   }
 
-  private mapCharacteristics(
-    characteristics: DocumentCharacteristicFormValue[]
-  ): DocumentCharacteristicCreateUpdate[] {
+  private mapCharacteristics(characteristics: DocumentCharacteristicFormValue[]): DocumentCharacteristicCreateUpdate[] {
     return characteristics
       .filter((characteristic) => characteristic.name && characteristic.value)
       .map((characteristic) => ({
         id: characteristic.id ?? undefined,
         name: characteristic.name!, // filter guarantees non-null
-        value: characteristic.value!, // filter guarantees non-null
-      }));
+        value: characteristic.value! // filter guarantees non-null
+      }))
   }
 }

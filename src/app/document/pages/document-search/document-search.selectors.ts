@@ -1,20 +1,16 @@
-import { createSelector } from '@ngrx/store';
-import { createChildSelectors } from '@onecx/ngrx-accelerator';
-import { RowListGridData } from '@onecx/portal-integration-angular';
-import {
-  Channel,
-  DocumentDetail,
-  DocumentType,
-} from '../../../shared/generated';
-import { documentFeature } from '../../document.reducers';
-import { initialState } from './document-search.reducers';
-import { DocumentSearchViewModel } from './document-search.viewmodel';
-import { SelectItem } from 'primeng/api';
+import { createSelector } from '@ngrx/store'
 
-export const documentSearchSelectors = createChildSelectors(
-  documentFeature.selectSearch,
-  initialState
-);
+import { SelectItem } from 'primeng/api'
+
+import { createChildSelectors } from '@onecx/ngrx-accelerator'
+import { RowListGridData } from '@onecx/portal-integration-angular'
+
+import { Channel, DocumentDetail, DocumentType } from 'src/app/shared/generated'
+import { documentFeature } from '../../document.reducers'
+import { initialState } from './document-search.reducers'
+import { DocumentSearchViewModel } from './document-search.viewmodel'
+
+export const documentSearchSelectors = createChildSelectors(documentFeature.selectSearch, initialState)
 
 export const selectResults = createSelector(
   documentSearchSelectors.selectResults,
@@ -23,27 +19,27 @@ export const selectResults = createSelector(
       imagePath: '',
       ...item,
       id: item.id!,
-      typeName: item.type?.name,
-    }));
+      typeName: item.type?.name
+    }))
   }
-);
+)
 
 const selectDocumentTypes = createSelector(
   documentSearchSelectors.selectAvailableDocumentTypes,
   (docTypes: DocumentType[]): SelectItem[] => {
-    return docTypes.map((type) => ({ label: type.name, value: type.id }));
+    return docTypes.map((type) => ({ label: type.name, value: type.id }))
   }
-);
+)
 
 const selectChannels = createSelector(
   documentSearchSelectors.selectAvailableChannels,
   (channels: Channel[]): SelectItem[] => {
     return channels.map((channel) => ({
       label: channel.name,
-      value: channel.id,
-    }));
+      value: channel.id
+    }))
   }
-);
+)
 
 const selectDocumentSearchResultState = createSelector(
   documentSearchSelectors.selectColumns,
@@ -52,22 +48,15 @@ const selectDocumentSearchResultState = createSelector(
   documentSearchSelectors.selectResultComponentState,
   documentSearchSelectors.selectSearchHeaderComponentState,
   documentSearchSelectors.selectDiagramComponentState,
-  (
+  (columns, searchCriteria, results, resultComponentState, searchHeaderComponentState, diagramComponentState) => ({
     columns,
     searchCriteria,
     results,
     resultComponentState,
     searchHeaderComponentState,
     diagramComponentState
-  ) => ({
-    columns,
-    searchCriteria,
-    results,
-    resultComponentState,
-    searchHeaderComponentState,
-    diagramComponentState,
   })
-);
+)
 
 const selectDocumentSearchStatusState = createSelector(
   documentSearchSelectors.selectChartVisible,
@@ -89,15 +78,15 @@ const selectDocumentSearchStatusState = createSelector(
     searchExecuted,
     criteriaOptionsLoaded,
     availableDocumentTypes,
-    avilableChannels,
+    avilableChannels
   })
-);
+)
 
 export const selectDocumentSearchViewModel = createSelector(
   selectDocumentSearchResultState,
   selectDocumentSearchStatusState,
   (resultState, statusState): DocumentSearchViewModel => ({
     ...resultState,
-    ...statusState,
+    ...statusState
   })
-);
+)

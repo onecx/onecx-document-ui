@@ -1,100 +1,81 @@
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { AttachmentCreateUpdate } from 'src/app/shared/generated';
+import { FormArray, FormControl, FormGroup } from '@angular/forms'
+import { AttachmentCreateUpdate } from 'src/app/shared/generated'
 
 export type AttachmentFile = {
-  fileName: string;
-  attachmentId?: string;
-  file: File;
-};
+  fileName: string
+  attachmentId?: string
+  file: File
+}
 
 export type AttachmentData = AttachmentCreateUpdate & {
-  fileData: File;
-  isValid?: boolean;
-};
+  fileData: File
+  isValid?: boolean
+}
 
 export interface DocumentAttachmentFormValue {
-  id: string | null;
-  name: string | null;
-  description: string | null;
-  fileName: string | null;
-  type: string | null;
-  size: number | null;
-  sizeUnit: string | null;
-  mimeType: string | null;
-  storageUploadStatus: boolean;
+  id: string | null
+  name: string | null
+  description: string | null
+  fileName: string | null
+  type: string | null
+  size: number | null
+  sizeUnit: string | null
+  mimeType: string | null
+  storageUploadStatus: boolean
 }
 
 export interface DocumentCharacteristicFormValue {
-  id: string | null;
-  name: string | null;
-  value: string | null;
+  id: string | null
+  name: string | null
+  value: string | null
 }
 
 export interface DocumentDetailsFormValue {
-  name: string | null;
-  type: string | null;
-  version: string | null;
-  channel: string | null;
-  specification: string | null;
-  status: string | null;
-  description: string | null;
-  involvement: string | null;
-  objectReferenceType: string | null;
-  objectReferenceId: string | null;
-  attachments: DocumentAttachmentFormValue[];
-  characteristics: DocumentCharacteristicFormValue[];
+  name: string | null
+  type: string | null
+  version: string | null
+  channel: string | null
+  specification: string | null
+  status: string | null
+  description: string | null
+  involvement: string | null
+  objectReferenceType: string | null
+  objectReferenceId: string | null
+  attachments: DocumentAttachmentFormValue[]
+  characteristics: DocumentCharacteristicFormValue[]
 }
 
 export type FormControlsOf<T extends object> = {
-  [K in keyof T]: T[K] extends Array<infer U>
-    ? FormArray<FormGroup<FormControlsOf<U & object>>>
-    : FormControl<T[K]>;
-};
+  [K in keyof T]: T[K] extends Array<infer U> ? FormArray<FormGroup<FormControlsOf<U & object>>> : FormControl<T[K]>
+}
 
-export type DocumentAttachmentFormGroup = FormGroup<
-  FormControlsOf<DocumentAttachmentFormValue>
->;
+export type DocumentAttachmentFormGroup = FormGroup<FormControlsOf<DocumentAttachmentFormValue>>
 
-export type DocumentCharacteristicsFormGroup = FormGroup<
-  FormControlsOf<DocumentCharacteristicFormValue>
->;
+export type DocumentCharacteristicsFormGroup = FormGroup<FormControlsOf<DocumentCharacteristicFormValue>>
 
-export type DocumentDetailsFormGroup = FormGroup<
-  FormControlsOf<DocumentDetailsFormValue>
->;
+export type DocumentDetailsFormGroup = FormGroup<FormControlsOf<DocumentDetailsFormValue>>
 
-export type DocumentCreateDetailsFormGroup = FormGroup<
-  FormControlsOf<DocumentCreateDetailsStepData>
->;
+export type DocumentCreateDetailsFormGroup = FormGroup<FormControlsOf<DocumentCreateDetailsStepData>>
 
-export type DocumentAttachmentFormRawValue = ReturnType<
-  DocumentAttachmentFormGroup['getRawValue']
->;
+export type DocumentAttachmentFormRawValue = ReturnType<DocumentAttachmentFormGroup['getRawValue']>
 
-export type DocumentCharacteristicsFormRawValue = ReturnType<
-  DocumentCharacteristicsFormGroup['getRawValue']
->;
+export type DocumentCharacteristicsFormRawValue = ReturnType<DocumentCharacteristicsFormGroup['getRawValue']>
 
-export type DocumentDetailsFormRawValue = ReturnType<
-  DocumentDetailsFormGroup['getRawValue']
->;
+export type DocumentDetailsFormRawValue = ReturnType<DocumentDetailsFormGroup['getRawValue']>
 
-export type DocumentCreateDetailsStepData = Omit<
-  DocumentDetailsFormValue,
-  'attachments' | 'characteristics'
->;
+export type DocumentCreateDetailsStepData = Omit<DocumentDetailsFormValue, 'attachments' | 'characteristics'>
 
 export type AttachmentDraft = {
-  name: string | null;
-  description: string | null;
-  mimeType: string | null;
-  validForEnd: string | null;
-  fileName: string;
-  file: File;
-};
+  name: string | null
+  description: string | null
+  mimeType: string | null
+  validForEnd: string | null
+  fileName: string
+  file: File
+}
 
 export type DocumentCreateSubmissionSource = {
-  details: Partial<DocumentCreateDetailsStepData> | null;
-  attachments: AttachmentDraft[];
-  characteristics: DocumentCharacteristicFormValue[];
-};
+  details: Partial<DocumentCreateDetailsStepData> | null
+  attachments: AttachmentDraft[]
+  characteristics: DocumentCharacteristicFormValue[]
+}

@@ -1,33 +1,30 @@
-import { createSelector } from '@ngrx/store';
-import { createChildSelectors } from '@onecx/ngrx-accelerator';
-import { SelectItem } from 'primeng/api';
-import { documentFeature } from '../../document.reducers';
-import { documentCreateOperationsSelectors } from '../../operations/document-create-operations.selectors';
-import { initialState } from './document-create.reducers';
-import { DocumentCreateViewModel } from './document-create.viewmodel';
+import { createSelector } from '@ngrx/store'
+import { createChildSelectors } from '@onecx/ngrx-accelerator'
+import { SelectItem } from 'primeng/api'
+import { documentFeature } from '../../document.reducers'
+import { documentCreateOperationsSelectors } from '../../operations/document-create-operations.selectors'
+import { initialState } from './document-create.reducers'
+import { DocumentCreateViewModel } from './document-create.viewmodel'
 
-export const documentCreateSelectors = createChildSelectors(
-  documentFeature.selectCreate,
-  initialState
-);
+export const documentCreateSelectors = createChildSelectors(documentFeature.selectCreate, initialState)
 
 export const selectCreateDocumentTypes = createSelector(
   documentCreateOperationsSelectors.selectAvailableDocumentTypes,
   (types): SelectItem[] =>
     types.map((type) => ({
       label: type.name,
-      value: type.id,
+      value: type.id
     }))
-);
+)
 
 export const selectCreateMimeTypes = createSelector(
   documentCreateOperationsSelectors.selectAvailableMimeTypes,
   (mimeTypes): SelectItem[] =>
     mimeTypes.map((mimeType) => ({
       label: mimeType,
-      value: mimeType,
+      value: mimeType
     }))
-);
+)
 
 const selectDocumentCreateFormState = createSelector(
   documentCreateSelectors.selectActiveStep,
@@ -38,9 +35,9 @@ const selectDocumentCreateFormState = createSelector(
     activeStep,
     details,
     attachments,
-    characteristics,
+    characteristics
   })
-);
+)
 
 const selectDocumentCreateStatusState = createSelector(
   documentCreateSelectors.selectSubmitting,
@@ -51,23 +48,23 @@ const selectDocumentCreateStatusState = createSelector(
     submitting,
     referenceDataLoading,
     referenceDataLoaded,
-    error,
+    error
   })
-);
+)
 
 export const selectDocumentCreateViewModel = createSelector(
   selectDocumentCreateFormState,
   selectDocumentCreateStatusState,
   (formState, statusState): DocumentCreateViewModel => ({
     ...formState,
-    ...statusState,
+    ...statusState
   })
-);
+)
 
 export const selectCanGoNextFromAttachments = createSelector(
   documentCreateSelectors.selectAttachments,
   (attachments) => attachments.length > 0
-);
+)
 
 export const selectDocumentCreateSubmissionSource = createSelector(
   documentCreateSelectors.selectDetails,
@@ -76,6 +73,6 @@ export const selectDocumentCreateSubmissionSource = createSelector(
   (details, attachments, characteristics) => ({
     details,
     attachments,
-    characteristics,
+    characteristics
   })
-);
+)

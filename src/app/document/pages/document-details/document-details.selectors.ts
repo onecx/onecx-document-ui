@@ -1,35 +1,32 @@
-import { createSelector } from '@ngrx/store';
-import { createChildSelectors } from '@onecx/ngrx-accelerator';
-import { selectBackNavigationPossible } from 'src/app/shared/selectors/onecx.selectors';
-import { DocumentDetail } from '../../../shared/generated';
-import { documentFeature } from '../../document.reducers';
-import { documentCreateOperationsSelectors } from '../../operations/document-create-operations.selectors';
-import { initialState } from './document-details.reducers';
-import { DocumentDetailsViewModel } from './document-details.viewmodel';
-import { SelectItem } from 'primeng/api';
+import { createSelector } from '@ngrx/store'
+import { createChildSelectors } from '@onecx/ngrx-accelerator'
+import { selectBackNavigationPossible } from 'src/app/shared/selectors/onecx.selectors'
+import { DocumentDetail } from 'src/app/shared/generated'
+import { documentFeature } from '../../document.reducers'
+import { documentCreateOperationsSelectors } from '../../operations/document-create-operations.selectors'
+import { initialState } from './document-details.reducers'
+import { DocumentDetailsViewModel } from './document-details.viewmodel'
+import { SelectItem } from 'primeng/api'
 
-export const documentDetailsSelectors = createChildSelectors(
-  documentFeature.selectDetails,
-  initialState
-);
+export const documentDetailsSelectors = createChildSelectors(documentFeature.selectDetails, initialState)
 
 export const selectDocumentTypes = createSelector(
   documentCreateOperationsSelectors.selectAvailableDocumentTypes,
   (types): SelectItem[] =>
     types.map((type) => ({
       label: type.name,
-      value: type.id,
+      value: type.id
     }))
-);
+)
 
 export const selectMimeTypes = createSelector(
   documentCreateOperationsSelectors.selectAvailableMimeTypes,
   (mimeTypes: string[]): SelectItem[] =>
     mimeTypes.map((mimeType) => ({
       label: mimeType,
-      value: mimeType,
+      value: mimeType
     }))
-);
+)
 
 export const selectDocumentDetailsViewModel = createSelector(
   documentDetailsSelectors.selectDetails,
@@ -51,6 +48,6 @@ export const selectDocumentDetailsViewModel = createSelector(
     backNavigationPossible,
     detailsLoaded,
     editMode,
-    isSubmitting,
+    isSubmitting
   })
-);
+)

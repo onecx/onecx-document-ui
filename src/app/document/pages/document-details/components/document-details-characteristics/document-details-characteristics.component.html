@@ -23,11 +23,7 @@
           </th>
         </tr>
       </ng-template>
-      <ng-template
-        pTemplate="body"
-        let-characteristicsFormGroup
-        let-rowIndex="rowIndex"
-      >
+      <ng-template pTemplate="body" let-characteristicsFormGroup let-rowIndex="rowIndex">
         <tr [formGroup]="characteristicsFormGroup">
           <td>
             <ng-container *ngIf="editMode; else nameText">
@@ -36,9 +32,7 @@
                 type="text"
                 formControlName="name"
                 class="w-full"
-                [attr.aria-label]="
-                  'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.NAME' | translate
-                "
+                [attr.aria-label]="'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.NAME' | translate"
               />
             </ng-container>
             <ng-template #nameText>
@@ -52,9 +46,7 @@
                 type="text"
                 formControlName="value"
                 class="w-full"
-                [attr.aria-label]="
-                  'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.VALUE' | translate
-                "
+                [attr.aria-label]="'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.VALUE' | translate"
               />
             </ng-container>
             <ng-template #valueText>
@@ -62,11 +54,7 @@
             </ng-template>
           </td>
           <td *ngIf="editMode">
-            <p-button
-              icon="pi pi-trash"
-              [text]="true"
-              (onClick)="onRowDelete(rowIndex)"
-            />
+            <p-button icon="pi pi-trash" [text]="true" (onClick)="onRowDelete(rowIndex)" />
           </td>
         </tr>
       </ng-template>
