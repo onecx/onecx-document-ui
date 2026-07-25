@@ -6,7 +6,7 @@ import { Action, Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { Router } from '@angular/router'
 import { DialogState, PortalDialogService, PortalMessageService } from '@onecx/portal-integration-angular'
-import { of, ReplaySubject, throwError } from 'rxjs'
+import { firstValueFrom, of, ReplaySubject, throwError } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { DocumentControllerAPIService } from 'src/app/shared/generated'
 import { ExternalFileHandlerService } from '../../service/external-file-handler.service'
@@ -158,7 +158,7 @@ describe('DocumentDetailsEffects', () => {
       documentService.getDocumentById.mockReturnValue(of(details))
 
       effects.loadDocumentById$.pipe(take(1)).subscribe(() => {
-        expect(documentService.getDocumentById).toHaveBeenCalledWith('')
+        expect(documentService.getDocumentById).toHaveBeenCalledWith({ id: '' })
         done()
       })
 
@@ -603,15 +603,15 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({
+          expect(documentService.updateDocument).toHaveBeenCalledWith({
+            id: 'doc-1',
+            documentCreateUpdate: expect.objectContaining({
               documentRelationships: [],
               relatedParties: [],
               categories: [],
               relatedObject: undefined
             })
-          )
+          })
           done()
         }
       })
@@ -640,15 +640,15 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({
+          expect(documentService.updateDocument).toHaveBeenCalledWith({
+            id: 'doc-1',
+            documentCreateUpdate: expect.objectContaining({
               documentRelationships: [{ id: 'rel-1', type: 'RELATED', documentRefId: 'ref-1' }],
               relatedParties: [{ id: 'p1', name: 'Party', role: 'OWNER', validFor: null }],
               categories: [{ id: 'cat-1', name: 'Cat', categoryVersion: 1 }],
               relatedObject: expect.objectContaining({ id: 'obj-1' })
             })
-          )
+          })
           done()
         }
       })
@@ -684,9 +684,9 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({
+          expect(documentService.updateDocument).toHaveBeenCalledWith({
+            id: 'doc-1',
+            documentCreateUpdate: expect.objectContaining({
               attachments: [
                 expect.objectContaining({
                   id: 'att-1',
@@ -697,7 +697,7 @@ describe('DocumentDetailsEffects', () => {
                 })
               ]
             })
-          )
+          })
           done()
         }
       })
@@ -719,7 +719,7 @@ describe('DocumentDetailsEffects', () => {
       )
     })
 
-    it('should include specification fields when prevState has specification', (done) => {
+    it('should include specification fields when prevState has specification', async () => {
       const prevDetails = {
         id: 'doc-1',
         modificationCount: 0,
@@ -733,21 +733,7 @@ describe('DocumentDetailsEffects', () => {
       store.refreshState()
       documentService.updateDocument.mockReturnValue(of({ id: 'doc-1' } as any))
 
-      effects.saveButtonClicked$.pipe(take(2)).subscribe({
-        next: () => {},
-        complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({
-              specification: expect.objectContaining({
-                specificationVersion: '2.0'
-              })
-            })
-          )
-          done()
-        }
-      })
-
+      const effectPromise = firstValueFrom(effects.saveButtonClicked$.pipe(take(2)))
       actions$.next(
         DocumentDetailsActions.saveButtonClicked({
           details: {
@@ -758,6 +744,16 @@ describe('DocumentDetailsEffects', () => {
           } as any
         })
       )
+      await effectPromise
+
+      expect(documentService.updateDocument).toHaveBeenCalledWith({
+        id: 'doc-1',
+        documentCreateUpdate: expect.objectContaining({
+          specification: expect.objectContaining({
+            specificationVersion: '2.0'
+          })
+        })
+      })
     })
 
     it('should use empty array for attachments when prevState has undefined attachments', (done) => {
@@ -776,10 +772,10 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({ attachments: [] })
-          )
+          expect(documentService.updateDocument).toHaveBeenCalledWith({
+            id: 'doc-1',
+            documentCreateUpdate: expect.objectContaining({ attachments: [] })
+          })
           done()
         }
       })
@@ -807,9 +803,9 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({
+          expect(documentService.updateDocument).toHaveBeenCalledWith({
+            id: 'doc-1',
+            documentCreateUpdate: expect.objectContaining({
               characteristics: [
                 expect.objectContaining({
                   id: 'char-1',
@@ -818,7 +814,7 @@ describe('DocumentDetailsEffects', () => {
                 })
               ]
             })
-          )
+          })
           done()
         }
       })
@@ -1033,7 +1029,7 @@ describe('DocumentDetailsEffects', () => {
       characteristics: []
     } as any
 
-    it('should omit specification when prevState.specification is undefined', (done) => {
+    it('should omit specification when prevState.specification is undefined', async () => {
       const prevDetails = {
         id: 'doc-1',
         modificationCount: 0,
@@ -1047,19 +1043,16 @@ describe('DocumentDetailsEffects', () => {
       store.overrideSelector(documentDetailsSelectors.selectDetails, prevDetails)
       store.refreshState()
       documentService.updateDocument.mockReturnValue(of({ id: 'doc-1' } as any))
-
-      effects.saveButtonClicked$.pipe(take(2)).subscribe({
-        next: () => {},
-        complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({ specification: undefined })
-          )
-          done()
-        }
-      })
+      const effectPromise = firstValueFrom(effects.saveButtonClicked$.pipe(take(2)))
 
       actions$.next(DocumentDetailsActions.saveButtonClicked({ details: baseDetails }))
+
+      await effectPromise
+
+      expect(documentService.updateDocument).toHaveBeenCalledWith({
+        id: 'doc-1',
+        documentCreateUpdate: expect.objectContaining({ specification: undefined })
+      })
     })
 
     it('should set channel.id=undefined when prevState.channel is null', (done) => {
@@ -1079,12 +1072,12 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({
+          expect(documentService.updateDocument).toHaveBeenCalledWith({
+            id: 'doc-1',
+            documentCreateUpdate: expect.objectContaining({
               channel: expect.objectContaining({ id: undefined })
             })
-          )
+          })
           done()
         }
       })
@@ -1114,12 +1107,12 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({
+          expect(documentService.updateDocument).toHaveBeenCalledWith({
+            id: 'doc-1',
+            documentCreateUpdate: expect.objectContaining({
               attachments: expect.arrayContaining([expect.objectContaining({ mimeType: null })])
             })
-          )
+          })
           done()
         }
       })
@@ -1153,12 +1146,12 @@ describe('DocumentDetailsEffects', () => {
       effects.saveButtonClicked$.pipe(take(2)).subscribe({
         next: () => {},
         complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({
+          expect(documentService.updateDocument).toHaveBeenCalledWith({
+            id: 'doc-1',
+            documentCreateUpdate: expect.objectContaining({
               characteristics: expect.arrayContaining([expect.objectContaining({ id: undefined })])
             })
-          )
+          })
           done()
         }
       })
@@ -1170,7 +1163,7 @@ describe('DocumentDetailsEffects', () => {
       )
     })
 
-    it('should set specification.name=undefined when prevState has specification but formValue.specification is falsy', (done) => {
+    it('should set specification.name=undefined when prevState has specification but formValue.specification is falsy', async () => {
       const prevDetails = {
         id: 'doc-1',
         modificationCount: 0,
@@ -1184,30 +1177,18 @@ describe('DocumentDetailsEffects', () => {
       store.overrideSelector(documentDetailsSelectors.selectDetails, prevDetails)
       store.refreshState()
       documentService.updateDocument.mockReturnValue(of({ id: 'doc-1' } as any))
+      const detailsWithoutSpec = { ...baseDetails, specification: '' } as any
 
-      const detailsWithoutSpec = {
-        ...baseDetails,
-        specification: ''
-      } as any
+      const effectPromise = firstValueFrom(effects.saveButtonClicked$.pipe(take(1)))
+      actions$.next(DocumentDetailsActions.saveButtonClicked({ details: detailsWithoutSpec }))
+      await effectPromise
 
-      effects.saveButtonClicked$.pipe(take(2)).subscribe({
-        next: () => {},
-        complete: () => {
-          expect(documentService.updateDocument).toHaveBeenCalledWith(
-            'doc-1',
-            expect.objectContaining({
-              specification: expect.objectContaining({ name: undefined })
-            })
-          )
-          done()
-        }
-      })
-
-      actions$.next(
-        DocumentDetailsActions.saveButtonClicked({
-          details: detailsWithoutSpec
+      expect(documentService.updateDocument).toHaveBeenCalledWith({
+        id: prevDetails.id,
+        documentCreateUpdate: expect.objectContaining({
+          specification: expect.objectContaining({ name: undefined })
         })
-      )
+      })
     })
   })
 })

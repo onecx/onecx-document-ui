@@ -38,8 +38,21 @@ const config: Config = {
     ]
   },
   // reporting
+  collectCoverage: true,
+  coverageReporters: ['json', 'text', 'lcov', 'text-summary'],
   coverageDirectory: '<rootDir>/reports/coverage/',
-  coveragePathIgnorePatterns: ignoredPathPatterns
+  coveragePathIgnorePatterns: ignoredPathPatterns,
+  reporters: [
+    'default',
+    [
+      'jest-sonar',
+      {
+        outputDirectory: 'reports',
+        outputName: 'sonarqube_report.xml',
+        reportedFilePath: 'absolute'
+      }
+    ]
+  ]
 }
 
 export default config

@@ -9,8 +9,7 @@
   "config": {
     "openapiYaml": "src/assets/api/openapi-bff.yaml",
     "openapiOutput": "src/app/shared/generated",
-    "jest.params.silent": "--silent --verbose --testResultsProcessor jest-sonar-reporter --collectCoverage --coverageReporters=json --coverageReporters=text --coverageReporters=lcov --coverageReporters=text-summary",
-    "jest.params": "--silent --noStackTrace"
+    "jest.params": "--noStackTrace --codeCoverage"
   },
   "scripts": {
     "build": "nx build",
@@ -24,7 +23,7 @@
     "prepare": "husky || true",
     "start": "nx serve --configuration=development --proxy-config=proxy.conf.js",
     "test": "nx test $npm_package_config_jest_params",
-    "test:ci": "nx test --watch=false --browsers=ChromeHeadless --code-coverage",
+    "test:ci": "nx test $npm_package_config_jest_params --watch=false",
     "sonar": "npx sonar-scanner",
     "apigen-cleanup": "rm -rf $npm_package_config_openapiOutput",
     "apigen-format": "npx prettier $npm_package_config_openapiYaml --write && npx prettier $npm_package_config_openapiOutput/**/* --write",
@@ -58,8 +57,7 @@
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/setup-jest.ts"
-    ],
-    "testResultsProcessor": "jest-sonar-reporter"
+    ]
   },
   "jestSonar": {
     "reportPath": "reports"

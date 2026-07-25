@@ -5,17 +5,21 @@ import { concatLatestFrom } from '@ngrx/operators'
 import { routerNavigatedAction } from '@ngrx/router-store'
 import { Action, Store } from '@ngrx/store'
 import { filterForNavigatedTo } from '@onecx/ngrx-accelerator'
+import equal from 'fast-deep-equal'
+import { catchError, forkJoin, map, mergeMap, of, switchMap, tap } from 'rxjs'
+
+import { PrimeIcons } from 'primeng/api'
+
 import {
   DialogState,
   ExportDataService,
   PortalMessageService,
   PortalDialogService
 } from '@onecx/portal-integration-angular'
-import equal from 'fast-deep-equal'
-import { PrimeIcons } from 'primeng/api'
-import { catchError, forkJoin, map, mergeMap, of, switchMap, tap } from 'rxjs'
+
 import { selectUrl } from 'src/app/shared/selectors/router.selectors'
 import { DocumentControllerAPIService, DocumentTypeControllerAPIService } from 'src/app/shared/generated'
+
 import { DocumentSearchActions } from './document-search.actions'
 import { DocumentSearchComponent } from './document-search.component'
 import { documentSearchCriteriasSchema } from './document-search.parameters'
@@ -39,10 +43,13 @@ export class DocumentSearchEffects {
     () => {
       return this.actions$.pipe(
         ofType(DocumentSearchActions.searchButtonClicked, DocumentSearchActions.resetButtonClicked),
+        tap((action) => console.log('LOG: Action ist im Effekt angekommen!', action)),
         concatLatestFrom(() => [this.store.select(documentSearchSelectors.selectCriteria), this.route.queryParams]),
         tap(([, criteria, queryParams]) => {
+          console.log('LOG 1: Ich bin IM tap- Block angekommen!', criteria, queryParams)
           const results = documentSearchCriteriasSchema.safeParse(queryParams)
           if (!results.success || !equal(criteria, results.data)) {
+            console.log('LOG 2: Ich habe die IF-Bedingung BESTANDEN!')
             const params = {
               ...criteria
             }

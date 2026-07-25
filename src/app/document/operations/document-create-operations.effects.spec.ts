@@ -6,7 +6,7 @@ import { Action, Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { AppStateService } from '@onecx/angular-integration-interface'
 import { provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { of, ReplaySubject, throwError } from 'rxjs'
+import { firstValueFrom, of, ReplaySubject, throwError } from 'rxjs'
 import { take } from 'rxjs/operators'
 import {
   DocumentControllerAPIService,
@@ -466,24 +466,23 @@ describe('DocumentCreateOperationsEffects', () => {
       )
     })
 
-    it('should call createFailedAttachmentsAuditLogs when there are failed IDs', (done) => {
+    it('should call createFailedAttachmentsAuditLogs when there are failed IDs', async () => {
       documentService.updateAttachmentsMetadata.mockReturnValue(of(null as any))
       documentService.createFailedAttachmentsAuditLogs.mockReturnValue(of(null as any))
+      const criteria = {
+        documentId: 'doc-1',
+        successfulIds: ['att-1'],
+        failedIds: ['att-fail']
+      }
+      const effectPromise = firstValueFrom(effects.allAttachmentsUploaded$.pipe(take(1)))
+      actions$.next(DocumentCreateOperationsActions.allAttachmentsUploaded(criteria))
 
-      effects.allAttachmentsUploaded$.pipe(take(1)).subscribe(() => {
-        expect(documentService.createFailedAttachmentsAuditLogs).toHaveBeenCalledWith('doc-1', [
-          { attachmentId: 'att-fail' }
-        ])
-        done()
+      await effectPromise
+
+      expect(documentService.createFailedAttachmentsAuditLogs).toHaveBeenCalledWith({
+        documentId: 'doc-1',
+        updateFileMetadataRequest: [{ attachmentId: 'att-fail' }]
       })
-
-      actions$.next(
-        DocumentCreateOperationsActions.allAttachmentsUploaded({
-          documentId: 'doc-1',
-          successfulIds: ['att-1'],
-          failedIds: ['att-fail']
-        })
-      )
     })
 
     it('should skip metadata update when no successful IDs and dispatch completed', (done) => {
