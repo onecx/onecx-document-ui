@@ -223,7 +223,7 @@ describe('DocumentSearchComponent', () => {
     await overflowActionButton?.click()
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems()
-    expect(overflowMenuItems.length).toBe(2)
+    expect(overflowMenuItems).toHaveLength(2)
 
     const exportAllActionItem = await pageHeader.getOverFlowMenuItem('Export all')
     expect(await exportAllActionItem!.getText()).toBe('Export all')
@@ -277,7 +277,7 @@ describe('DocumentSearchComponent', () => {
     await columnGroupSelector!.openCustomGroupColumnSelectorDialog()
     const pickList = await columnGroupSelector!.getPicklist()
     const transferControlButtons = await pickList.getTransferControlsButtons()
-    expect(transferControlButtons.length).toBe(4)
+    expect(transferControlButtons).toHaveLength(4)
 
     // Currently, all columns are selected. Next, we are unselecting all to have a clean test setting.
     const deactivateAllColumnsButton = transferControlButtons[1]
@@ -443,7 +443,7 @@ describe('DocumentSearchComponent', () => {
   describe('buildHeaderActions', () => {
     it('should emit 4 header actions: quickUpload, createNewDocument, exportAll', (done) => {
       component.headerActions$.subscribe((actions) => {
-        expect(actions.length).toBe(4)
+        expect(actions).toHaveLength(4)
         done()
       })
     })
