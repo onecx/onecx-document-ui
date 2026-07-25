@@ -43,13 +43,10 @@ export class DocumentSearchEffects {
     () => {
       return this.actions$.pipe(
         ofType(DocumentSearchActions.searchButtonClicked, DocumentSearchActions.resetButtonClicked),
-        tap((action) => console.log('LOG: Action ist im Effekt angekommen!', action)),
         concatLatestFrom(() => [this.store.select(documentSearchSelectors.selectCriteria), this.route.queryParams]),
         tap(([, criteria, queryParams]) => {
-          console.log('LOG 1: Ich bin IM tap- Block angekommen!', criteria, queryParams)
           const results = documentSearchCriteriasSchema.safeParse(queryParams)
           if (!results.success || !equal(criteria, results.data)) {
-            console.log('LOG 2: Ich habe die IF-Bedingung BESTANDEN!')
             const params = {
               ...criteria
             }

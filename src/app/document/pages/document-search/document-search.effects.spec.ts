@@ -29,6 +29,14 @@ jest.mock('@onecx/ngrx-accelerator', () => {
   }
 })
 
+// fast-deep-equal uses `module.exports = fn` (CJS). Without esModuleInterop,
+// TypeScript compiles `import equal from 'fast-deep-equal'` to `.default`, which
+// would be undefined. This mock provides the expected ESM-style default export.
+jest.mock('fast-deep-equal', () => {
+  const actual = jest.requireActual<(a: unknown, b: unknown) => boolean>('fast-deep-equal')
+  return { __esModule: true, default: actual }
+})
+
 describe('DocumentSearchEffects', () => {
   let actions$: ReplaySubject<Action>
   let effects: DocumentSearchEffects
@@ -122,59 +130,55 @@ describe('DocumentSearchEffects', () => {
     )
   })
 
-  /* failed-test-case 
-  describe("syncParamsToUrl$", () => {
+  describe('syncParamsToUrl$', () => {
     beforeEach(() => {
-      store.overrideSelector(
-        documentSearchSelectors.selectCriteria,
-        mockCriteria,
-      );
-      store.refreshState();
-    });
+      store.overrideSelector(documentSearchSelectors.selectCriteria, mockCriteria)
+      store.refreshState()
+    })
 
-    it("should navigate to update URL when criteria differs from query params", (done) => {
-      const navigateSpy = jest.spyOn(router, "navigate");
-      route.queryParams = of({ different: "yes" }) as any;
+    it('should navigate when criteria differs from query params on searchButtonClicked', (done) => {
+      route.queryParams = of({ name: 'different' }) as any
 
       effects.syncParamsToUrl$.pipe(take(1)).subscribe(() => {
-        expect(navigateSpy).toHaveBeenCalled();
-        done();
-      });
+        expect(router.navigate).toHaveBeenCalledWith([], {
+          relativeTo: route,
+          queryParams: mockCriteria,
+          replaceUrl: true,
+          onSameUrlNavigation: 'ignore'
+        })
+        done()
+      })
 
-      actions$.next(
-        DocumentSearchActions.searchButtonClicked({
-          searchCriteria: mockCriteria,
-        }),
-      );
-    });
+      actions$.next(DocumentSearchActions.searchButtonClicked({ searchCriteria: mockCriteria }))
+    })
 
-    it('should not navigate when criteria matches query params', async () => {
-      const navigateSpy = jest.spyOn(router, 'navigate')
+    it('should not navigate when criteria matches query params on searchButtonClicked', (done) => {
       route.queryParams = of(mockCriteria as any) as any
 
-      const effectPromise = firstValueFrom(effects.syncParamsToUrl$.pipe(take(1)))
-      actions$.next(DocumentSearchActions.searchButtonClicked({ searchCriteria: { name: 'abc' } }))
+      effects.syncParamsToUrl$.pipe(take(1)).subscribe(() => {
+        expect(router.navigate).not.toHaveBeenCalled()
+        done()
+      })
 
-      await effectPromise
-
-      expect(navigateSpy).not.toHaveBeenCalled()
+      actions$.next(DocumentSearchActions.searchButtonClicked({ searchCriteria: mockCriteria }))
     })
 
-    it('should navigate when resetButtonClicked action is triggered', () => {
-      const navigateSpy = jest.spyOn(router, 'navigate')
-      const subscription = effects.syncParamsToUrl$.subscribe()
-      queryParamsSubject.next({ name: '1' })
-      store.overrideSelector(documentSearchSelectors.selectCriteria, { name: '2' })
-      store.refreshState()
+    it('should navigate when criteria differs from query params on resetButtonClicked', (done) => {
+      route.queryParams = of({ name: 'old' }) as any
+
+      effects.syncParamsToUrl$.pipe(take(1)).subscribe(() => {
+        expect(router.navigate).toHaveBeenCalledWith([], {
+          relativeTo: route,
+          queryParams: mockCriteria,
+          replaceUrl: true,
+          onSameUrlNavigation: 'ignore'
+        })
+        done()
+      })
 
       actions$.next(DocumentSearchActions.resetButtonClicked())
-
-      expect(navigateSpy).toHaveBeenCalled()
-
-      subscription.unsubscribe()
     })
-  });
-  */
+  })
 
   describe('searchByUrl$', () => {
     it('should dispatch loadAvailableCriteriaOptionsAndSearch when criteria options are not loaded', (done) => {
