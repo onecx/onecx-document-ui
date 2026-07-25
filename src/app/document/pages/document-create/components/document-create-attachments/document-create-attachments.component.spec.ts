@@ -31,7 +31,7 @@ describe('DocumentCreateAttachmentsComponent', () => {
 
       component.ngOnInit()
 
-      expect(component.attachmentForms.length).toBe(1)
+      expect(component.attachmentForms).toHaveLength(1)
       expect(component.attachmentForms.at(0).controls.name.value).toBe('doc.pdf')
     })
 
@@ -63,7 +63,7 @@ describe('DocumentCreateAttachmentsComponent', () => {
 
       component.onFileSelected(file)
 
-      expect(component.attachmentForms.length).toBe(1)
+      expect(component.attachmentForms).toHaveLength(1)
       expect(component.files).toHaveLength(1)
       expect(component.attachmentForms.at(0).controls.mimeType.value).toBe('image/png')
     })
@@ -78,7 +78,7 @@ describe('DocumentCreateAttachmentsComponent', () => {
       component.onFileSelected(file)
 
       expect(emitted).toEqual(['virus.exe'])
-      expect(component.attachmentForms.length).toBe(0)
+      expect(component.attachmentForms).toHaveLength(0)
     })
 
     it('should update selectedIndex to last added attachment', () => {
@@ -100,7 +100,7 @@ describe('DocumentCreateAttachmentsComponent', () => {
     it('should remove form entry and file at given index', () => {
       component.removeAttachment(0)
 
-      expect(component.attachmentForms.length).toBe(1)
+      expect(component.attachmentForms).toHaveLength(1)
       expect(component.files).toHaveLength(1)
       expect(component.files[0].name).toBe('b.png')
     })

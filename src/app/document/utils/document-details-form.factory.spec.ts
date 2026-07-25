@@ -60,8 +60,8 @@ describe('document-details-form.factory', () => {
       const form = createDocumentDetailsForm()
       expect(form.contains('attachments')).toBe(true)
       expect(form.contains('characteristics')).toBe(true)
-      expect(form.controls.attachments.length).toBe(0)
-      expect(form.controls.characteristics.length).toBe(0)
+      expect(form.controls.attachments).toHaveLength(0)
+      expect(form.controls.characteristics).toHaveLength(0)
     })
   })
 
@@ -113,7 +113,7 @@ describe('document-details-form.factory', () => {
 
       patchDocumentDetailsForm(form, details)
 
-      expect(form.controls.attachments.length).toBe(1)
+      expect(form.controls.attachments).toHaveLength(1)
       expect(form.controls.attachments.at(0).get('id')!.value).toBe('a1')
     })
 
@@ -126,7 +126,7 @@ describe('document-details-form.factory', () => {
 
       patchDocumentDetailsForm(form, details)
 
-      expect(form.controls.characteristics.length).toBe(1)
+      expect(form.controls.characteristics).toHaveLength(1)
       expect(form.controls.characteristics.at(0).get('name')!.value).toBe('color')
     })
 
@@ -145,17 +145,17 @@ describe('document-details-form.factory', () => {
       ] as any
 
       setAttachmentsOnForm(form, attachments)
-      expect(form.controls.attachments.length).toBe(2)
+      expect(form.controls.attachments).toHaveLength(2)
 
       setAttachmentsOnForm(form, [attachments[0]])
-      expect(form.controls.attachments.length).toBe(1)
+      expect(form.controls.attachments).toHaveLength(1)
     })
 
     it('should clear attachments when empty array passed', () => {
       const form = createDocumentDetailsForm()
       setAttachmentsOnForm(form, [{ id: 'a1' }] as any)
       setAttachmentsOnForm(form, [])
-      expect(form.controls.attachments.length).toBe(0)
+      expect(form.controls.attachments).toHaveLength(0)
     })
   })
 
@@ -165,10 +165,10 @@ describe('document-details-form.factory', () => {
       const chars = [{ id: 'c1', name: 'color', value: 'red' }] as any
 
       setCharacteristicsOnForm(form, chars)
-      expect(form.controls.characteristics.length).toBe(1)
+      expect(form.controls.characteristics).toHaveLength(1)
 
       setCharacteristicsOnForm(form, [])
-      expect(form.controls.characteristics.length).toBe(0)
+      expect(form.controls.characteristics).toHaveLength(0)
     })
   })
 
@@ -178,7 +178,7 @@ describe('document-details-form.factory', () => {
 
       addCharacteristic(form)
 
-      expect(form.controls.characteristics.length).toBe(1)
+      expect(form.controls.characteristics).toHaveLength(1)
       expect(form.controls.characteristics.at(0).get('name')!.value).toBeNull()
     })
   })
@@ -193,7 +193,7 @@ describe('document-details-form.factory', () => {
 
       removeCharacteristic(form, 0)
 
-      expect(form.controls.characteristics.length).toBe(1)
+      expect(form.controls.characteristics).toHaveLength(1)
       expect(form.controls.characteristics.at(0).get('name')!.value).toBe('size')
     })
   })

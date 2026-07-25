@@ -16,7 +16,7 @@ describe('DocumentCreateCharacteristicsComponent', () => {
 
       component.ngOnInit()
 
-      expect(component.characteristicsForm.length).toBe(2)
+      expect(component.characteristicsForm).toHaveLength(2)
       expect(component.characteristicsForm.at(0).controls.name.value).toBe('color')
       expect(component.characteristicsForm.at(1).controls.value.value).toBe('large')
     })
@@ -24,7 +24,7 @@ describe('DocumentCreateCharacteristicsComponent', () => {
     it('should initialize empty form when characteristics input is empty', () => {
       component.characteristics = []
       component.ngOnInit()
-      expect(component.characteristicsForm.length).toBe(0)
+      expect(component.characteristicsForm).toHaveLength(0)
     })
 
     it('should use undefined for null id, name, and value in characteristic form group', () => {
@@ -54,7 +54,7 @@ describe('DocumentCreateCharacteristicsComponent', () => {
       component.ngOnInit()
       component.onAddCharacteristic()
 
-      expect(component.characteristicsForm.length).toBe(1)
+      expect(component.characteristicsForm).toHaveLength(1)
       expect(component.characteristicsForm.at(0).controls.name.value).toBeNull()
     })
   })
@@ -69,7 +69,7 @@ describe('DocumentCreateCharacteristicsComponent', () => {
 
       component.onRemoveCharacteristic(0)
 
-      expect(component.characteristicsForm.length).toBe(1)
+      expect(component.characteristicsForm).toHaveLength(1)
       expect(component.characteristicsForm.at(0).controls.name.value).toBe('size')
     })
   })

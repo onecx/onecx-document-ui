@@ -88,7 +88,7 @@ describe('DocumentQuickUploadFormComponent', () => {
 
     component.onFilesSelected([file])
 
-    expect(component.attachmentArray.length).toBe(1)
+    expect(component.attachmentArray).toHaveLength(1)
     expect(component.attachmentArray[0].mimeType).toBe('mime-1')
     expect(component.attachmentArray[0].isValid).toBe(true)
   })
@@ -217,7 +217,7 @@ describe('DocumentQuickUploadFormComponent', () => {
 
     component.onFilesSelected([file])
 
-    expect(component.attachmentArray.length).toBe(1)
+    expect(component.attachmentArray).toHaveLength(1)
   })
 
   it('should treat file as invalid when fileData.size is undefined (null-coalesces to 0)', () => {

@@ -186,9 +186,9 @@ describe('DocumentDetailsComponent', () => {
     const initialLength = arr.length
     component.onCharacteristicAdd()
     component.onCharacteristicAdd()
-    expect(arr.length).toBe(initialLength + 2)
+    expect(arr).toHaveLength(initialLength + 2)
     component.onCharacteristicRemove(0)
-    expect(arr.length).toBe(initialLength + 1)
+    expect(arr).toHaveLength(initialLength + 1)
   })
 
   it('should add a characteristic row when onCharacteristicAdd is called', () => {
@@ -200,7 +200,7 @@ describe('DocumentDetailsComponent', () => {
     const arr = component.characteristicsFormArray
     const before = arr.length
     component.onCharacteristicAdd()
-    expect(arr.length).toBe(before + 1)
+    expect(arr).toHaveLength(before + 1)
   })
 
   it('should expose attachmentsFormArray from the form group', () => {
@@ -209,7 +209,7 @@ describe('DocumentDetailsComponent', () => {
 
   it('should build 5 header actions covering back, edit, cancel, save and delete', (done) => {
     component.headerActions$.subscribe((actions) => {
-      expect(actions.length).toBe(5)
+      expect(actions).toHaveLength(5)
       const labelKeys = actions.map((a) => a.labelKey)
       expect(labelKeys).toContain('DOCUMENT_DETAILS.GENERAL.BACK')
       expect(labelKeys).toContain('DOCUMENT_DETAILS.GENERAL.EDIT')
