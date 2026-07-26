@@ -82,6 +82,6 @@ export class OneCXDocumentModule implements DoBootstrap {
   constructor(private readonly injector: Injector) {}
 
   ngDoBootstrap(): void {
-    createAppEntrypoint(AppEntrypointComponent, 'onecx-document-ui-webcomponent', this.injector)
+    createAppEntrypoint(AppEntrypointComponent, 'ocx-document-component', this.injector)
   }
 }

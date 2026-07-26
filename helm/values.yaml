@@ -16,7 +16,7 @@ app:
           type: MODULE
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-document
-          tagName: onecx-document-component
+          tagName: ocx-document-component
           endpoints:
             - name: Document search
               path: /document
