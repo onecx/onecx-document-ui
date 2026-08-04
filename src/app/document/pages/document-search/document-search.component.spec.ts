@@ -12,9 +12,9 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { CalendarModule } from 'primeng/calendar'
+import { DatePickerModule } from 'primeng/datepicker'
 import { DialogService } from 'primeng/dynamicdialog'
-import { DropdownModule } from 'primeng/dropdown'
+import { SelectModule } from 'primeng/select'
 import { InputTextModule } from 'primeng/inputtext'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { TooltipModule } from 'primeng/tooltip'
@@ -123,8 +123,8 @@ describe('DocumentSearchComponent', () => {
           require('./../../../../assets/i18n/de.json')
         ),
         NoopAnimationsModule,
-        CalendarModule,
-        DropdownModule,
+        DatePickerModule,
+        SelectModule,
         InputTextModule,
         MultiSelectModule,
         TooltipModule

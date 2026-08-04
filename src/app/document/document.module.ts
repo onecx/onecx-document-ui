@@ -12,8 +12,8 @@ import { TranslateModule } from '@ngx-translate/core'
 import { addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 import { PortalCoreModule, providePortalDialogService } from '@onecx/portal-integration-angular'
 import { ButtonModule } from 'primeng/button'
-import { CalendarModule } from 'primeng/calendar'
-import { DropdownModule } from 'primeng/dropdown'
+import { DatePickerModule } from 'primeng/datepicker'
+import { SelectModule } from 'primeng/select'
 import { InputTextModule } from 'primeng/inputtext'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { StepsModule } from 'primeng/steps'
@@ -73,8 +73,8 @@ import { DocumentTypeSearchEffects } from './pages/document-type-search/document
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
-    CalendarModule,
-    DropdownModule,
+    DatePickerModule,
+    SelectModule,
     InputTextModule,
     MultiSelectModule,
     StepsModule,

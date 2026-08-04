@@ -18,7 +18,7 @@ import { documentQuickUploadSelectors } from './document-quick-upload.selectors'
 import { DocumentQuickUploadComponent } from './document-quick-upload.component'
 import { initialState } from './document-quick-upload.reducers'
 import { PrimeIcons } from 'primeng/api'
-import { DropdownModule } from 'primeng/dropdown'
+import { SelectModule } from 'primeng/select'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 
 describe('DocumentQuickUploadComponent', () => {
@@ -36,7 +36,7 @@ describe('DocumentQuickUploadComponent', () => {
         PortalCoreModule,
         LetDirective,
         ReactiveFormsModule,
-        DropdownModule,
+        SelectModule,
         InteractiveDataViewComponent,
         StoreModule.forRoot({}),
         TranslateTestingModule.withTranslations('en', require('../../../../assets/i18n/en.json')),

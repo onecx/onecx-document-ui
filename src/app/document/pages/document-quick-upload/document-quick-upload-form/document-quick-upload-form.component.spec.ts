@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { DropdownModule } from 'primeng/dropdown'
+import { SelectModule } from 'primeng/select'
 
 import { FileUploadComponent } from 'src/app/document/components/file-upload/file-upload.component'
 import { DocumentQuickUploadFormComponent } from './document-quick-upload-form.component'
@@ -14,7 +14,7 @@ describe('DocumentQuickUploadFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DocumentQuickUploadFormComponent, FileUploadComponent],
-      imports: [ReactiveFormsModule, DropdownModule, TranslateTestingModule.withTranslations('en', {})]
+      imports: [ReactiveFormsModule, SelectModule, TranslateTestingModule.withTranslations('en', {})]
     }).compileComponents()
 
     fixture = TestBed.createComponent(DocumentQuickUploadFormComponent)

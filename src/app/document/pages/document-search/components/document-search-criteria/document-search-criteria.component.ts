@@ -1,14 +1,14 @@
 import { Component, Input, QueryList, ViewChildren } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
-import { Calendar } from 'primeng/calendar'
+import { DatePickerModule } from 'primeng/datepicker'
 
 @Component({
   selector: 'app-document-search-criteria',
   templateUrl: './document-search-criteria.component.html'
 })
 export class DocumentSearchCriteriaComponent {
-  @ViewChildren(Calendar) calendars!: QueryList<Calendar>
+  @ViewChildren(DatePickerModule) calendars!: QueryList<DatePickerModule>
 
   @Input() formGroup!: FormGroup
   @Input() viewMode: string | null = 'basic'

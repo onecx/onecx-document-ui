@@ -19,14 +19,14 @@
       </div>
       <div class="col-6">
         <span class="p-float-label" controlErrorAnchor>
-          <p-dropdown
+          <p-select
             id="typeId"
             [options]="documentTypes"
             appendTo="body"
             [autoDisplayFirst]="false"
             [showClear]="true"
             formControlName="typeId"
-          ></p-dropdown>
+          ></p-select>
           <label for="typeId" class="required">{{
             'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_TYPE' | translate
           }}</label>
@@ -51,14 +51,14 @@
       </div>
       <div class="col-6 mt-2">
         <span class="p-float-label" controlErrorAnchor>
-          <p-dropdown
+          <p-select
             id="status"
             [options]="documentStatus"
             appendTo="body"
             [autoDisplayFirst]="false"
             [showClear]="true"
             formControlName="lifeCycleState"
-          ></p-dropdown>
+          ></p-select>
           <label for="status">{{ 'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_STATUS' | translate }}</label>
         </span>
       </div>

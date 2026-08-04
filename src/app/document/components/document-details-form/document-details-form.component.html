@@ -27,7 +27,7 @@
 
   <div class="col-12 md:col-6 xl:col-3">
     <span class="p-float-label" controlErrorAnchor>
-      <p-dropdown
+      <p-select
         id="type"
         class="w-full"
         [ngClass]="{
@@ -42,7 +42,7 @@
         pTooltip="{{ 'DOCUMENT_DETAILS.FORM.TYPE.TOOLTIP' | translate }}"
         tooltipPosition="top"
         [attr.aria-label]="'DOCUMENT_DETAILS.FORM.TYPE.ARIA-LABEL' | translate"
-      ></p-dropdown>
+      ></p-select>
       <label for="type" class="required">{{ 'DOCUMENT_DETAILS.FORM.TYPE.LABEL' | translate }}</label>
     </span>
   </div>
@@ -84,7 +84,7 @@
 
   <div class="col-12 md:col-6 xl:col-3">
     <span class="p-float-label" controlErrorAnchor>
-      <p-dropdown
+      <p-select
         id="status"
         class="w-full"
         formControlName="status"
@@ -99,7 +99,7 @@
         pTooltip="{{ 'DOCUMENT_DETAILS.FORM.STATUS.TOOLTIP' | translate }}"
         tooltipPosition="top"
         [attr.aria-label]="'DOCUMENT_DETAILS.FORM.STATUS.ARIA-LABEL' | translate"
-      ></p-dropdown>
+      ></p-select>
       <label for="status" class="required">{{ 'DOCUMENT_DETAILS.FORM.STATUS.LABEL' | translate }}</label>
     </span>
   </div>

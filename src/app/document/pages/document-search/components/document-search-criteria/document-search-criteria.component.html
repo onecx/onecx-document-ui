@@ -36,7 +36,7 @@
   </div>
   <div [class]="'col-12 ' + (viewMode === 'basic' ? 'md:col-4' : 'md:col-3')">
     <span class="p-float-label">
-      <p-dropdown
+      <p-select
         inputId="channelName"
         formControlName="channelName"
         [options]="availableChannels"
@@ -46,7 +46,7 @@
         tooltipEvent="hover"
         appendTo="body"
         [attr.aria-label]="'DOCUMENT_SEARCH.CRITERIA.CHANNEL_NAME.ARIA-LABEL' | translate"
-      ></p-dropdown>
+      ></p-select>
       <label for="channelName" style="white-space: nowrap">
         {{ 'DOCUMENT_SEARCH.CRITERIA.CHANNEL_NAME.LABEL' | translate }}
       </label>
@@ -91,7 +91,7 @@
     </div>
     <div class="col-12 md:col-3">
       <span class="p-float-label">
-        <p-calendar
+        <p-datepicker
           inputId="startDate"
           formControlName="startDate"
           styleClass="w-full"
@@ -102,7 +102,7 @@
           tooltipPosition="top"
           tooltipEvent="hover"
           [attr.aria-label]="'DOCUMENT_SEARCH.CRITERIA.START_DATE.ARIA-LABEL' | translate"
-        ></p-calendar>
+        ></p-datepicker>
         <label for="startDate" style="white-space: nowrap">
           {{ 'DOCUMENT_SEARCH.CRITERIA.START_DATE.LABEL' | translate }}
         </label>
@@ -110,7 +110,7 @@
     </div>
     <div class="col-12 md:col-3">
       <span class="p-float-label">
-        <p-calendar
+        <p-datepicker
           inputId="endDate"
           formControlName="endDate"
           styleClass="w-full"
@@ -121,7 +121,7 @@
           tooltipPosition="top"
           tooltipEvent="hover"
           [attr.aria-label]="'DOCUMENT_SEARCH.CRITERIA.END_DATE.ARIA-LABEL' | translate"
-        ></p-calendar>
+        ></p-datepicker>
         <label for="endDate" style="white-space: nowrap">
           {{ 'DOCUMENT_SEARCH.CRITERIA.END_DATE.LABEL' | translate }}
         </label>
