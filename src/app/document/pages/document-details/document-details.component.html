@@ -15,35 +15,37 @@
       [attr.aria-label]="'DOCUMENT_DETAILS.FORM.NAME' | translate"
     >
     </ocx-page-header>
-    <ocx-page-content class="mb-4" role="main" [attr.aria-label]="'DOCUMENT_DETAILS.ARIA-LABEL' | translate">
-      <div class="surface-section mt-3 mb-1 mx-3">
-        <app-document-details-form [formGroup]="formGroup" [availableTypes]="(documentTypes$ | async) || []">
-        </app-document-details-form>
-      </div>
-    </ocx-page-content>
-    <ocx-page-content>
-      <div class="card p-4">
-        <p-tabView>
-          <p-tabPanel [header]="'DOCUMENT_DETAILS.SECTIONS.ATTACHMENTS' | translate">
-            <app-document-details-attachment-list
-              [attachments]="attachmentsFormArray"
-              [editMode]="vm.editMode"
-              (download)="onAttachmentDownload($event)"
-              (retryUpload)="onFileUploadRetry($event)"
-            >
-            </app-document-details-attachment-list>
-          </p-tabPanel>
-          <p-tabPanel [header]="'DOCUMENT_DETAILS.SECTIONS.CHARACTERISTICS' | translate">
-            <app-document-details-characteristics
-              [characteristics]="characteristicsFormArray"
-              [editMode]="vm.editMode"
-              (characteristicRemoved)="onCharacteristicRemove($event)"
-              (characteristicAdded)="onCharacteristicAdd()"
-            >
-            </app-document-details-characteristics>
-          </p-tabPanel>
-        </p-tabView>
-      </div>
-    </ocx-page-content>
+    <ocx-content-container>
+      <ocx-content class="mb-4" role="main" [attr.aria-label]="'DOCUMENT_DETAILS.ARIA-LABEL' | translate">
+        <div class="surface-section mt-3 mb-1 mx-3">
+          <app-document-details-form [formGroup]="formGroup" [availableTypes]="(documentTypes$ | async) || []">
+          </app-document-details-form>
+        </div>
+      </ocx-content>
+      <ocx-content>
+        <div class="card p-4">
+          <p-tabView>
+            <p-tabPanel [header]="'DOCUMENT_DETAILS.SECTIONS.ATTACHMENTS' | translate">
+              <app-document-details-attachment-list
+                [attachments]="attachmentsFormArray"
+                [editMode]="vm.editMode"
+                (download)="onAttachmentDownload($event)"
+                (retryUpload)="onFileUploadRetry($event)"
+              >
+              </app-document-details-attachment-list>
+            </p-tabPanel>
+            <p-tabPanel [header]="'DOCUMENT_DETAILS.SECTIONS.CHARACTERISTICS' | translate">
+              <app-document-details-characteristics
+                [characteristics]="characteristicsFormArray"
+                [editMode]="vm.editMode"
+                (characteristicRemoved)="onCharacteristicRemove($event)"
+                (characteristicAdded)="onCharacteristicAdd()"
+              >
+              </app-document-details-characteristics>
+            </p-tabPanel>
+          </p-tabView>
+        </div>
+      </ocx-content>
+    </ocx-content-container>
   </div>
 </ocx-portal-page>

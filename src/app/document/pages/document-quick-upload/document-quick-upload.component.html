@@ -44,31 +44,22 @@
   </ocx-page-header>
   <div class="card mt-2 p-0" *ngIf="attachmentArray.length">
     <div class="p-3 border-bottom-1 surface-border">
-      <ocx-data-view-controls
-        [supportedViews]="['list', 'grid']"
-        [initialViewMode]="'grid'"
-        [enableFiltering]="false"
-        (sortDirectionChange)="onSortOrderChange($event)"
-        (sortChange)="onSortFieldChange($event)"
-        (dataViewChange)="updateAttachmentsLayout($event)"
-      ></ocx-data-view-controls>
-    </div>
-    <div>
-      <p-dataView
+      <ocx-interactive-data-view
         #dv
         *ngIf="attachmentArray.length"
-        [layout]="layout"
-        [sortField]="sortField"
-        [sortOrder]="sortOrder"
-        [value]="attachmentArray"
-        emptyMessage="{{ 'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.NO_DATA' | translate }}"
-        [paginator]="isPaginatorVisible"
-        [rows]="rowsPerPage"
-        [rowsPerPageOptions]="rowsPerPageOptions"
+        [data]="attachments"
+        [pageSize]="rowsPerPage"
+        [pageSizes]="rowsPerPageOptions"
+        [supportedViewLayouts]="['list', 'grid']"
+        [layout]="'grid'"
+        [clientSideFiltering]="false"
+        [emptyResultsMessage]="'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.NO_DATA' | translate"
+        (sorted)="onSorted($event)"
+        (dataViewLayoutChange)="updateAttachmentsLayout($event)"
       >
-        <ng-template pTemplate="grid" let-attachments>
+        <ng-template pTemplate="item" let-attachment let-i="index">
           <div class="grid grid-nogutter">
-            <div class="col-12 lg:col-4 xl:col-3 flex" *ngFor="let attachment of attachments">
+            <div class="col-12 lg:col-4 xl:col-3 flex">
               <div
                 class="card p-0 flex flex-column justify-content-between w-12 lg:w-11 mb-2 mt-2 mr-2 ml-2 align-self-stretch highlight"
               >
@@ -100,7 +91,7 @@
                       </div>
                       <div>
                         <p class="text-left font-light">
-                          {{ formatBytes(attachment.fileData.size) }}
+                          {{ formatBytes(attachment.fileData?.size) }}
                         </p>
                       </div>
                     </div>
@@ -121,9 +112,9 @@
             </div>
           </div>
         </ng-template>
-        <ng-template let-attachments pTemplate="list">
+        <ng-template pTemplate="item" let-attachment let-i="index">
           <div class="grid grid-nogutter">
-            <div class="col-12 highlight" *ngFor="let attachment of attachments">
+            <div class="col-12 highlight">
               <div class="align-items-center p-3 w-full gap-8">
                 <div class="flex-1">
                   <div class="attachment-name-row list-item">
@@ -141,7 +132,7 @@
                       >
                         {{ attachment.name }}
                       </div>
-                      <div class="font-light mt-3" *ngIf="attachment.fileData.size">
+                      <div class="font-light mt-3" *ngIf="attachment.fileData?.size">
                         {{ formatBytes(attachment.fileData.size) }}
                       </div>
                     </div>
@@ -161,7 +152,7 @@
                         icon="pi pi-trash"
                         class="p-button-rounded p-button-text mb-1 mr-2"
                         pButton
-                        (click)="isSubmitted ? null : onDeleteUploadFile(attachment)"
+                        (click)="isSubmitted ? null : onDeleteUploadFile(attachment.id)"
                       >
                         {{ 'GENERAL.REMOVE' | translate }}
                       </button>
@@ -172,7 +163,7 @@
             </div>
           </div>
         </ng-template>
-      </p-dataView>
+      </ocx-interactive-data-view>
     </div>
   </div>
 </ocx-portal-page>

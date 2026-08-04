@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PrimeIcons, SelectItem } from 'primeng/api'
+import { DataSortDirection, RowListGridData } from '@onecx/angular-accelerator'
 import { Observable, Subscription } from 'rxjs'
 import { BreadcrumbService, PrimeIcon } from '@onecx/portal-integration-angular'
 import { AttachmentCreateUpdate, DocumentCreateUpdate } from 'src/app/shared/generated'
@@ -38,7 +39,7 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   sortOrderType: SortOrder = SortOrder.DESCENDING
   attachmentArray: AttachmentData[] = []
   sortField = ''
-  layout: 'list' | 'grid' = 'grid'
+  layout: 'list' | 'grid' | 'table' = 'grid'
 
   private readonly subs = new Subscription()
   readonly formatBytes = formatBytes
@@ -82,7 +83,7 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   /**
    * Tracks the updated value of view layout
    */
-  updateAttachmentsLayout(layout: 'list' | 'grid'): void {
+  updateAttachmentsLayout(layout: 'list' | 'grid' | 'table'): void {
     this.layout = layout
   }
   /**
@@ -109,19 +110,15 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Add the sort type
+   * Add the sort type and sort field
    */
-  onSortOrderChange(sortOrder: boolean) {
-    this.sortOrderType = sortOrder === true ? SortOrder.ASCENDING : SortOrder.DESCENDING
+  onSorted(event: { sortColumn: string; sortDirection: DataSortDirection }) {
+    this.sortField = event.sortColumn
+    this.sortOrderType =
+      event.sortDirection === DataSortDirection.ASCENDING ? SortOrder.ASCENDING : SortOrder.DESCENDING
     this.updateSorting()
   }
-  /**
-   * Add sort field
-   */
-  onSortFieldChange(sortField: string) {
-    this.sortField = sortField
-    this.updateSorting()
-  }
+
   onSave(): void {
     const createRequest: DocumentCreateUpdate = {
       name: this.documentQuickUploadForm.controls['documentName'].value,
@@ -184,13 +181,13 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
    * function to remove file from attachmentArray according to array index
    * @param index index of current file
    */
-  onDeleteUploadFile(attachment: AttachmentData) {
+  onDeleteUploadFile(attachment: AttachmentData | RowListGridData) {
     this.attachmentArray = this.attachmentArray.filter((obj) => obj != attachment)
     this.validateAttachmentArray()
   }
 
-  getAttachmentIcon(attachment: AttachmentData): PrimeIcon {
-    const fileTypeData = attachment?.fileData ? attachment.fileData.type : ''
+  getAttachmentIcon(attachment: AttachmentData | RowListGridData): PrimeIcon {
+    const fileTypeData = (attachment as any)?.fileData ? (attachment as any).fileData.type : ''
 
     if (fileTypeData) {
       const fileType = fileTypeData.split('/')
@@ -208,6 +205,18 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
       }
     }
     return PrimeIcons.FILE
+  }
+
+  public toInteractiveData(data: AttachmentData[]): RowListGridData[] {
+    return (data ?? []).map((item, index) => ({
+      ...item,
+      id: item.name ?? `attachment-${index}`,
+      imagePath: item.name ?? `attachment-${index}`
+    })) as RowListGridData[]
+  }
+
+  get attachments(): RowListGridData[] {
+    return this.toInteractiveData(this.attachmentArray)
   }
 
   /**

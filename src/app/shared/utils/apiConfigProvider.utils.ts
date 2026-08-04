@@ -1,4 +1,5 @@
-import { AppStateService, ConfigurationService, PortalApiConfiguration } from '@onecx/portal-integration-angular'
+import { AppStateService, ConfigurationService } from '@onecx/portal-integration-angular'
+import { PortalApiConfiguration } from '@onecx/angular-utils'
 import { environment } from 'src/environments/environment'
 import { Configuration } from '../generated'
 

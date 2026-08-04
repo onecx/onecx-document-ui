@@ -10,7 +10,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { DataViewModule } from 'primeng/dataview'
+import { InteractiveDataViewComponent } from '@onecx/angular-accelerator'
 import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions'
 import { FileUploadComponent } from '../../components/file-upload/file-upload.component'
 import { DocumentQuickUploadFormComponent } from './document-quick-upload-form/document-quick-upload-form.component'
@@ -37,7 +37,7 @@ describe('DocumentQuickUploadComponent', () => {
         LetDirective,
         ReactiveFormsModule,
         DropdownModule,
-        DataViewModule,
+        InteractiveDataViewComponent,
         StoreModule.forRoot({}),
         TranslateTestingModule.withTranslations('en', require('../../../../assets/i18n/en.json')),
         NoopAnimationsModule

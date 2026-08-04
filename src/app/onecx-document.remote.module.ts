@@ -15,9 +15,9 @@ import {
   addInitializeModuleGuard,
   AppStateService,
   ConfigurationService,
-  createTranslateLoader,
   PortalCoreModule
 } from '@onecx/portal-integration-angular'
+import { createTranslateLoader } from '@onecx/angular-utils'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { routes } from './app-routing.module'
 import { commonImports } from './app.module'
