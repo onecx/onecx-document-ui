@@ -2,7 +2,7 @@
   <div class="grid p-fluid pl-0">
     <div class="col-7 grid p-fluid mt-2">
       <div class="col-6">
-        <span class="p-float-label" controlErrorAnchor>
+        <p-float-label variant="on" controlErrorAnchor>
           <input
             id="documentName"
             pInputText
@@ -15,10 +15,10 @@
           <label for="documentName" class="required">{{
             'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_NAME' | translate
           }}</label>
-        </span>
+        </p-float-label>
       </div>
       <div class="col-6">
-        <span class="p-float-label" controlErrorAnchor>
+        <p-float-label variant="on" controlErrorAnchor>
           <p-select
             id="typeId"
             [options]="documentTypes"
@@ -30,10 +30,10 @@
           <label for="typeId" class="required">{{
             'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_TYPE' | translate
           }}</label>
-        </span>
+        </p-float-label>
       </div>
       <div class="col-6 mt-2">
-        <span class="p-float-label" controlErrorAnchor>
+        <p-float-label variant="on" controlErrorAnchor>
           <input
             id="channel"
             pInputText
@@ -47,10 +47,10 @@
           <label for="channel" class="required">{{
             'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_CHANNEL' | translate
           }}</label>
-        </span>
+        </p-float-label>
       </div>
       <div class="col-6 mt-2">
-        <span class="p-float-label" controlErrorAnchor>
+        <p-float-label variant="on" controlErrorAnchor>
           <p-select
             id="status"
             [options]="documentStatus"
@@ -60,7 +60,7 @@
             formControlName="lifeCycleState"
           ></p-select>
           <label for="status">{{ 'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_STATUS' | translate }}</label>
-        </span>
+        </p-float-label>
       </div>
     </div>
     <div class="col-5 p-fluid mt-3 pr-3">

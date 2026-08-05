@@ -44,7 +44,7 @@
     <div class="grid p-fluid">
       <!-- name: full width -->
       <div class="col-12">
-        <span class="p-float-label" controlErrorAnchor>
+        <p-float-label variant="on" controlErrorAnchor>
           <input
             pInputText
             id="attachmentName"
@@ -56,12 +56,12 @@
           <label for="attachmentName" class="required-label">
             {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.NAME.LABEL' | translate }}
           </label>
-        </span>
+        </p-float-label>
       </div>
 
       <!-- mimeType (disabled) + validity (calendar) -->
       <div class="col-6 mt-2">
-        <span class="p-float-label">
+        <p-float-label variant="on">
           <input
             pInputText
             id="mimeType"
@@ -73,11 +73,11 @@
           <label for="mimeType">
             {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.MIME_TYPE.LABEL' | translate }}
           </label>
-        </span>
+        </p-float-label>
       </div>
 
       <div class="col-6 mt-2">
-        <span class="p-float-label">
+        <p-float-label variant="on">
           <p-datepicker
             inputId="validForEnd"
             class="w-full"
@@ -89,12 +89,12 @@
           <label for="validForEnd">
             {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.VALIDITY.LABEL' | translate }}
           </label>
-        </span>
+        </p-float-label>
       </div>
 
       <!-- description: textarea -->
       <div class="col-12 mt-2">
-        <span class="p-float-label">
+        <p-float-label variant="on">
           <textarea
             pInputTextarea
             id="attachmentDescription"
@@ -105,7 +105,7 @@
           <label for="attachmentDescription">
             {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.DESCRIPTION.LABEL' | translate }}
           </label>
-        </span>
+        </p-float-label>
       </div>
 
       <!-- file upload widget -->

@@ -3,6 +3,7 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, UntypedFormGroup, Validators } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { SelectItem } from 'primeng/api'
+import { FloatLabelModule } from 'primeng/floatlabel'
 import { SelectModule } from 'primeng/select'
 import { FileUploadComponent } from 'src/app/document/components/file-upload/file-upload.component'
 import { AttachmentData } from 'src/app/document/types/document-create.types'
@@ -11,7 +12,7 @@ import { LifeCycleState } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-document-quick-upload-form',
-  imports: [TranslateModule, SelectModule, ReactiveFormsModule, FileUploadComponent],
+  imports: [TranslateModule, SelectModule, ReactiveFormsModule, FileUploadComponent, FloatLabelModule],
   templateUrl: './document-quick-upload-form.component.html',
   styleUrls: ['./document-quick-upload-form.component.scss']
 })

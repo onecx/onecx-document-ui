@@ -1,6 +1,6 @@
 <form [formGroup]="formGroup" class="grid mt-0 p-fluid">
   <div [class]="'col-12 ' + (viewMode === 'basic' ? 'md:col-4' : 'md:col-3')">
-    <span class="p-float-label">
+    <p-float-label variant="on">
       <input
         pInputText
         id="name"
@@ -14,10 +14,10 @@
       <label for="name" style="white-space: nowrap">
         {{ 'DOCUMENT_SEARCH.CRITERIA.NAME.LABEL' | translate }}
       </label>
-    </span>
+    </p-float-label>
   </div>
   <div [class]="'col-12 ' + (viewMode === 'basic' ? 'md:col-4' : 'md:col-3')">
-    <span class="p-float-label">
+    <p-float-label variant="on">
       <p-multiSelect
         inputId="documentTypeId"
         formControlName="documentTypeId"
@@ -32,10 +32,10 @@
       <label for="documentTypeId" style="white-space: nowrap">
         {{ 'DOCUMENT_SEARCH.CRITERIA.DOCUMENT_TYPE_ID.LABEL' | translate }}
       </label>
-    </span>
+    </p-float-label>
   </div>
   <div [class]="'col-12 ' + (viewMode === 'basic' ? 'md:col-4' : 'md:col-3')">
-    <span class="p-float-label">
+    <p-float-label variant="on">
       <p-select
         inputId="channelName"
         formControlName="channelName"
@@ -51,12 +51,12 @@
       <label for="channelName" style="white-space: nowrap">
         {{ 'DOCUMENT_SEARCH.CRITERIA.CHANNEL_NAME.LABEL' | translate }}
       </label>
-    </span>
+    </p-float-label>
   </div>
 
   @if (viewMode === 'advanced') {
     <div class="col-12 md:col-3">
-      <span class="p-float-label">
+      <p-float-label variant="on">
         <input
           pInputText
           id="id"
@@ -70,10 +70,10 @@
         <label for="id" style="white-space: nowrap">
           {{ 'DOCUMENT_SEARCH.CRITERIA.ID.LABEL' | translate }}
         </label>
-      </span>
+      </p-float-label>
     </div>
     <div class="col-12 md:col-3">
-      <span class="p-float-label">
+      <p-float-label variant="on">
         <p-multiSelect
           inputId="lifeCycleState"
           formControlName="lifeCycleState"
@@ -88,10 +88,10 @@
         <label for="lifeCycleState" style="white-space: nowrap">
           {{ 'DOCUMENT_SEARCH.CRITERIA.LIFE_CYCLE_STATE.LABEL' | translate }}
         </label>
-      </span>
+      </p-float-label>
     </div>
     <div class="col-12 md:col-3">
-      <span class="p-float-label">
+      <p-float-label variant="on">
         <p-datepicker
           inputId="startDate"
           formControlName="startDate"
@@ -107,10 +107,10 @@
         <label for="startDate" style="white-space: nowrap">
           {{ 'DOCUMENT_SEARCH.CRITERIA.START_DATE.LABEL' | translate }}
         </label>
-      </span>
+      </p-float-label>
     </div>
     <div class="col-12 md:col-3">
-      <span class="p-float-label">
+      <p-float-label variant="on">
         <p-datepicker
           inputId="endDate"
           formControlName="endDate"
@@ -126,10 +126,10 @@
         <label for="endDate" style="white-space: nowrap">
           {{ 'DOCUMENT_SEARCH.CRITERIA.END_DATE.LABEL' | translate }}
         </label>
-      </span>
+      </p-float-label>
     </div>
     <div class="col-12 md:col-3">
-      <span class="p-float-label">
+      <p-float-label variant="on">
         <input
           pInputText
           id="createBy"
@@ -143,10 +143,10 @@
         <label for="createBy" style="white-space: nowrap">
           {{ 'DOCUMENT_SEARCH.CRITERIA.CREATE_BY.LABEL' | translate }}
         </label>
-      </span>
+      </p-float-label>
     </div>
     <div class="col-12 md:col-3">
-      <span class="p-float-label">
+      <p-float-label variant="on">
         <input
           pInputText
           id="objectReferenceId"
@@ -160,10 +160,10 @@
         <label for="objectReferenceId" style="white-space: nowrap">
           {{ 'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_ID.LABEL' | translate }}
         </label>
-      </span>
+      </p-float-label>
     </div>
     <div class="col-12 md:col-3">
-      <span class="p-float-label">
+      <p-float-label variant="on">
         <input
           pInputText
           id="objectReferenceType"
@@ -177,7 +177,7 @@
         <label for="objectReferenceType" style="white-space: nowrap">
           {{ 'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_TYPE.LABEL' | translate }}
         </label>
-      </span>
+      </p-float-label>
     </div>
   }
 </form>

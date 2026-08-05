@@ -11,6 +11,7 @@ import { TooltipModule } from 'primeng/tooltip'
 import { DatePickerModule } from 'primeng/datepicker'
 import { FileUploadComponent } from 'src/app/document/components/file-upload/file-upload.component'
 import { CommonModule } from '@angular/common'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-document-create-attachments',
@@ -23,7 +24,8 @@ import { CommonModule } from '@angular/common'
     TooltipModule,
     TableModule,
     DatePickerModule,
-    FileUploadComponent
+    FileUploadComponent,
+    FloatLabelModule
   ],
   templateUrl: './document-create-attachments.component.html'
 })

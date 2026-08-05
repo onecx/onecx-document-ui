@@ -10,10 +10,19 @@ import { ButtonModule } from 'primeng/button'
 import { InputTextModule } from 'primeng/inputtext'
 import { TableModule } from 'primeng/table'
 import { TooltipModule } from 'primeng/tooltip'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-document-create-characteristics',
-  imports: [TranslateModule, ReactiveFormsModule, ButtonModule, InputTextModule, TooltipModule, TableModule],
+  imports: [
+    TranslateModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    InputTextModule,
+    TooltipModule,
+    TableModule,
+    FloatLabelModule
+  ],
   templateUrl: './document-create-characteristics.component.html'
 })
 export class DocumentCreateCharacteristicsComponent implements OnInit {

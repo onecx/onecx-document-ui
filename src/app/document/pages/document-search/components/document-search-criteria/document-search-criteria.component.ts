@@ -19,6 +19,7 @@ import { TooltipModule } from 'primeng/tooltip'
     MultiSelectModule,
     InputTextModule,
     SelectModule,
+    FloatLabelModule,
     FloatLabelModule
   ],
   templateUrl: './document-search-criteria.component.html'

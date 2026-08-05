@@ -8,10 +8,19 @@ import { InputTextModule } from 'primeng/inputtext'
 import { SelectModule } from 'primeng/select'
 import { TooltipModule } from 'primeng/tooltip'
 import { CommonModule } from '@angular/common'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-document-details-form',
-  imports: [TranslateModule, ReactiveFormsModule, InputTextModule, SelectModule, TooltipModule, CommonModule],
+  imports: [
+    TranslateModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    SelectModule,
+    TooltipModule,
+    CommonModule,
+    FloatLabelModule
+  ],
   templateUrl: './document-details-form.component.html',
   styleUrls: ['./document-details-form.component.scss']
 })
