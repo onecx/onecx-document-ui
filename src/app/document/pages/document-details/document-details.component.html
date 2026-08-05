@@ -24,26 +24,32 @@
       </ocx-content>
       <ocx-content>
         <div class="card p-4">
-          <p-tabView>
-            <p-tabPanel [header]="'DOCUMENT_DETAILS.SECTIONS.ATTACHMENTS' | translate">
-              <app-document-details-attachment-list
-                [attachments]="attachmentsFormArray"
-                [editMode]="vm.editMode"
-                (download)="onAttachmentDownload($event)"
-                (retryUpload)="onFileUploadRetry($event)"
-              >
-              </app-document-details-attachment-list>
-            </p-tabPanel>
-            <p-tabPanel [header]="'DOCUMENT_DETAILS.SECTIONS.CHARACTERISTICS' | translate">
-              <app-document-details-characteristics
-                [characteristics]="characteristicsFormArray"
-                [editMode]="vm.editMode"
-                (characteristicRemoved)="onCharacteristicRemove($event)"
-                (characteristicAdded)="onCharacteristicAdd()"
-              >
-              </app-document-details-characteristics>
-            </p-tabPanel>
-          </p-tabView>
+          <p-tabs [value]="0">
+            <p-tablist>
+              <p-tab value="0">{{ 'DOCUMENT_DETAILS.SECTIONS.ATTACHMENTS' | translate }}</p-tab>
+              <p-tab value="1">{{ 'DOCUMENT_DETAILS.SECTIONS.CHARACTERISTICS' | translate }}</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+              <p-tabpanel value="0">
+                <app-document-details-attachment-list
+                  [attachments]="attachmentsFormArray"
+                  [editMode]="vm.editMode"
+                  (download)="onAttachmentDownload($event)"
+                  (retryUpload)="onFileUploadRetry($event)"
+                >
+                </app-document-details-attachment-list>
+              </p-tabpanel>
+              <p-tabpanel value="1">
+                <app-document-details-characteristics
+                  [characteristics]="characteristicsFormArray"
+                  [editMode]="vm.editMode"
+                  (characteristicRemoved)="onCharacteristicRemove($event)"
+                  (characteristicAdded)="onCharacteristicAdd()"
+                >
+                </app-document-details-characteristics>
+              </p-tabpanel>
+            </p-tabpanels>
+          </p-tabs>
         </div>
       </ocx-content>
     </ocx-content-container>
