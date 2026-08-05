@@ -6,7 +6,7 @@ import {
   InteractiveDataViewComponentState,
   RowListGridData,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+} from '@onecx/angular-accelerator'
 
 import { DocumentSearchCriteriaSchema } from './document-search.parameters'
 

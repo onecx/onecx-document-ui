@@ -8,7 +8,7 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ActivatedRoute } from '@angular/router'
 import { DocumentCreateAttachmentsComponent } from './components/document-create-attachments/document-create-attachments.component'
@@ -51,7 +51,7 @@ describe('DocumentCreateComponent', () => {
         DocumentCreateCharacteristicsComponent
       ],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),

@@ -3,7 +3,7 @@ import {
   InteractiveDataViewComponentState,
   RowListGridData,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+} from '@onecx/angular-accelerator'
 import { DocumentType } from 'src/app/shared/generated'
 
 export interface DocumentTypeSearchViewModel {

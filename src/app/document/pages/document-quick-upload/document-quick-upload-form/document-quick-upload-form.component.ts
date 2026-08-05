@@ -1,13 +1,17 @@
 // Core imports
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core'
-import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms'
+import { FormControl, FormGroup, ReactiveFormsModule, UntypedFormGroup, Validators } from '@angular/forms'
+import { TranslateModule } from '@ngx-translate/core'
 import { SelectItem } from 'primeng/api'
+import { SelectModule } from 'primeng/select'
+import { FileUploadComponent } from 'src/app/document/components/file-upload/file-upload.component'
 import { AttachmentData } from 'src/app/document/types/document-create.types'
 import { noSpecialCharacters, trimSpaces } from 'src/app/document/utils/attachment.utils'
 import { LifeCycleState } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-document-quick-upload-form',
+  imports: [TranslateModule, SelectModule, ReactiveFormsModule, FileUploadComponent],
   templateUrl: './document-quick-upload-form.component.html',
   styleUrls: ['./document-quick-upload-form.component.scss']
 })

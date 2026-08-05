@@ -1,6 +1,6 @@
 import { createSelector } from '@ngrx/store'
 import { createChildSelectors } from '@onecx/ngrx-accelerator'
-import { RowListGridData } from '@onecx/portal-integration-angular'
+import { RowListGridData } from '@onecx/angular-accelerator'
 import { DocumentType } from 'src/app/shared/generated'
 import { documentFeature } from '../../document.reducers'
 import { initialState } from './document-type-search.reducers'

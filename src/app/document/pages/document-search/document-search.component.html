@@ -6,7 +6,7 @@
   <ocx-loading-indicator *ngIf="vm.searchLoadingIndicator"></ocx-loading-indicator>
   <ocx-search-header
     ocxAdvanced
-    [headline]="'DOCUMENT_SEARCH.HEADER' | translate"
+    [header]="'DOCUMENT_SEARCH.HEADER' | translate"
     [subheader]="'DOCUMENT_SEARCH.SUB_HEADER' | translate"
     (searched)="search(documentSearchFormGroup)"
     (resetted)="resetSearch()"
@@ -34,7 +34,6 @@
         [emptyResultsMessage]="'DOCUMENT_SEARCH.EMPTY_RESULTS' | translate"
         (componentStateChanged)="resultComponentStateChanged($event)"
         [layout]="vm.resultComponentState?.layout ?? 'table'"
-        [displayedColumns]="vm.resultComponentState?.displayedColumns ?? []"
         [supportedViewLayouts]="['list', 'table']"
         [page]="vm.resultComponentState?.activePage ?? 0"
         [pageSize]="vm.resultComponentState?.pageSize"

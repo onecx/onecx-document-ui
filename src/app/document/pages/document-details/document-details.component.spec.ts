@@ -9,12 +9,9 @@ import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { provideAppStateServiceMock, provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import {
-  BreadcrumbService,
-  HAS_PERMISSION_CHECKER,
-  PortalCoreModule,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { UserService } from '@onecx/angular-integration-interface'
+import { HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { BreadcrumbService, AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DocumentDetailsActions } from './document-details.actions'
 import { DocumentDetailsComponent } from './document-details.component'
@@ -43,7 +40,7 @@ describe('DocumentDetailsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [DocumentDetailsComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         NoopAnimationsModule,

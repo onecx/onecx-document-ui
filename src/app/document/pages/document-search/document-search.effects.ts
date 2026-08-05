@@ -10,12 +10,8 @@ import { catchError, forkJoin, map, mergeMap, of, switchMap, tap } from 'rxjs'
 
 import { PrimeIcons } from 'primeng/api'
 
-import {
-  DialogState,
-  ExportDataService,
-  PortalMessageService,
-  PortalDialogService
-} from '@onecx/portal-integration-angular'
+import { DialogState, ExportDataService, PortalDialogService } from '@onecx/angular-accelerator'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { selectUrl } from 'src/app/shared/selectors/router.selectors'
 import { DocumentControllerAPIService, DocumentTypeControllerAPIService } from 'src/app/shared/generated'

@@ -1,7 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { TranslateModule } from '@ngx-translate/core'
+import { ButtonModule } from 'primeng/button'
+import { InputTextModule } from 'primeng/inputtext'
 
 @Component({
   selector: 'app-file-upload',
+  imports: [TranslateModule, ButtonModule, InputTextModule],
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })

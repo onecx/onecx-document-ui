@@ -7,7 +7,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { ReplaySubject } from 'rxjs'
 import { take } from 'rxjs/operators'
 
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions'
 import { DocumentCreateActions } from './document-create.actions'

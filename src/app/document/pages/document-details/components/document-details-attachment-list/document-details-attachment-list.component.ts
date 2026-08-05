@@ -1,10 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
-import { FormArray, FormGroup } from '@angular/forms'
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { DocumentAttachmentFormValue } from '../../../../types/document-create.types'
 import { formatBytes } from '../../../../utils/attachment.utils'
+import { TranslateModule } from '@ngx-translate/core'
+import { TableModule } from 'primeng/table'
+import { ButtonModule } from 'primeng/button'
+import { TooltipModule } from 'primeng/tooltip'
 
 @Component({
   selector: 'app-document-details-attachment-list',
+  imports: [TranslateModule, TableModule, ButtonModule, TooltipModule, ReactiveFormsModule],
   templateUrl: './document-details-attachment-list.component.html',
   styleUrl: './document-details-attachment-list.component.scss'
 })

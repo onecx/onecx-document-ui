@@ -8,25 +8,29 @@ import { PrimeIcons, SelectItem } from 'primeng/api'
 
 import {
   Action,
+  AngularAcceleratorModule,
   BreadcrumbService,
   buildSearchCriteria,
   DataAction,
   DataSortDirection,
   InteractiveDataViewComponentState,
   RowListGridData,
-  SearchHeaderComponentState,
-  UserService
-} from '@onecx/portal-integration-angular'
-
+  SearchHeaderComponentState
+} from '@onecx/angular-accelerator'
+import { UserService } from '@onecx/angular-integration-interface'
 import { LifeCycleState } from 'src/app/shared/generated'
 import { DocumentSearchCriteriaComponent } from './components/document-search-criteria/document-search-criteria.component'
 import { DocumentSearchActions } from './document-search.actions'
 import { DocumentSearchCriteriaSchema, documentSearchCriteriasSchema } from './document-search.parameters'
 import { selectDocumentSearchViewModel } from './document-search.selectors'
 import { DocumentSearchViewModel } from './document-search.viewmodel'
+import { TranslateModule } from '@ngx-translate/core'
+import { AsyncPipe } from '@angular/common'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 @Component({
   selector: 'app-document-search',
+  imports: [TranslateModule, AngularAcceleratorModule, DocumentSearchCriteriaComponent, AsyncPipe, PortalPageComponent],
   templateUrl: './document-search.component.html',
   styleUrls: ['./document-search.component.scss']
 })
@@ -58,11 +62,17 @@ export class DocumentSearchComponent implements OnInit {
     this.headerActions$ = this.buildHeaderActions()
     this.lifeCycleStates = this.buildLifeCycleStates()
     this.documentSearchFormGroup = this.buildSearchFormGroup()
-    if (this.userService.hasPermission('DOCUMENT#EDIT')) this.hasEditPermission = true
-    if (this.userService.hasPermission('DOCUMENT#VIEW')) this.hasViewPermission = true
   }
 
   ngOnInit() {
+    this.userService.hasPermission('DOCUMENT#EDIT').then((hasPermission) => {
+      this.hasEditPermission = hasPermission
+      this.prepareAdditionalActions()
+    })
+    this.userService.hasPermission('DOCUMENT#VIEW').then((hasPermission) => {
+      this.hasViewPermission = hasPermission
+      this.prepareAdditionalActions()
+    })
     this.breadcrumbService.setItems([
       {
         titleKey: 'DOCUMENT_SEARCH.BREADCRUMB',

@@ -11,16 +11,11 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
 import { provideNavigatedEventStoreConnector } from '@onecx/ngrx-accelerator'
-import {
-  addInitializeModuleGuard,
-  AppStateService,
-  ConfigurationService,
-  PortalCoreModule
-} from '@onecx/portal-integration-angular'
-import { createTranslateLoader } from '@onecx/angular-utils'
+import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { createTranslateLoader, provideThemeConfig } from '@onecx/angular-utils'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { routes } from './app-routing.module'
-import { commonImports } from './app.module'
 import { metaReducers, reducers } from './app.reducers'
 import { Configuration } from './shared/generated'
 import { SharedModule } from './shared/shared.module'
@@ -32,11 +27,10 @@ const effectProvidersForWorkaround = [EffectsRunner, EffectSources, Actions]
 effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
 
 @NgModule({
-  declarations: [AppEntrypointComponent],
   imports: [
-    ...commonImports,
-    PortalCoreModule.forMicroFrontend(),
-    RouterModule.forRoot(addInitializeModuleGuard(routes)),
+    AppEntrypointComponent,
+    AngularAcceleratorModule,
+    RouterModule.forRoot(routes),
     TranslateModule.forRoot({
       extend: true,
       isolate: false,
@@ -75,6 +69,7 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       multi: true,
       deps: [Router, AppStateService]
     },
+    provideThemeConfig(),
     provideNavigatedEventStoreConnector()
   ]
 })

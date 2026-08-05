@@ -4,7 +4,7 @@
   *ngrxLet="viewModel$; let vm"
 >
   <ocx-loading-indicator *ngIf="vm.detailsLoadingIndicator"> </ocx-loading-indicator>
-  <ocx-data-loading-error *ngIf="!vm.detailsLoaded && !vm.detailsLoadingIndicator"> </ocx-data-loading-error>
+  <ocx-error *ngIf="!vm.detailsLoaded && !vm.detailsLoadingIndicator"> </ocx-error>
   <div *ngIf="vm.detailsLoaded && !vm.detailsLoadingIndicator" class="flex flex-column">
     <ocx-page-header
       [header]="'DOCUMENT_DETAILS.HEADER' | translate"

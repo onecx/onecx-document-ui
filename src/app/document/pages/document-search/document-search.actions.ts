@@ -4,7 +4,7 @@ import {
   GroupByCountDiagramComponentState,
   InteractiveDataViewComponentState,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+} from '@onecx/angular-accelerator'
 
 import { Channel, DocumentDetail, DocumentType } from 'src/app/shared/generated'
 import { DocumentSearchCriteriaSchema } from './document-search.parameters'

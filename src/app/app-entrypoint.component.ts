@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core'
+import { RouterModule } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
-import { PrimeNGConfig } from 'primeng/api'
+import { PrimeNG } from 'primeng/config'
 import { merge, mergeMap } from 'rxjs'
 
 @Component({
   selector: 'app-root',
+  imports: [RouterModule],
   templateUrl: './app-entrypoint.component.html'
 })
 export class AppEntrypointComponent implements OnInit {
   constructor(
     private readonly translateService: TranslateService,
-    private readonly config: PrimeNGConfig
+    private readonly config: PrimeNG
   ) {}
 
   ngOnInit(): void {

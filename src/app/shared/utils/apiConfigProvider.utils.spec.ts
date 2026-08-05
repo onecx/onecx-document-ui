@@ -1,19 +1,15 @@
-import { AppStateService, ConfigurationService } from '@onecx/portal-integration-angular'
+import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { PortalApiConfiguration } from '@onecx/angular-utils'
 import { environment } from 'src/environments/environment'
 import { Configuration } from '../generated'
 import { apiConfigProvider } from './apiConfigProvider.utils'
-
-jest.mock('@onecx/portal-integration-angular', () => ({
-  PortalApiConfiguration: jest.fn()
-}))
 
 describe('apiConfigProvider', () => {
   it('should create PortalApiConfiguration when provider is called', () => {
     const configService = {} as ConfigurationService
     const appStateService = {} as AppStateService
 
-    const result = apiConfigProvider(configService, appStateService)
+    const result = apiConfigProvider()
 
     expect(PortalApiConfiguration).toHaveBeenCalledWith(
       Configuration,

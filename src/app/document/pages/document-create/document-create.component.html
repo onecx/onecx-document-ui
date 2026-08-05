@@ -1,6 +1,6 @@
 <ocx-portal-page *ngrxLet="viewModel$; let vm">
   <ocx-page-header
-    header="{{ 'DOCUMENT_CREATE.HEADER' | translate }}"
+    [header]="'DOCUMENT_CREATE.HEADER' | translate"
     [disableDefaultActions]="true"
     [manualBreadcrumbs]="true"
   ></ocx-page-header>

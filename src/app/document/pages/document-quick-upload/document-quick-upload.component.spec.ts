@@ -8,7 +8,7 @@ import { LetDirective } from '@ngrx/component'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { InteractiveDataViewComponent } from '@onecx/angular-accelerator'
 import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions'
@@ -33,7 +33,7 @@ describe('DocumentQuickUploadComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [DocumentQuickUploadComponent, DocumentQuickUploadFormComponent, FileUploadComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         SelectModule,

@@ -9,22 +9,22 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideAppStateServiceMock, provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import {
+  AngularAcceleratorModule,
   BreadcrumbService,
-  HAS_PERMISSION_CHECKER,
   InteractiveDataViewComponentState,
-  PortalCoreModule,
   providePortalDialogService,
   RowListGridData,
-  SearchHeaderComponentState,
-  UserService
-} from '@onecx/portal-integration-angular'
+  SearchHeaderComponentState
+} from '@onecx/angular-accelerator'
+import HAS_PERMISSION_CHECKER from '@onecx/angular-utils'
+import { UserService } from '@onecx/angular-integration-interface'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ButtonModule } from 'primeng/button'
 import { CheckboxModule } from 'primeng/checkbox'
 import { DialogModule } from 'primeng/dialog'
 import { DialogService } from 'primeng/dynamicdialog'
 import { InputTextModule } from 'primeng/inputtext'
-import { InputTextareaModule } from 'primeng/inputtextarea'
+import { Textarea } from 'primeng/inputtextarea'
 import { DocumentTypeSearchActions } from './document-type-search.actions'
 import { documentTypeSearchColumns } from './document-type-search.columns'
 import { DocumentTypeSearchComponent } from './document-type-search.component'
@@ -63,7 +63,7 @@ describe('DocumentTypeSearchComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [DocumentTypeSearchComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
@@ -76,7 +76,7 @@ describe('DocumentTypeSearchComponent', () => {
         CheckboxModule,
         DialogModule,
         InputTextModule,
-        InputTextareaModule
+        Textarea
       ],
       providers: [
         { provide: ActivatedRoute, useValue: mockActivatedRoute },

@@ -1,24 +1,43 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import {
   Action,
+  AngularAcceleratorModule,
   BreadcrumbService,
   DataSortDirection,
   InteractiveDataViewComponentState,
   RowListGridData,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+} from '@onecx/angular-accelerator'
 import { PrimeIcons } from 'primeng/api'
 import { map, Observable } from 'rxjs'
 import { DocumentType } from 'src/app/shared/generated'
 import { DocumentTypeSearchActions } from './document-type-search.actions'
 import { selectDocumentTypeSearchViewModel } from './document-type-search.selectors'
 import { DocumentTypeSearchViewModel } from './document-type-search.viewmodel'
+import { TranslateModule } from '@ngx-translate/core'
+import { CheckboxModule } from 'primeng/checkbox'
+import { DialogModule } from 'primeng/dialog'
+import { InputTextModule } from 'primeng/inputtext'
+import { Textarea } from 'primeng/inputtextarea'
+import { AsyncPipe } from '@angular/common'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 @Component({
   selector: 'app-document-type-search',
-  templateUrl: './document-type-search.component.html'
+  templateUrl: './document-type-search.component.html',
+  imports: [
+    TranslateModule,
+    CheckboxModule,
+    ReactiveFormsModule,
+    DialogModule,
+    InputTextModule,
+    Textarea,
+    AngularAcceleratorModule,
+    AsyncPipe,
+    PortalPageComponent
+  ]
 })
 export class DocumentTypeSearchComponent implements OnInit {
   viewModel$: Observable<DocumentTypeSearchViewModel>

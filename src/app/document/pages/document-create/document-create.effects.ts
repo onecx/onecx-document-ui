@@ -5,7 +5,7 @@ import { concatLatestFrom } from '@ngrx/operators'
 import { Store } from '@ngrx/store'
 import { routerNavigatedAction } from '@ngrx/router-store'
 import { filterForNavigatedTo } from '@onecx/ngrx-accelerator'
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 import {
   AttachmentCreateUpdate,
   DocumentCharacteristicCreateUpdate,

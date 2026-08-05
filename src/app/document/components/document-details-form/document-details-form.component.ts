@@ -2,10 +2,16 @@ import { Component, Input, OnInit } from '@angular/core'
 import { SelectItem } from 'primeng/api'
 import { LifeCycleState } from 'src/app/shared/generated/model/lifeCycleState'
 import { DocumentCreateDetailsFormGroup, DocumentDetailsFormGroup } from '../../types/document-create.types'
-import { FormGroup } from '@angular/forms'
+import { FormGroup, ReactiveFormsModule } from '@angular/forms'
+import { TranslateModule } from '@ngx-translate/core'
+import { InputTextModule } from 'primeng/inputtext'
+import { SelectModule } from 'primeng/select'
+import { TooltipModule } from 'primeng/tooltip'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-document-details-form',
+  imports: [TranslateModule, ReactiveFormsModule, InputTextModule, SelectModule, TooltipModule, CommonModule],
   templateUrl: './document-details-form.component.html',
   styleUrls: ['./document-details-form.component.scss']
 })

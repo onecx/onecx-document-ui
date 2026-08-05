@@ -1,11 +1,30 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
 import { AttachmentDraft } from '../../../../types/document-create.types'
 import { AttachmentFormGroup } from './document-create-attachments.types'
+import { TranslateModule } from '@ngx-translate/core'
+import { ButtonModule } from 'primeng/button'
+import { InputTextModule } from 'primeng/inputtext'
+import { TableModule } from 'primeng/table'
+import { TooltipModule } from 'primeng/tooltip'
+import { DatePickerModule } from 'primeng/datepicker'
+import { FileUploadComponent } from 'src/app/document/components/file-upload/file-upload.component'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-document-create-attachments',
+  imports: [
+    TranslateModule,
+    ReactiveFormsModule,
+    CommonModule,
+    ButtonModule,
+    InputTextModule,
+    TooltipModule,
+    TableModule,
+    DatePickerModule,
+    FileUploadComponent
+  ],
   templateUrl: './document-create-attachments.component.html'
 })
 export class DocumentCreateAttachmentsComponent implements OnInit {

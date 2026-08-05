@@ -3,7 +3,7 @@ import { createSelector } from '@ngrx/store'
 import { SelectItem } from 'primeng/api'
 
 import { createChildSelectors } from '@onecx/ngrx-accelerator'
-import { RowListGridData } from '@onecx/portal-integration-angular'
+import { RowListGridData } from '@onecx/angular-accelerator'
 
 import { Channel, DocumentDetail, DocumentType } from 'src/app/shared/generated'
 import { documentFeature } from '../../document.reducers'

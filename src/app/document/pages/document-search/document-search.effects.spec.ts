@@ -9,7 +9,8 @@ import { take } from 'rxjs/operators'
 
 import { DialogService } from 'primeng/dynamicdialog'
 
-import { ExportDataService, PortalDialogService, PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
+import { ExportDataService, PortalDialogService } from '@onecx/angular-accelerator'
 
 import { DocumentControllerAPIService, DocumentTypeControllerAPIService } from 'src/app/shared/generated'
 import { selectUrl } from 'src/app/shared/selectors/router.selectors'

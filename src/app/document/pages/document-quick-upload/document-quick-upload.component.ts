@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms'
+import { FormControl, FormGroup, ReactiveFormsModule, UntypedFormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PrimeIcons, SelectItem } from 'primeng/api'
-import { DataSortDirection, RowListGridData } from '@onecx/angular-accelerator'
+import { AngularAcceleratorModule, DataSortDirection, RowListGridData } from '@onecx/angular-accelerator'
 import { Observable, Subscription } from 'rxjs'
-import { BreadcrumbService, PrimeIcon } from '@onecx/portal-integration-angular'
+import { BreadcrumbService, PrimeIcon } from '@onecx/angular-accelerator'
 import { AttachmentCreateUpdate, DocumentCreateUpdate } from 'src/app/shared/generated'
 import { AttachmentData, AttachmentFile } from '../../types/document-create.types'
 import { formatBytes } from '../../utils/attachment.utils'
@@ -15,6 +15,13 @@ import {
   selectQuickUploadMimeTypes
 } from './document-quick-upload.selectors'
 import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions'
+import { TooltipModule } from 'primeng/tooltip'
+import { ButtonModule } from 'primeng/button'
+import { TranslateModule } from '@ngx-translate/core'
+import { DialogModule } from 'primeng/dialog'
+import { AsyncPipe, CommonModule } from '@angular/common'
+import { PortalPageComponent } from '@onecx/angular-utils'
+import { DocumentQuickUploadFormComponent } from './document-quick-upload-form/document-quick-upload-form.component'
 
 enum SortOrder {
   ASCENDING,
@@ -23,6 +30,18 @@ enum SortOrder {
 
 @Component({
   selector: 'app-document-quick-upload',
+  imports: [
+    AsyncPipe,
+    TooltipModule,
+    TranslateModule,
+    DocumentQuickUploadFormComponent,
+    ReactiveFormsModule,
+    DialogModule,
+    ButtonModule,
+    AngularAcceleratorModule,
+    CommonModule,
+    PortalPageComponent
+  ],
   templateUrl: './document-quick-upload.component.html',
   styleUrls: ['./document-quick-upload.component.scss']
 })

@@ -2,7 +2,7 @@ import {
   DataTableColumn,
   InteractiveDataViewComponentState,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+} from '@onecx/angular-accelerator'
 import { DocumentType } from 'src/app/shared/generated'
 
 export interface DocumentTypeSearchState {

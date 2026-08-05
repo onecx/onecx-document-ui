@@ -21,15 +21,15 @@ import { TooltipModule } from 'primeng/tooltip'
 
 import { provideAppStateServiceMock, provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import {
+  AngularAcceleratorModule,
   BreadcrumbService,
   ColumnType,
-  HAS_PERMISSION_CHECKER,
   InteractiveDataViewComponentState,
-  PortalCoreModule,
   providePortalDialogService,
-  RowListGridData,
-  UserService
-} from '@onecx/portal-integration-angular'
+  RowListGridData
+} from '@onecx/angular-accelerator'
+import HAS_PERMISSION_CHECKER from '@onecx/angular-utils'
+import { UserService } from '@onecx/angular-integration-interface'
 
 import { DocumentSearchCriteriaComponent } from './components/document-search-criteria/document-search-criteria.component'
 import { DocumentSearchActions } from './document-search.actions'
@@ -114,7 +114,7 @@ describe('DocumentSearchComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [DocumentSearchComponent, DocumentSearchCriteriaComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),

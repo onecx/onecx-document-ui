@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { isDevMode, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
@@ -10,13 +9,8 @@ import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AngularAuthModule } from '@onecx/angular-auth'
-import {
-  AppStateService,
-  APP_CONFIG,
-  ConfigurationService,
-  PortalCoreModule,
-  providePortalDialogService
-} from '@onecx/portal-integration-angular'
+import { AppStateService, APP_CONFIG, ConfigurationService } from '@onecx/angular-integration-interface'
+import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
 import { createTranslateLoader, provideTranslationPathFromMeta } from '@onecx/angular-utils'
 import { environment } from 'src/environments/environment'
 import { AppRoutingModule } from './app-routing.module'
@@ -26,12 +20,9 @@ import { metaReducers, reducers } from './app.reducers'
 import { Configuration } from './shared/generated'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
 
-export const commonImports = [CommonModule]
-
 @NgModule({
-  declarations: [AppComponent],
   imports: [
-    ...commonImports,
+    AppComponent,
     AngularAuthModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -48,7 +39,7 @@ export const commonImports = [CommonModule]
     }),
     EffectsModule.forRoot([]),
     HttpClientModule,
-    PortalCoreModule.forRoot('onecx-document-ui-app'),
+    AngularAcceleratorModule,
     TranslateModule.forRoot({
       extend: true,
       loader: {
@@ -67,7 +58,6 @@ export const commonImports = [CommonModule]
       deps: [ConfigurationService, AppStateService]
     },
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')
-  ],
-  bootstrap: [AppComponent]
+  ]
 })
 export class AppModule {}
