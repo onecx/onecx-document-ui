@@ -17,9 +17,9 @@
           'ng-dirty': isInvalid('name')
         }"
         formControlName="name"
-        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.NAME.TOOLTIP' | translate }}"
+        [pTooltip]="'DOCUMENT_DETAILS.FORM.NAME.TOOLTIP' | translate"
         tooltipPosition="top"
-        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.NAME.ARIA-LABEL' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.FORM.NAME.ARIA-LABEL' | translate"
       />
       <label for="name" class="required">{{ 'DOCUMENT_DETAILS.FORM.NAME.LABEL' | translate }}</label>
     </span>
@@ -39,9 +39,9 @@
         optionLabel="label"
         optionValue="value"
         appendTo="body"
-        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.TYPE.TOOLTIP' | translate }}"
+        [pTooltip]="'DOCUMENT_DETAILS.FORM.TYPE.TOOLTIP' | translate"
         tooltipPosition="top"
-        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.TYPE.ARIA-LABEL' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.FORM.TYPE.ARIA-LABEL' | translate"
       ></p-select>
       <label for="type" class="required">{{ 'DOCUMENT_DETAILS.FORM.TYPE.LABEL' | translate }}</label>
     </span>
@@ -55,9 +55,9 @@
         id="version"
         class="w-full"
         formControlName="version"
-        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.VERSION.TOOLTIP' | translate }}"
+        [pTooltip]="'DOCUMENT_DETAILS.FORM.VERSION.TOOLTIP' | translate"
         tooltipPosition="top"
-        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.VERSION.ARIA-LABEL' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.FORM.VERSION.ARIA-LABEL' | translate"
       />
       <label for="version">{{ 'DOCUMENT_DETAILS.FORM.VERSION.LABEL' | translate }}</label>
     </span>
@@ -74,9 +74,9 @@
           'ng-dirty': isInvalid('channel')
         }"
         formControlName="channel"
-        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.CHANNEL.TOOLTIP' | translate }}"
+        [pTooltip]="'DOCUMENT_DETAILS.FORM.CHANNEL.TOOLTIP' | translate"
         tooltipPosition="top"
-        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.CHANNEL.ARIA-LABEL' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.FORM.CHANNEL.ARIA-LABEL' | translate"
       />
       <label for="channel" class="required">{{ 'DOCUMENT_DETAILS.FORM.CHANNEL.LABEL' | translate }}</label>
     </span>
@@ -96,9 +96,9 @@
           'ng-invalid': isInvalid('status'),
           'ng-dirty': isInvalid('status')
         }"
-        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.STATUS.TOOLTIP' | translate }}"
+        [pTooltip]="'DOCUMENT_DETAILS.FORM.STATUS.TOOLTIP' | translate"
         tooltipPosition="top"
-        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.STATUS.ARIA-LABEL' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.FORM.STATUS.ARIA-LABEL' | translate"
       ></p-select>
       <label for="status" class="required">{{ 'DOCUMENT_DETAILS.FORM.STATUS.LABEL' | translate }}</label>
     </span>
@@ -112,9 +112,9 @@
         class="w-full"
         rows="5"
         formControlName="description"
-        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.DESCRIPTION.TOOLTIP' | translate }}"
+        [pTooltip]="'DOCUMENT_DETAILS.FORM.DESCRIPTION.TOOLTIP' | translate"
         tooltipPosition="top"
-        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.DESCRIPTION.ARIA-LABEL' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.FORM.DESCRIPTION.ARIA-LABEL' | translate"
       ></textarea>
       <label for="description">{{ 'DOCUMENT_DETAILS.FORM.DESCRIPTION.LABEL' | translate }}</label>
     </span>
@@ -134,9 +134,9 @@
         id="involvement"
         class="w-full"
         formControlName="involvement"
-        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.INVOLVEMENT.TOOLTIP' | translate }}"
+        [pTooltip]="'DOCUMENT_DETAILS.FORM.INVOLVEMENT.TOOLTIP' | translate"
         tooltipPosition="top"
-        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.INVOLVEMENT.ARIA-LABEL' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.FORM.INVOLVEMENT.ARIA-LABEL' | translate"
       />
       <label for="involvement">{{ 'DOCUMENT_DETAILS.FORM.INVOLVEMENT.LABEL' | translate }}</label>
     </span>
@@ -150,9 +150,9 @@
         id="objectReferenceType"
         class="w-full"
         formControlName="objectReferenceType"
-        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_TYPE.TOOLTIP' | translate }}"
+        [pTooltip]="'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_TYPE.TOOLTIP' | translate"
         tooltipPosition="top"
-        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_TYPE.ARIA-LABEL' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_TYPE.ARIA-LABEL' | translate"
       />
       <label for="objectReferenceType">{{ 'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_TYPE.LABEL' | translate }}</label>
     </span>
@@ -166,9 +166,9 @@
         id="objectReferenceId"
         class="w-full"
         formControlName="objectReferenceId"
-        pTooltip="{{ 'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_ID.TOOLTIP' | translate }}"
+        [pTooltip]="'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_ID.TOOLTIP' | translate"
         tooltipPosition="top"
-        [attr.aria-label]="'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_ID.ARIA-LABEL' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_ID.ARIA-LABEL' | translate"
       />
       <label for="objectReferenceId">{{ 'DOCUMENT_DETAILS.FORM.OBJECT_REFERENCE_ID.LABEL' | translate }}</label>
     </span>

@@ -12,11 +12,11 @@
       [actions]="(headerActions$ | async) ?? []"
       [disableDefaultActions]="true"
       [manualBreadcrumbs]="true"
-      [attr.aria-label]="'DOCUMENT_DETAILS.FORM.NAME' | translate"
+      [ariaLabel]="'DOCUMENT_DETAILS.FORM.NAME' | translate"
     >
     </ocx-page-header>
     <ocx-content-container>
-      <ocx-content class="mb-4" role="main" [attr.aria-label]="'DOCUMENT_DETAILS.ARIA-LABEL' | translate">
+      <ocx-content class="mb-4" role="main" [ariaLabel]="'DOCUMENT_DETAILS.ARIA-LABEL' | translate">
         <div class="surface-section mt-3 mb-1 mx-3">
           <app-document-details-form [formGroup]="formGroup" [availableTypes]="(documentTypes$ | async) || []">
           </app-document-details-form>

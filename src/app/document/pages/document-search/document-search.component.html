@@ -14,7 +14,7 @@
     [actions]="(headerActions$ | async) ?? []"
     (componentStateChanged)="searchHeaderComponentStateChanged($event)"
     [viewMode]="vm.searchHeaderComponentState?.activeViewMode ?? 'basic'"
-    [attr.aria-label]="'DOCUMENT_SEARCH.ARIA-LABEL' | translate"
+    [ariaLabel]="'DOCUMENT_SEARCH.ARIA-LABEL' | translate"
   >
     <app-document-search-criteria
       [formGroup]="documentSearchFormGroup"
@@ -44,7 +44,7 @@
         [defaultGroupKey]="vm.resultComponentState?.activeColumnGroupKey ?? ''"
         [actionColumnPosition]="vm.resultComponentState?.actionColumnConfig?.position ?? 'left'"
         [frozenActionColumn]="vm.resultComponentState?.actionColumnConfig?.frozen ?? false"
-        [attr.aria-label]="'DOCUMENT_SEARCH.RESULTS.NAME' | translate"
+        [ariaLabel]="'DOCUMENT_SEARCH.RESULTS.NAME' | translate"
       >
       </ocx-interactive-data-view>
     </ocx-content>

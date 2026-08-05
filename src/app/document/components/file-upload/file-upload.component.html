@@ -14,7 +14,7 @@
       iconPos="left"
       class="w-full"
       [label]="'FILE_UPLOAD.CHOOSE_BTN' | translate"
-      [attr.aria-label]="'FILE_UPLOAD.CHOOSE_BTN' | translate"
+      [ariaLabel]="'FILE_UPLOAD.CHOOSE_BTN' | translate"
       [disabled]="disabled"
     ></button>
     <input type="file" [multiple]="multiple" [disabled]="disabled" (change)="onFileInputChange($event)" title />

@@ -38,7 +38,7 @@
                 type="text"
                 formControlName="name"
                 class="w-full"
-                [attr.aria-label]="'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate"
+                [ariaLabel]="'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate"
               />
             </ng-container>
             <ng-template #nameText>
@@ -52,7 +52,7 @@
                 type="text"
                 formControlName="description"
                 class="w-full"
-                [attr.aria-label]="'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.DESCRIPTION' | translate"
+                [ariaLabel]="'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.DESCRIPTION' | translate"
               />
             </ng-container>
             <ng-template #descriptionText>
@@ -77,7 +77,7 @@
               [rounded]="true"
               [pTooltip]="'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate"
               tooltipPosition="top"
-              [attr.aria-label]="'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate"
+              [ariaLabel]="'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate"
               [disabled]="!attachmentFormGroup.get('id')?.value"
               (onClick)="onDownloadClicked(attachmentFormGroup)"
             ></p-button>
@@ -90,7 +90,7 @@
                 [rounded]="true"
                 [pTooltip]="'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate"
                 tooltipPosition="top"
-                [attr.aria-label]="'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate"
+                [ariaLabel]="'DOCUMENT_DETAILS.ATTACHMENTS.ACTIONS.DOWNLOAD' | translate"
               >
               </p-button>
             </ng-template>
