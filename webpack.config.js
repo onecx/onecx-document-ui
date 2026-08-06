@@ -29,6 +29,7 @@ const config = withModuleFederationPlugin({
     '@onecx/integration-interface': { requiredVersion: 'auto', includeSecondaries: true }
   })
 })
+config.devServer = { allowedHosts: 'all' }
 
 const plugins = config.plugins.filter((plugin) => !(plugin instanceof ModifyEntryPlugin))
 
