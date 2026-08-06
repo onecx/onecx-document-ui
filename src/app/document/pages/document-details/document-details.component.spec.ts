@@ -23,7 +23,6 @@ describe('DocumentDetailsComponent', () => {
   let component: DocumentDetailsComponent
   let fixture: ComponentFixture<DocumentDetailsComponent>
   let store: MockStore<Store>
-  let breadcrumbService: BreadcrumbService
 
   const mockActivatedRoute = { snapshot: { data: {} } }
 
@@ -38,15 +37,15 @@ describe('DocumentDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentDetailsComponent],
       imports: [
+        DocumentDetailsComponent,
         AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         NoopAnimationsModule,
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
+        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
           'de',
-          require('./../../../../assets/i18n/de.json')
+          require('./src/assets/i18n/de.json')
         )
       ],
       providers: [
@@ -73,7 +72,6 @@ describe('DocumentDetailsComponent', () => {
 
     fixture = TestBed.createComponent(DocumentDetailsComponent)
     component = fixture.componentInstance
-    breadcrumbService = TestBed.inject(BreadcrumbService)
     fixture.detectChanges()
   })
 
@@ -82,8 +80,11 @@ describe('DocumentDetailsComponent', () => {
   })
 
   it('should set breadcrumbs on init', () => {
+    const breadcrumbService = component['breadcrumbService']
     jest.spyOn(breadcrumbService, 'setItems')
+
     component.ngOnInit()
+
     expect(breadcrumbService.setItems).toHaveBeenCalledWith([
       expect.objectContaining({ labelKey: 'DOCUMENT_SEARCH.HEADER' }),
       expect.objectContaining({ labelKey: 'DOCUMENT_DETAILS.BREADCRUMB' })
@@ -122,7 +123,7 @@ describe('DocumentDetailsComponent', () => {
     component.headerActions$.subscribe((actions) => {
       const backAction = actions.find((a) => a.labelKey?.includes('BACK'))
       jest.spyOn(store, 'dispatch')
-      backAction?.actionCallback()
+      backAction?.actionCallback?.()
       expect(store.dispatch).toHaveBeenCalledWith(DocumentDetailsActions.navigateBackButtonClicked())
       done()
     })

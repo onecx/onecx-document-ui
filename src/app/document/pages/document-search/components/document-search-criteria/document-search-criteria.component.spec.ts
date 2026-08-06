@@ -16,8 +16,8 @@ describe('DocumentSearchCriteriaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentSearchCriteriaComponent],
       imports: [
+        DocumentSearchCriteriaComponent,
         ReactiveFormsModule,
         NoopAnimationsModule,
         DatePickerModule,
@@ -25,7 +25,10 @@ describe('DocumentSearchCriteriaComponent', () => {
         InputTextModule,
         MultiSelectModule,
         TooltipModule,
-        TranslateTestingModule.withTranslations('en', require('./../../../../../../assets/i18n/en.json'))
+        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
+          'de',
+          require('./src/assets/i18n/de.json')
+        )
       ]
     }).compileComponents()
 

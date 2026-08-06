@@ -13,8 +13,16 @@ describe('DocumentQuickUploadFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentQuickUploadFormComponent, FileUploadComponent],
-      imports: [ReactiveFormsModule, SelectModule, TranslateTestingModule.withTranslations('en', {})]
+      imports: [
+        DocumentQuickUploadFormComponent,
+        FileUploadComponent,
+        ReactiveFormsModule,
+        SelectModule,
+        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
+          'de',
+          require('./src/assets/i18n/de.json')
+        )
+      ]
     }).compileComponents()
 
     fixture = TestBed.createComponent(DocumentQuickUploadFormComponent)

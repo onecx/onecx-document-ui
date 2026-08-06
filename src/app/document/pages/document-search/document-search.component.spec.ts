@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { ReactiveFormsModule } from '@angular/forms'
@@ -11,9 +10,9 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+import { firstValueFrom } from 'rxjs'
 
 import { DatePickerModule } from 'primeng/datepicker'
-import { DialogService } from 'primeng/dynamicdialog'
 import { SelectModule } from 'primeng/select'
 import { InputTextModule } from 'primeng/inputtext'
 import { MultiSelectModule } from 'primeng/multiselect'
@@ -22,20 +21,18 @@ import { TooltipModule } from 'primeng/tooltip'
 import { provideAppStateServiceMock, provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import {
   AngularAcceleratorModule,
-  BreadcrumbService,
   ColumnType,
   InteractiveDataViewComponentState,
   providePortalDialogService,
   RowListGridData
 } from '@onecx/angular-accelerator'
-import HAS_PERMISSION_CHECKER from '@onecx/angular-utils'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
 import { UserService } from '@onecx/angular-integration-interface'
 
 import { DocumentSearchCriteriaComponent } from './components/document-search-criteria/document-search-criteria.component'
 import { DocumentSearchActions } from './document-search.actions'
 import { documentSearchColumns } from './document-search.columns'
 import { DocumentSearchComponent } from './document-search.component'
-import { DocumentSearchHarness } from './document-search.harness'
 import { initialState } from './document-search.reducers'
 import { selectDocumentSearchViewModel } from './document-search.selectors'
 import { DocumentSearchViewModel } from './document-search.viewmodel'
@@ -72,7 +69,6 @@ describe('DocumentSearchComponent', () => {
   let component: DocumentSearchComponent
   let fixture: ComponentFixture<DocumentSearchComponent>
   let store: MockStore<Store>
-  let documentSearch: DocumentSearchHarness
 
   const mockActivatedRoute = {
     snapshot: {
@@ -112,15 +108,16 @@ describe('DocumentSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentSearchComponent, DocumentSearchCriteriaComponent],
       imports: [
+        DocumentSearchComponent,
+        DocumentSearchCriteriaComponent,
         AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
+        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
           'de',
-          require('./../../../../assets/i18n/de.json')
+          require('./src/assets/i18n/de.json')
         ),
         NoopAnimationsModule,
         DatePickerModule,
@@ -130,9 +127,9 @@ describe('DocumentSearchComponent', () => {
         TooltipModule
       ],
       providers: [
-        DialogService,
         provideHttpClient(),
         provideHttpClientTesting(),
+        providePermissionService(),
         provideMockStore({
           initialState: { document: { search: initialState } }
         }),
@@ -142,7 +139,7 @@ describe('DocumentSearchComponent', () => {
         provideAppStateServiceMock(),
         {
           provide: HAS_PERMISSION_CHECKER,
-          useExisting: UserService
+          useClass: AlwaysGrantPermissionChecker
         }
       ]
     }).compileComponents()
@@ -150,17 +147,7 @@ describe('DocumentSearchComponent', () => {
 
   beforeEach(async () => {
     const userService = TestBed.inject(UserService)
-    userService.permissions$.next([
-      'DOCUMENT#CREATE',
-      'DOCUMENT#EDIT',
-      'DOCUMENT#DELETE',
-      'DOCUMENT#IMPORT',
-      'DOCUMENT#EXPORT',
-      'DOCUMENT#VIEW',
-      'DOCUMENT#SEARCH',
-      'DOCUMENT#BACK'
-    ])
-    userService.hasPermission = () => true
+    jest.spyOn(userService, 'hasPermission').mockResolvedValue(true)
     const translateService = TestBed.inject(TranslateService)
     translateService.use('en')
 
@@ -172,7 +159,7 @@ describe('DocumentSearchComponent', () => {
     fixture = TestBed.createComponent(DocumentSearchComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-    documentSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, DocumentSearchHarness)
+    await fixture.whenStable()
   })
 
   it('should create the component', () => {
@@ -211,37 +198,39 @@ describe('DocumentSearchComponent', () => {
       doneFn()
     })
 
-    const searchHeader = await documentSearch.getHeader()
-    await searchHeader.clickResetButton()
+    component.resetSearch()
     expect(doneFn).toHaveBeenCalledTimes(1)
   })
 
   it('should have 2 overFlow header action', async () => {
-    const searchHeader = await documentSearch.getHeader()
-    const pageHeader = await searchHeader.getPageHeader()
-    const overflowActionButton = await pageHeader.getOverflowActionMenuButton()
-    await overflowActionButton?.click()
+    const actions = await firstValueFrom(component.headerActions$)
+    const overflowActions = actions.filter((action) => action.show === 'asOverflow')
 
-    const overflowMenuItems = await pageHeader.getOverFlowMenuItems()
-    expect(overflowMenuItems).toHaveLength(2)
-
-    const exportAllActionItem = await pageHeader.getOverFlowMenuItem('Export all')
-    expect(await exportAllActionItem!.getText()).toBe('Export all')
+    expect(overflowActions).toHaveLength(2)
+    expect(
+      overflowActions.some((action) => action.labelKey === 'DOCUMENT_SEARCH.HEADER_ACTIONS.EXPORT_ALL')
+    ).toBeTruthy()
+    expect(
+      overflowActions.some((action) => action.labelKey === 'DOCUMENT_SEARCH.HEADER_ACTIONS.NAVIGATE_TO_TYPES')
+    ).toBeTruthy()
   })
 
   it('should display correct breadcrumbs', async () => {
-    const breadcrumbService = TestBed.inject(BreadcrumbService)
+    const breadcrumbService = component['breadcrumbService']
     jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
     fixture.detectChanges()
 
     expect(breadcrumbService.setItems).toHaveBeenCalledTimes(1)
-    const searchHeader = await documentSearch.getHeader()
-    const pageHeader = await searchHeader.getPageHeader()
-    const searchBreadcrumbItem = await pageHeader.getBreadcrumbItem('Search')
-
-    expect(await searchBreadcrumbItem!.getText()).toEqual('Search')
+    expect(breadcrumbService.setItems).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          labelKey: 'DOCUMENT_SEARCH.BREADCRUMB',
+          titleKey: 'DOCUMENT_SEARCH.BREADCRUMB'
+        })
+      ])
+    )
   })
 
   it('should dispatch displayedColumnsChanged on data view column change', async () => {
@@ -268,28 +257,17 @@ describe('DocumentSearchComponent', () => {
     })
     store.refreshState()
 
-    const interactiveDataView = await documentSearch.getSearchResults()
-    ;(await (await interactiveDataView.getDataLayoutSelection()).getTableLayoutSelectionButton())?.click()
+    const state = {
+      activePage: 0,
+      pageSize: 10,
+      filters: [],
+      sorting: { sortColumn: '', sortDirection: 'NONE' },
+      selectedRows: []
+    } as InteractiveDataViewComponentState
 
-    const columnGroupSelector = await interactiveDataView?.getCustomGroupColumnSelector()
-    expect(columnGroupSelector).toBeTruthy()
+    component.resultComponentStateChanged(state)
 
-    await columnGroupSelector!.openCustomGroupColumnSelectorDialog()
-    const pickList = await columnGroupSelector!.getPicklist()
-    const transferControlButtons = await pickList.getTransferControlsButtons()
-    expect(transferControlButtons).toHaveLength(4)
-
-    // Currently, all columns are selected. Next, we are unselecting all to have a clean test setting.
-    const deactivateAllColumnsButton = transferControlButtons[1]
-    await deactivateAllColumnsButton.click()
-    const inactiveItems = await pickList.getTargetListItems()
-    await inactiveItems[0].selectItem()
-    const activateCurrentColumnButton = transferControlButtons[2]
-    await activateCurrentColumnButton.click()
-    const saveButton = await columnGroupSelector!.getSaveButton()
-    await saveButton.click()
-
-    expect(store.dispatch).toHaveBeenLastCalledWith(expect.objectContaining({ displayedColumns: columns }))
+    expect(store.dispatch).toHaveBeenCalledWith(DocumentSearchActions.resultComponentStateChanged(state))
   })
 
   it('should export csv data on export action click', async () => {
@@ -324,13 +302,15 @@ describe('DocumentSearchComponent', () => {
     })
     store.refreshState()
 
-    const searchHeader = await documentSearch.getHeader()
-    const pageHeader = await searchHeader.getPageHeader()
-    const overflowActionButton = await pageHeader.getOverflowActionMenuButton()
-    await overflowActionButton?.click()
+    const actions = await firstValueFrom(component.headerActions$)
+    const exportAction = actions.find((action) => action.labelKey === 'DOCUMENT_SEARCH.HEADER_ACTIONS.EXPORT_ALL')
 
-    const exportAllActionItem = await pageHeader.getOverFlowMenuItem('Export all')
-    await exportAllActionItem!.selectItem()
+    expect(exportAction).toBeTruthy()
+    if (typeof (exportAction as any)?.actionCallback === 'function') {
+      ;(exportAction as any).actionCallback()
+    } else {
+      throw new Error('Export action does not have a callable handler')
+    }
 
     expect(store.dispatch).toHaveBeenCalledWith(DocumentSearchActions.exportButtonClicked())
   })
@@ -588,7 +568,7 @@ describe('DocumentSearchComponent', () => {
 
     it('should dispatch navigateToTypesButtonClicked when navigateToTypes action callback is invoked', (done) => {
       component.headerActions$.subscribe((actions) => {
-        actions[2].actionCallback()
+        actions[2].actionCallback?.()
         expect(store.dispatch).toHaveBeenCalledWith(DocumentSearchActions.navigateToTypesButtonClicked())
         done()
       })

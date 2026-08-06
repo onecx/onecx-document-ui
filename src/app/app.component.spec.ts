@@ -8,14 +8,14 @@ import { AppComponent } from './app.component'
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
       imports: [
+        AppComponent,
         RouterTestingModule,
         AngularAcceleratorModule,
         HttpClientTestingModule,
-        TranslateTestingModule.withTranslations('en', require('./../assets/i18n/en.json')).withTranslations(
+        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
           'de',
-          require('./../assets/i18n/de.json')
+          require('./src/assets/i18n/de.json')
         )
       ],
       providers: []

@@ -23,6 +23,7 @@ import { InputTextModule } from 'primeng/inputtext'
 import { Textarea } from 'primeng/inputtextarea'
 import { AsyncPipe } from '@angular/common'
 import { PortalPageComponent } from '@onecx/angular-utils'
+import { LetDirective } from '@ngrx/component'
 
 @Component({
   selector: 'app-document-type-search',
@@ -36,7 +37,8 @@ import { PortalPageComponent } from '@onecx/angular-utils'
     Textarea,
     AngularAcceleratorModule,
     AsyncPipe,
-    PortalPageComponent
+    PortalPageComponent,
+    LetDirective
   ]
 })
 export class DocumentTypeSearchComponent implements OnInit {

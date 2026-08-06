@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Store } from '@ngrx/store'
 import { map, Observable } from 'rxjs'
@@ -25,12 +25,22 @@ import { DocumentSearchCriteriaSchema, documentSearchCriteriasSchema } from './d
 import { selectDocumentSearchViewModel } from './document-search.selectors'
 import { DocumentSearchViewModel } from './document-search.viewmodel'
 import { TranslateModule } from '@ngx-translate/core'
-import { AsyncPipe } from '@angular/common'
+import { AsyncPipe, CommonModule } from '@angular/common'
 import { PortalPageComponent } from '@onecx/angular-utils'
+import { LetDirective } from '@ngrx/component'
 
 @Component({
   selector: 'app-document-search',
-  imports: [TranslateModule, AngularAcceleratorModule, DocumentSearchCriteriaComponent, AsyncPipe, PortalPageComponent],
+  imports: [
+    TranslateModule,
+    AngularAcceleratorModule,
+    DocumentSearchCriteriaComponent,
+    AsyncPipe,
+    PortalPageComponent,
+    LetDirective,
+    CommonModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './document-search.component.html',
   styleUrls: ['./document-search.component.scss']
 })

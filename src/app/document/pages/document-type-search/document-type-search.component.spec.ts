@@ -10,13 +10,12 @@ import { TranslateService } from '@ngx-translate/core'
 import { provideAppStateServiceMock, provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import {
   AngularAcceleratorModule,
-  BreadcrumbService,
   InteractiveDataViewComponentState,
   providePortalDialogService,
   RowListGridData,
   SearchHeaderComponentState
 } from '@onecx/angular-accelerator'
-import HAS_PERMISSION_CHECKER from '@onecx/angular-utils'
+import { HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
 import { UserService } from '@onecx/angular-integration-interface'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ButtonModule } from 'primeng/button'
@@ -32,7 +31,6 @@ import { initialState } from './document-type-search.reducers'
 import { selectDocumentTypeSearchViewModel } from './document-type-search.selectors'
 import { DocumentTypeSearchViewModel } from './document-type-search.viewmodel'
 import { ActivatedRoute } from '@angular/router'
-
 describe('DocumentTypeSearchComponent', () => {
   let component: DocumentTypeSearchComponent
   let fixture: ComponentFixture<DocumentTypeSearchComponent>
@@ -61,15 +59,15 @@ describe('DocumentTypeSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentTypeSearchComponent],
       imports: [
+        DocumentTypeSearchComponent,
         AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
+        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
           'de',
-          require('./../../../../assets/i18n/de.json')
+          require('./src/assets/i18n/de.json')
         ),
         NoopAnimationsModule,
         ButtonModule,
@@ -117,10 +115,12 @@ describe('DocumentTypeSearchComponent', () => {
   })
 
   it('should set breadcrumb items on init', () => {
-    const breadcrumbService = TestBed.inject(BreadcrumbService)
-    const spy = jest.spyOn(breadcrumbService, 'setItems')
+    const breadcrumbService = component['breadcrumbService']
+    jest.spyOn(breadcrumbService, 'setItems')
+
     component.ngOnInit()
-    expect(spy).toHaveBeenCalledWith([
+
+    expect(breadcrumbService.setItems).toHaveBeenCalledWith([
       {
         titleKey: 'DOCUMENT_TYPE_SEARCH.BREADCRUMB',
         labelKey: 'DOCUMENT_TYPE_SEARCH.BREADCRUMB',

@@ -1,3 +1,29 @@
+import { jest } from '@jest/globals'
+Object.defineProperty(HTMLElement.prototype, 'ariaLabel', {
+  get() {
+    return this.getAttribute('aria-label')
+  },
+  set(value) {
+    this.setAttribute('aria-label', value)
+  },
+  configurable: true
+})
+
+/* Mock matchMedia for tests */
+Object.defineProperty(globalThis, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn()
+  }))
+})
+
 // @ts-expect-error https://thymikee.github.io/jest-preset-angular/docs/getting-started/test-environment
 globalThis.ngJest = {
   testEnvironmentOptions: {
@@ -5,4 +31,32 @@ globalThis.ngJest = {
     errorOnUnknownProperties: true
   }
 }
-import 'jest-preset-angular/setup-jest'
+
+// setup-jest.ts
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone'
+
+setupZoneTestEnv()
+
+/* fixes a bug with jsdom: ignoring this error message in log */
+const originalConsoleError = console.error
+type Err = { message: string }
+console.error = (message, ...optionalParams) => {
+  try {
+    if (message?.includes('Error: Could not parse CSS stylesheet')) return
+  } catch (err) {
+    ;(err as Err).message = `Error in console.error`
+    return
+  }
+  originalConsoleError(message, ...optionalParams)
+}
+
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  globalThis.ResizeObserver = class ResizeObserver {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    observe() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    unobserve() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    disconnect() {}
+  }
+}

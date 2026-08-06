@@ -8,7 +8,7 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ActivatedRoute } from '@angular/router'
 import { DocumentCreateAttachmentsComponent } from './components/document-create-attachments/document-create-attachments.component'
@@ -44,18 +44,19 @@ describe('DocumentCreateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
+      imports: [
         DocumentCreateComponent,
         DocumentCreateDetailsFormComponent,
         DocumentCreateAttachmentsComponent,
-        DocumentCreateCharacteristicsComponent
-      ],
-      imports: [
+        DocumentCreateCharacteristicsComponent,
         AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations('en', require('../../../../assets/i18n/en.json')),
+        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
+          'de',
+          require('./src/assets/i18n/de.json')
+        ),
         NoopAnimationsModule
       ],
       providers: [
@@ -81,12 +82,12 @@ describe('DocumentCreateComponent', () => {
 
   describe('ngOnInit', () => {
     it('should set breadcrumb with two items including search routerLink', () => {
-      const breadcrumbService = TestBed.inject(BreadcrumbService)
-      const setItemsSpy = jest.spyOn(breadcrumbService, 'setItems')
+      const breadcrumbService = component['breadcrumbService']
+      jest.spyOn(breadcrumbService, 'setItems')
 
       component.ngOnInit()
 
-      expect(setItemsSpy).toHaveBeenCalledWith([
+      expect(breadcrumbService.setItems).toHaveBeenCalledWith([
         expect.objectContaining({ routerLink: '../' }),
         expect.objectContaining({ labelKey: 'DOCUMENT_CREATE.BREADCRUMB' })
       ])

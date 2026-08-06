@@ -8,9 +8,8 @@ import { LetDirective } from '@ngrx/component'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
+import { AngularAcceleratorModule, BreadcrumbService, DataSortDirection } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { InteractiveDataViewComponent } from '@onecx/angular-accelerator'
 import { DocumentCreateOperationsActions } from '../../operations/document-create-operations.actions'
 import { FileUploadComponent } from '../../components/file-upload/file-upload.component'
 import { DocumentQuickUploadFormComponent } from './document-quick-upload-form/document-quick-upload-form.component'
@@ -20,6 +19,7 @@ import { initialState } from './document-quick-upload.reducers'
 import { PrimeIcons } from 'primeng/api'
 import { SelectModule } from 'primeng/select'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import { providePermissionService } from '@onecx/angular-utils'
 
 describe('DocumentQuickUploadComponent', () => {
   let component: DocumentQuickUploadComponent
@@ -31,15 +31,19 @@ describe('DocumentQuickUploadComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentQuickUploadComponent, DocumentQuickUploadFormComponent, FileUploadComponent],
       imports: [
+        DocumentQuickUploadComponent,
+        DocumentQuickUploadFormComponent,
+        FileUploadComponent,
         AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         SelectModule,
-        InteractiveDataViewComponent,
         StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations('en', require('../../../../assets/i18n/en.json')),
+        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
+          'de',
+          require('./src/assets/i18n/de.json')
+        ),
         NoopAnimationsModule
       ],
       providers: [
@@ -51,7 +55,8 @@ describe('DocumentQuickUploadComponent', () => {
         }),
         BreadcrumbService,
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
-        provideAppStateServiceMock()
+        provideAppStateServiceMock(),
+        providePermissionService()
       ]
     }).compileComponents()
 
@@ -110,21 +115,44 @@ describe('DocumentQuickUploadComponent', () => {
     expect(component.attachmentArray).toBe(attachments)
   })
 
-  it('should set sortField and trigger updateSorting on onSortFieldChange', () => {
-    component.onSortFieldChange('fileName')
-    expect(component.sortField).toBe('fileName')
-  })
+  it('should set sortField and sortOrder=-1 when sorting fileData.name in ASCENDING order', () => {
+    component.onSorted({
+      sortColumn: 'fileData.name',
+      sortDirection: DataSortDirection.ASCENDING
+    })
 
-  it('should set sortOrder=−1 when sorting fileData.name in ASCENDING', () => {
-    component.sortField = 'fileData.name'
-    component.onSortOrderChange(true)
+    expect(component.sortField).toBe('fileData.name')
     expect(component.sortOrder).toBe(-1)
   })
 
-  it('should set sortOrder=1 when sorting fileData.name in DESCENDING', () => {
-    component.sortField = 'fileData.name'
-    component.onSortOrderChange(false)
+  it('should set sortField and sortOrder=1 when sorting fileData.name in DESCENDING order', () => {
+    component.onSorted({
+      sortColumn: 'fileData.name',
+      sortDirection: DataSortDirection.DESCENDING
+    })
+
+    expect(component.sortField).toBe('fileData.name')
     expect(component.sortOrder).toBe(1)
+  })
+
+  it('should set sortField and sortOrder=1 when sorting non-fileData.name field in ASCENDING order', () => {
+    component.onSorted({
+      sortColumn: 'fileName',
+      sortDirection: DataSortDirection.ASCENDING
+    })
+
+    expect(component.sortField).toBe('fileName')
+    expect(component.sortOrder).toBe(1)
+  })
+
+  it('should set sortField and sortOrder=-1 when sorting non-fileData.name field in DESCENDING order', () => {
+    component.onSorted({
+      sortColumn: 'fileName',
+      sortDirection: DataSortDirection.DESCENDING
+    })
+
+    expect(component.sortField).toBe('fileName')
+    expect(component.sortOrder).toBe(-1)
   })
 
   it('should dispatch startDocumentCreation on onSave', () => {
@@ -324,17 +352,5 @@ describe('DocumentQuickUploadComponent', () => {
         })
       })
     )
-  })
-
-  it('should set sortOrder=1 when sorting non-fileData.name field in ASCENDING order', () => {
-    component.sortField = 'fileName'
-    component.onSortOrderChange(true)
-    expect(component.sortOrder).toBe(1)
-  })
-
-  it('should set sortOrder=-1 when sorting non-fileData.name field in DESCENDING order', () => {
-    component.sortField = 'fileName'
-    component.onSortOrderChange(false)
-    expect(component.sortOrder).toBe(-1)
   })
 })
