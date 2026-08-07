@@ -34,13 +34,19 @@
           <tr [formGroup]="attachmentFormGroup">
             <td>
               <ng-container *ngIf="editMode; else nameText">
-                <input
-                  pInputText
-                  type="text"
-                  formControlName="name"
-                  class="w-full"
-                  [ariaLabel]="'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate"
-                />
+                <p-floatlabel variant="on">
+                  <input
+                    id="attachment-name"
+                    pInputText
+                    type="text"
+                    formControlName="name"
+                    class="w-full"
+                    [ariaLabel]="'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate"
+                  />
+                  <label for="attachment-name" class="sr-only">
+                    {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.NAME' | translate }}
+                  </label>
+                </p-floatlabel>
               </ng-container>
               <ng-template #nameText>
                 {{ attachmentFormGroup.get('name')?.value || '-' }}
@@ -48,13 +54,19 @@
             </td>
             <td>
               <ng-container *ngIf="editMode; else descriptionText">
-                <input
-                  pInputText
-                  type="text"
-                  formControlName="description"
-                  class="w-full"
-                  [ariaLabel]="'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.DESCRIPTION' | translate"
-                />
+                <p-floatlabel variant="on">
+                  <input
+                    id="attachment-description"
+                    pInputText
+                    type="text"
+                    formControlName="description"
+                    class="w-full"
+                    [ariaLabel]="'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.DESCRIPTION' | translate"
+                  />
+                  <label for="attachment-description" class="sr-only">
+                    {{ 'DOCUMENT_DETAILS.ATTACHMENTS.COLUMNS.DESCRIPTION' | translate }}
+                  </label>
+                </p-floatlabel>
               </ng-container>
               <ng-template #descriptionText>
                 {{ attachmentFormGroup.get('description')?.value || '-' }}

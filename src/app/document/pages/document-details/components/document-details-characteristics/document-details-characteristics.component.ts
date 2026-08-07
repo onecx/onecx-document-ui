@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext'
 import { TableModule } from 'primeng/table'
 import { TooltipModule } from 'primeng/tooltip'
 import { DocumentCharacteristicsFormGroup } from 'src/app/document/types/document-create.types'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-document-details-characteristics',
@@ -19,7 +20,8 @@ import { DocumentCharacteristicsFormGroup } from 'src/app/document/types/documen
     ButtonModule,
     InputTextModule,
     TooltipModule,
-    TableModule
+    TableModule,
+    FloatLabelModule
   ],
   templateUrl: './document-details-characteristics.component.html'
 })

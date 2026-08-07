@@ -28,13 +28,19 @@
           <tr [formGroup]="characteristicsFormGroup">
             <td>
               <ng-container *ngIf="editMode; else nameText">
-                <input
-                  pInputText
-                  type="text"
-                  formControlName="name"
-                  class="w-full"
-                  [ariaLabel]="'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.NAME' | translate"
-                />
+                <p-floatlabel variant="on">
+                  <input
+                    id="characteristic-name"
+                    pInputText
+                    type="text"
+                    formControlName="name"
+                    class="w-full"
+                    [ariaLabel]="'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.NAME' | translate"
+                  />
+                  <label for="characteristic-name" class="sr-only">
+                    {{ 'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.NAME' | translate }}
+                  </label>
+                </p-floatlabel>
               </ng-container>
               <ng-template #nameText>
                 {{ characteristicsFormGroup.get('name')?.value }}
@@ -42,13 +48,19 @@
             </td>
             <td>
               <ng-container *ngIf="editMode; else valueText">
-                <input
-                  pInputText
-                  type="text"
-                  formControlName="value"
-                  class="w-full"
-                  [ariaLabel]="'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.VALUE' | translate"
-                />
+                <p-floatlabel variant="on">
+                  <input
+                    id="characteristic-value"
+                    pInputText
+                    type="text"
+                    formControlName="value"
+                    class="w-full"
+                    [ariaLabel]="'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.VALUE' | translate"
+                  />
+                  <label for="characteristic-value" class="sr-only">
+                    {{ 'DOCUMENT_DETAILS.CHARACTERISTICS.COLUMNS.VALUE' | translate }}
+                  </label>
+                </p-floatlabel>
               </ng-container>
               <ng-template #valueText>
                 {{ characteristicsFormGroup.get('value')?.value }}

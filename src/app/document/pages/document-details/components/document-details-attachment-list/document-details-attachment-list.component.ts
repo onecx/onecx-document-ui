@@ -8,10 +8,20 @@ import { TableModule } from 'primeng/table'
 import { ButtonModule } from 'primeng/button'
 import { TooltipModule } from 'primeng/tooltip'
 import { FluidModule } from 'primeng/fluid'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-document-details-attachment-list',
-  imports: [CommonModule, TranslateModule, TableModule, FluidModule, ButtonModule, TooltipModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    FloatLabelModule,
+    TableModule,
+    FluidModule,
+    ButtonModule,
+    TooltipModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './document-details-attachment-list.component.html',
   styleUrl: './document-details-attachment-list.component.scss'
 })

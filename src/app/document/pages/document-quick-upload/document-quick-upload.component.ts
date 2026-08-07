@@ -2,9 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, UntypedFormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PrimeIcons, SelectItem } from 'primeng/api'
-import { AngularAcceleratorModule, DataSortDirection, RowListGridData } from '@onecx/angular-accelerator'
+import {
+  AngularAcceleratorModule,
+  BreadcrumbService,
+  PrimeIcon,
+  DataSortDirection,
+  RowListGridData
+} from '@onecx/angular-accelerator'
 import { Observable, Subscription } from 'rxjs'
-import { BreadcrumbService, PrimeIcon } from '@onecx/angular-accelerator'
 import { AttachmentCreateUpdate, DocumentCreateUpdate } from 'src/app/shared/generated'
 import { AttachmentData, AttachmentFile } from '../../types/document-create.types'
 import { formatBytes } from '../../utils/attachment.utils'
