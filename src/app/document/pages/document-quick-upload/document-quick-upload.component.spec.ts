@@ -282,6 +282,58 @@ describe('DocumentQuickUploadComponent', () => {
     expect(component.getAttachmentIcon(null as any)).toBe(PrimeIcons.FILE)
   })
 
+  it('should map attachments to interactive data using name as id and imagePath', () => {
+    const data = [{ name: 'file1.pdf', isValid: true } as any, { name: 'file2.pdf', isValid: true } as any]
+    const result = component.toInteractiveData(data)
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        name: 'file1.pdf',
+        id: 'file1.pdf',
+        imagePath: 'file1.pdf'
+      }),
+      expect.objectContaining({
+        name: 'file2.pdf',
+        id: 'file2.pdf',
+        imagePath: 'file2.pdf'
+      })
+    ])
+  })
+
+  it('should use fallback id and imagePath when name is missing', () => {
+    const data = [{} as any, { name: undefined } as any]
+    const result = component.toInteractiveData(data)
+
+    expect(result[0]).toEqual(
+      expect.objectContaining({
+        id: 'attachment-0',
+        imagePath: 'attachment-0'
+      })
+    )
+    expect(result[1]).toEqual(
+      expect.objectContaining({
+        id: 'attachment-1',
+        imagePath: 'attachment-1'
+      })
+    )
+  })
+
+  it('should return empty array when toInteractiveData receives null', () => {
+    expect(component.toInteractiveData(null as any)).toEqual([])
+  })
+
+  it('should return interactive attachments from getter', () => {
+    component.attachmentArray = [{ name: 'file.pdf', isValid: true } as any]
+
+    expect(component.attachments).toEqual([
+      expect.objectContaining({
+        name: 'file.pdf',
+        id: 'file.pdf',
+        imagePath: 'file.pdf'
+      })
+    ])
+  })
+
   it('should dispatch startDocumentCreation with endDateTime=undefined when attachment validFor is undefined', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch')
     component.documentQuickUploadForm.setValue({
