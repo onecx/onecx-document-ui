@@ -13,7 +13,12 @@ import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcompone
 import { provideNavigatedEventStoreConnector } from '@onecx/ngrx-accelerator'
 import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
-import { createTranslateLoader, provideThemeConfig } from '@onecx/angular-utils'
+import {
+  createTranslateLoader,
+  providePermissionService,
+  provideThemeConfig,
+  provideTranslationPathFromMeta
+} from '@onecx/angular-utils'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { routes } from './app-routing.module'
 import { metaReducers, reducers } from './app.reducers'
@@ -69,6 +74,8 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       multi: true,
       deps: [Router, AppStateService]
     },
+    providePermissionService(),
+    provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
     provideThemeConfig(),
     provideNavigatedEventStoreConnector()
   ]

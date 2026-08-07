@@ -1,142 +1,144 @@
-<div class="grid p-fluid mt-2" errorTailor>
-  <!-- Left column: attachment list -->
-  <div class="col-4">
-    <div class="flex justify-content-between align-items-center mb-2">
-      <span class="font-semibold">{{ 'DOCUMENT_CREATE.ATTACHMENTS.LIST_TITLE' | translate }}</span>
+<p-fluid>
+  <div class="grid mt-2" errorTailor>
+    <!-- Left column: attachment list -->
+    <div class="col-4">
+      <div class="flex justify-content-between align-items-center mb-2">
+        <span class="font-semibold">{{ 'DOCUMENT_CREATE.ATTACHMENTS.LIST_TITLE' | translate }}</span>
+      </div>
+
+      <div
+        *ngFor="let form of attachmentForms.controls; let i = index"
+        class="flex align-items-center justify-content-between p-2 mb-1 border-round hover:surface-100"
+        [class.surface-100]="i === selectedIndex"
+      >
+        <button
+          type="button"
+          class="border-none bg-transparent p-0 m-0 flex-1 text-left cursor-pointer"
+          (click)="selectAttachment(i)"
+          [attr.aria-pressed]="i === selectedIndex"
+        >
+          <span class="text-sm overflow-hidden white-space-nowrap text-overflow-ellipsis block">
+            {{
+              form.controls.name.value ||
+                form.controls.mimeType.value ||
+                ('DOCUMENT_CREATE.ATTACHMENTS.UNNAMED' | translate)
+            }}
+          </span>
+        </button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          class="p-button-text p-button-danger p-button-sm ml-2"
+          [ariaLabel]="'DOCUMENT_CREATE.ATTACHMENTS.REMOVE' | translate"
+          (click)="removeAttachment(i)"
+        ></button>
+      </div>
+
+      <div *ngIf="attachmentForms.length === 0" class="text-sm text-color-secondary mt-2">
+        {{ 'DOCUMENT_CREATE.ATTACHMENTS.EMPTY' | translate }}
+      </div>
     </div>
 
-    <div
-      *ngFor="let form of attachmentForms.controls; let i = index"
-      class="flex align-items-center justify-content-between p-2 mb-1 border-round hover:surface-100"
-      [class.surface-100]="i === selectedIndex"
-    >
-      <button
-        type="button"
-        class="border-none bg-transparent p-0 m-0 flex-1 text-left cursor-pointer"
-        (click)="selectAttachment(i)"
-        [attr.aria-pressed]="i === selectedIndex"
-      >
-        <span class="text-sm overflow-hidden white-space-nowrap text-overflow-ellipsis block">
-          {{
-            form.controls.name.value ||
-              form.controls.mimeType.value ||
-              ('DOCUMENT_CREATE.ATTACHMENTS.UNNAMED' | translate)
-          }}
-        </span>
-      </button>
+    <!-- Right column: metadata form + file upload -->
+    <div class="col-6 col-offset-2" *ngIf="selectedForm as form; else noSelection" [formGroup]="form">
+      <div class="grid">
+        <!-- name: full width -->
+        <div class="col-12">
+          <p-float-label variant="on" controlErrorAnchor>
+            <input
+              pInputText
+              id="attachmentName"
+              type="text"
+              class="w-full"
+              [ngClass]="{ 'ng-invalid ng-dirty': isFieldInvalid(form, 'name') }"
+              formControlName="name"
+            />
+            <label for="attachmentName" class="required-label">
+              {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.NAME.LABEL' | translate }}
+            </label>
+          </p-float-label>
+        </div>
+
+        <!-- mimeType (disabled) + validity (calendar) -->
+        <div class="col-6 mt-2">
+          <p-float-label variant="on">
+            <input
+              pInputText
+              id="mimeType"
+              type="text"
+              class="w-full"
+              formControlName="mimeType"
+              [attr.disabled]="true"
+            />
+            <label for="mimeType">
+              {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.MIME_TYPE.LABEL' | translate }}
+            </label>
+          </p-float-label>
+        </div>
+
+        <div class="col-6 mt-2">
+          <p-float-label variant="on">
+            <p-datepicker
+              inputId="validForEnd"
+              class="w-full"
+              formControlName="validForEnd"
+              dateFormat="yy-mm-dd"
+              [showIcon]="true"
+              appendTo="body"
+            ></p-datepicker>
+            <label for="validForEnd">
+              {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.VALIDITY.LABEL' | translate }}
+            </label>
+          </p-float-label>
+        </div>
+
+        <!-- description: textarea -->
+        <div class="col-12 mt-2">
+          <p-float-label variant="on">
+            <textarea
+              pInputTextarea
+              id="attachmentDescription"
+              class="w-full"
+              rows="3"
+              formControlName="description"
+            ></textarea>
+            <label for="attachmentDescription">
+              {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.DESCRIPTION.LABEL' | translate }}
+            </label>
+          </p-float-label>
+        </div>
+
+        <!-- file upload widget -->
+        <div class="col-12 mt-2">
+          <app-file-upload [multiple]="false" (fileSelected)="onFileSelected($event)"></app-file-upload>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noSelection>
+      <div class="col-6 col-offset-2 flex align-items-center justify-content-center">
+        <app-file-upload class="w-full" [multiple]="false" (fileSelected)="onFileSelected($event)"></app-file-upload>
+      </div>
+    </ng-template>
+
+    <div class="col-6 col-offset-6 column-gap-2 flex justify-content-between mt-3">
       <button
         pButton
         type="button"
-        icon="pi pi-trash"
-        class="p-button-text p-button-danger p-button-sm ml-2"
-        [ariaLabel]="'DOCUMENT_CREATE.ATTACHMENTS.REMOVE' | translate"
-        (click)="removeAttachment(i)"
+        [label]="'DOCUMENT_DETAILS.GENERAL.BACK' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.GENERAL.BACK' | translate"
+        (click)="onBack()"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        [label]="'DOCUMENT_DETAILS.GENERAL.NEXT' | translate"
+        [ariaLabel]="'DOCUMENT_DETAILS.GENERAL.NEXT' | translate"
+        [disabled]="!isFormValid()"
+        (click)="onNext()"
       ></button>
     </div>
-
-    <div *ngIf="attachmentForms.length === 0" class="text-sm text-color-secondary mt-2">
-      {{ 'DOCUMENT_CREATE.ATTACHMENTS.EMPTY' | translate }}
-    </div>
   </div>
-
-  <!-- Right column: metadata form + file upload -->
-  <div class="col-6 col-offset-2" *ngIf="selectedForm as form; else noSelection" [formGroup]="form">
-    <div class="grid p-fluid">
-      <!-- name: full width -->
-      <div class="col-12">
-        <p-float-label variant="on" controlErrorAnchor>
-          <input
-            pInputText
-            id="attachmentName"
-            type="text"
-            class="w-full"
-            [ngClass]="{ 'ng-invalid ng-dirty': isFieldInvalid(form, 'name') }"
-            formControlName="name"
-          />
-          <label for="attachmentName" class="required-label">
-            {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.NAME.LABEL' | translate }}
-          </label>
-        </p-float-label>
-      </div>
-
-      <!-- mimeType (disabled) + validity (calendar) -->
-      <div class="col-6 mt-2">
-        <p-float-label variant="on">
-          <input
-            pInputText
-            id="mimeType"
-            type="text"
-            class="w-full"
-            formControlName="mimeType"
-            [attr.disabled]="true"
-          />
-          <label for="mimeType">
-            {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.MIME_TYPE.LABEL' | translate }}
-          </label>
-        </p-float-label>
-      </div>
-
-      <div class="col-6 mt-2">
-        <p-float-label variant="on">
-          <p-datepicker
-            inputId="validForEnd"
-            class="w-full"
-            formControlName="validForEnd"
-            dateFormat="yy-mm-dd"
-            [showIcon]="true"
-            appendTo="body"
-          ></p-datepicker>
-          <label for="validForEnd">
-            {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.VALIDITY.LABEL' | translate }}
-          </label>
-        </p-float-label>
-      </div>
-
-      <!-- description: textarea -->
-      <div class="col-12 mt-2">
-        <p-float-label variant="on">
-          <textarea
-            pInputTextarea
-            id="attachmentDescription"
-            class="w-full"
-            rows="3"
-            formControlName="description"
-          ></textarea>
-          <label for="attachmentDescription">
-            {{ 'DOCUMENT_CREATE.ATTACHMENTS.FORM.DESCRIPTION.LABEL' | translate }}
-          </label>
-        </p-float-label>
-      </div>
-
-      <!-- file upload widget -->
-      <div class="col-12 mt-2">
-        <app-file-upload [multiple]="false" (fileSelected)="onFileSelected($event)"></app-file-upload>
-      </div>
-    </div>
-  </div>
-
-  <ng-template #noSelection>
-    <div class="col-6 col-offset-2 flex align-items-center justify-content-center">
-      <app-file-upload class="w-full" [multiple]="false" (fileSelected)="onFileSelected($event)"></app-file-upload>
-    </div>
-  </ng-template>
-
-  <div class="col-6 col-offset-6 column-gap-2 flex justify-content-between mt-3">
-    <button
-      pButton
-      type="button"
-      [label]="'DOCUMENT_DETAILS.GENERAL.BACK' | translate"
-      [ariaLabel]="'DOCUMENT_DETAILS.GENERAL.BACK' | translate"
-      (click)="onBack()"
-    ></button>
-
-    <button
-      pButton
-      type="button"
-      [label]="'DOCUMENT_DETAILS.GENERAL.NEXT' | translate"
-      [ariaLabel]="'DOCUMENT_DETAILS.GENERAL.NEXT' | translate"
-      [disabled]="!isFormValid()"
-      (click)="onNext()"
-    ></button>
-  </div>
-</div>
+</p-fluid>

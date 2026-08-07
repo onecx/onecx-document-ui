@@ -9,6 +9,7 @@ import { SelectModule } from 'primeng/select'
 import { TooltipModule } from 'primeng/tooltip'
 import { CommonModule } from '@angular/common'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { FluidModule } from 'primeng/fluid'
 
 @Component({
   selector: 'app-document-details-form',
@@ -19,7 +20,8 @@ import { FloatLabelModule } from 'primeng/floatlabel'
     SelectModule,
     TooltipModule,
     CommonModule,
-    FloatLabelModule
+    FloatLabelModule,
+    FluidModule
   ],
   templateUrl: './document-details-form.component.html',
   styleUrls: ['./document-details-form.component.scss']

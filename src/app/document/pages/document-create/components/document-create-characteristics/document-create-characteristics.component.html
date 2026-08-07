@@ -1,91 +1,93 @@
-<div class="p-3" errorTailor>
-  <div class="grid p-fluid mt-1">
-    <div class="flex w-full justify-content-end mb-2">
-      <p-button icon="pi pi-plus" [text]="true" (onClick)="onAddCharacteristic()"></p-button>
+<p-fluid>
+  <div class="p-3" errorTailor>
+    <div class="grid mt-1">
+      <div class="flex w-full justify-content-end mb-2">
+        <p-button icon="pi pi-plus" [text]="true" (onClick)="onAddCharacteristic()"></p-button>
+      </div>
+
+      <div class="col-12">
+        <p-table
+          [value]="characteristicsForm.controls"
+          [tableStyle]="{ 'min-width': '64rem' }"
+          [rowTrackBy]="trackByIndex"
+          responsiveLayout="scroll"
+          styleClass="p-datatable-sm"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th id="CHAR_NAME_COL">
+                {{ 'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.NAME' | translate }}
+              </th>
+              <th id="CHAR_VAL_COL">
+                {{ 'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.VALUE' | translate }}
+              </th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-rowGroup let-rowIndex="rowIndex">
+            <tr [formGroup]="rowGroup">
+              <td>
+                <p-float-label variant="on" controlErrorAnchor>
+                  <input
+                    pInputText
+                    id="characteristicName-{{ rowIndex }}"
+                    type="text"
+                    formControlName="name"
+                    class="w-full"
+                    [ariaLabel]="'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.NAME' | translate"
+                  />
+                  <label for="characteristicName-{{ rowIndex }}">{{
+                    'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.NAME' | translate
+                  }}</label>
+                </p-float-label>
+              </td>
+
+              <td>
+                <p-float-label variant="on" controlErrorAnchor>
+                  <input
+                    pInputText
+                    id="characteristicValue-{{ rowIndex }}"
+                    type="text"
+                    formControlName="value"
+                    class="w-full"
+                    [ariaLabel]="'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.VALUE' | translate"
+                  />
+                  <label for="characteristicValue-{{ rowIndex }}">{{
+                    'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.VALUE' | translate
+                  }}</label>
+                </p-float-label>
+              </td>
+
+              <td>
+                <p-button
+                  icon="pi pi-trash"
+                  [text]="true"
+                  (onClick)="onRemoveCharacteristic(rowIndex)"
+                  [ariaLabel]="'DOCUMENT_CREATE.CHARACTERISTICS.ACTIONS.REMOVE' | translate"
+                ></p-button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="3">
+                {{ 'DOCUMENT_CREATE.CHARACTERISTICS.EMPTY' | translate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
     </div>
 
-    <div class="col-12">
-      <p-table
-        [value]="characteristicsForm.controls"
-        [tableStyle]="{ 'min-width': '64rem' }"
-        [rowTrackBy]="trackByIndex"
-        responsiveLayout="scroll"
-        styleClass="p-datatable-sm"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th id="CHAR_NAME_COL">
-              {{ 'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.NAME' | translate }}
-            </th>
-            <th id="CHAR_VAL_COL">
-              {{ 'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.VALUE' | translate }}
-            </th>
-          </tr>
-        </ng-template>
+    <div class="col-6 col-offset-6 column-gap-2 flex justify-content-between mt-3">
+      <button pButton class="w-full" type="button" (click)="onBackClick()">
+        {{ 'DOCUMENT_DETAILS.GENERAL.BACK' | translate }}
+      </button>
 
-        <ng-template pTemplate="body" let-rowGroup let-rowIndex="rowIndex">
-          <tr [formGroup]="rowGroup">
-            <td>
-              <p-float-label variant="on" controlErrorAnchor>
-                <input
-                  pInputText
-                  id="characteristicName-{{ rowIndex }}"
-                  type="text"
-                  formControlName="name"
-                  class="w-full"
-                  [ariaLabel]="'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.NAME' | translate"
-                />
-                <label for="characteristicName-{{ rowIndex }}">{{
-                  'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.NAME' | translate
-                }}</label>
-              </p-float-label>
-            </td>
-
-            <td>
-              <p-float-label variant="on" controlErrorAnchor>
-                <input
-                  pInputText
-                  id="characteristicValue-{{ rowIndex }}"
-                  type="text"
-                  formControlName="value"
-                  class="w-full"
-                  [ariaLabel]="'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.VALUE' | translate"
-                />
-                <label for="characteristicValue-{{ rowIndex }}">{{
-                  'DOCUMENT_CREATE.CHARACTERISTICS.COLUMNS.VALUE' | translate
-                }}</label>
-              </p-float-label>
-            </td>
-
-            <td>
-              <p-button
-                icon="pi pi-trash"
-                [text]="true"
-                (onClick)="onRemoveCharacteristic(rowIndex)"
-                [ariaLabel]="'DOCUMENT_CREATE.CHARACTERISTICS.ACTIONS.REMOVE' | translate"
-              ></p-button>
-            </td>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="emptymessage">
-          <tr>
-            <td colspan="3">
-              {{ 'DOCUMENT_CREATE.CHARACTERISTICS.EMPTY' | translate }}
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
+      <button pButton class="w-full" type="button" (click)="onSaveClick()">
+        {{ 'DOCUMENT_CREATE.GENERAL.SUBMIT' | translate }}
+      </button>
     </div>
   </div>
-
-  <div class="col-6 col-offset-6 column-gap-2 flex justify-content-between mt-3">
-    <button pButton class="w-full" type="button" (click)="onBackClick()">
-      {{ 'DOCUMENT_DETAILS.GENERAL.BACK' | translate }}
-    </button>
-
-    <button pButton class="w-full" type="button" (click)="onSaveClick()">
-      {{ 'DOCUMENT_CREATE.GENERAL.SUBMIT' | translate }}
-    </button>
-  </div>
-</div>
+</p-fluid>

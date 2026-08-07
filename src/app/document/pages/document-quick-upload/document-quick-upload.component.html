@@ -179,10 +179,10 @@
   <div>
     {{ 'DOCUMENT_QUICK_UPLOAD.CANCEL_MODAL.CONFIRM' | translate }}
   </div>
-  <p-footer class="btn-text">
+  <ng-template pTemplate="footer" class="btn-text">
     <button type="button" pButton icon="pi pi-times" (click)="onCancelNo()">
       {{ 'GENERAL.NO' | translate }}
     </button>
     <button type="button" pButton icon="pi pi-check" (click)="onCancelYes()">{{ 'GENERAL.YES' | translate }}</button>
-  </p-footer>
+  </ng-template>
 </p-dialog>

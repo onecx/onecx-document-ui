@@ -1,78 +1,80 @@
-<form [formGroup]="documentQuickUploadForm" errorTailor>
-  <div class="grid p-fluid pl-0">
-    <div class="col-7 grid p-fluid mt-2">
-      <div class="col-6">
-        <p-float-label variant="on" controlErrorAnchor>
-          <input
-            id="documentName"
-            pInputText
-            maxlength="60"
-            type="text"
-            formControlName="documentName"
-            (blur)="trimSpace($event)"
-            (keypress)="preventSpace($event)"
-          />
-          <label for="documentName" class="required">{{
-            'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_NAME' | translate
-          }}</label>
-        </p-float-label>
+<p-fluid>
+  <form [formGroup]="documentQuickUploadForm" errorTailor>
+    <div class="grid pl-0">
+      <div class="col-7 grid mt-2">
+        <div class="col-6">
+          <p-float-label variant="on" controlErrorAnchor>
+            <input
+              id="documentName"
+              pInputText
+              maxlength="60"
+              type="text"
+              formControlName="documentName"
+              (blur)="trimSpace($event)"
+              (keypress)="preventSpace($event)"
+            />
+            <label for="documentName" class="required">{{
+              'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_NAME' | translate
+            }}</label>
+          </p-float-label>
+        </div>
+        <div class="col-6">
+          <p-float-label variant="on" controlErrorAnchor>
+            <p-select
+              id="typeId"
+              [options]="documentTypes"
+              appendTo="body"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              formControlName="typeId"
+            ></p-select>
+            <label for="typeId" class="required">{{
+              'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_TYPE' | translate
+            }}</label>
+          </p-float-label>
+        </div>
+        <div class="col-6 mt-2">
+          <p-float-label variant="on" controlErrorAnchor>
+            <input
+              id="channel"
+              pInputText
+              maxlength="60"
+              type="text"
+              formControlName="channelname"
+              (blur)="trimSpace($event)"
+              (keypress)="preventSpace($event)"
+              (paste)="trimSpaceOnPaste($event, 'channelname', 60)"
+            />
+            <label for="channel" class="required">{{
+              'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_CHANNEL' | translate
+            }}</label>
+          </p-float-label>
+        </div>
+        <div class="col-6 mt-2">
+          <p-float-label variant="on" controlErrorAnchor>
+            <p-select
+              id="status"
+              [options]="documentStatus"
+              appendTo="body"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              formControlName="lifeCycleState"
+            ></p-select>
+            <label for="status">{{ 'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_STATUS' | translate }}</label>
+          </p-float-label>
+        </div>
       </div>
-      <div class="col-6">
-        <p-float-label variant="on" controlErrorAnchor>
-          <p-select
-            id="typeId"
-            [options]="documentTypes"
-            appendTo="body"
-            [autoDisplayFirst]="false"
-            [showClear]="true"
-            formControlName="typeId"
-          ></p-select>
-          <label for="typeId" class="required">{{
-            'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_TYPE' | translate
-          }}</label>
-        </p-float-label>
-      </div>
-      <div class="col-6 mt-2">
-        <p-float-label variant="on" controlErrorAnchor>
-          <input
-            id="channel"
-            pInputText
-            maxlength="60"
-            type="text"
-            formControlName="channelname"
-            (blur)="trimSpace($event)"
-            (keypress)="preventSpace($event)"
-            (paste)="trimSpaceOnPaste($event, 'channelname', 60)"
-          />
-          <label for="channel" class="required">{{
-            'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_CHANNEL' | translate
-          }}</label>
-        </p-float-label>
-      </div>
-      <div class="col-6 mt-2">
-        <p-float-label variant="on" controlErrorAnchor>
-          <p-select
-            id="status"
-            [options]="documentStatus"
-            appendTo="body"
-            [autoDisplayFirst]="false"
-            [showClear]="true"
-            formControlName="lifeCycleState"
-          ></p-select>
-          <label for="status">{{ 'DOCUMENT_QUICK_UPLOAD.BASIC_FIELDS.DOCUMENT_STATUS' | translate }}</label>
-        </p-float-label>
+      <div class="col-5 mt-3 pr-3">
+        <app-file-upload
+          [multiple]="true"
+          [disabled]="isSubmitted"
+          (filesSelected)="onFilesSelected($event)"
+        ></app-file-upload>
+        <div class="text-sm text-color-secondary mt-1">
+          {{ 'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.ALLOWED_FILETYPE_MESSAGE' | translate }}
+          ({{ 'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.ALLOWED_FILESIZE_MESSAGE' | translate }})
+        </div>
       </div>
     </div>
-    <div class="col-5 p-fluid mt-3 pr-3">
-      <app-file-upload
-        [multiple]="true"
-        [disabled]="isSubmitted"
-        (filesSelected)="onFilesSelected($event)"
-      ></app-file-upload>
-      <div class="text-sm text-color-secondary mt-1">
-        {{ 'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.ALLOWED_FILETYPE_MESSAGE' | translate }}
-        ({{ 'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.ALLOWED_FILESIZE_MESSAGE' | translate }})
-      </div>
-    </div>
-  </div>
-</form>
+  </form>
+</p-fluid>

@@ -1,183 +1,184 @@
-<form [formGroup]="formGroup" class="grid mt-0 p-fluid">
-  <div [class]="'col-12 ' + (viewMode === 'basic' ? 'md:col-4' : 'md:col-3')">
-    <p-float-label variant="on">
-      <input
-        pInputText
-        id="name"
-        type="text"
-        formControlName="name"
-        [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.NAME.TOOLTIP' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-        [attr.aria-label]="'DOCUMENT_SEARCH.CRITERIA.NAME.ARIA-LABEL' | translate"
-      />
-      <label for="name" style="white-space: nowrap">
-        {{ 'DOCUMENT_SEARCH.CRITERIA.NAME.LABEL' | translate }}
-      </label>
-    </p-float-label>
-  </div>
-  <div [class]="'col-12 ' + (viewMode === 'basic' ? 'md:col-4' : 'md:col-3')">
-    <p-float-label variant="on">
-      <p-multiSelect
-        inputId="documentTypeId"
-        formControlName="documentTypeId"
-        [options]="availableDocumentTypes"
-        [filter]="true"
-        [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.DOCUMENT_TYPE_ID.TOOLTIP' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-        appendTo="body"
-        [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.DOCUMENT_TYPE_ID.ARIA-LABEL' | translate"
-      ></p-multiSelect>
-      <label for="documentTypeId" style="white-space: nowrap">
-        {{ 'DOCUMENT_SEARCH.CRITERIA.DOCUMENT_TYPE_ID.LABEL' | translate }}
-      </label>
-    </p-float-label>
-  </div>
-  <div [class]="'col-12 ' + (viewMode === 'basic' ? 'md:col-4' : 'md:col-3')">
-    <p-float-label variant="on">
-      <p-select
-        inputId="channelName"
-        formControlName="channelName"
-        [options]="availableChannels"
-        data
-        [showClear]="true"
-        [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.CHANNEL_NAME.TOOLTIP' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-        appendTo="body"
-        [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.CHANNEL_NAME.ARIA-LABEL' | translate"
-      ></p-select>
-      <label for="channelName" style="white-space: nowrap">
-        {{ 'DOCUMENT_SEARCH.CRITERIA.CHANNEL_NAME.LABEL' | translate }}
-      </label>
-    </p-float-label>
-  </div>
-
-  @if (viewMode === 'advanced') {
-    <div class="col-12 md:col-3">
+<p-fluid>
+  <form [formGroup]="formGroup" class="grid mt-0">
+    <div [class]="'col-12 ' + (viewMode === 'basic' ? 'md:col-4' : 'md:col-3')">
       <p-float-label variant="on">
         <input
           pInputText
-          id="id"
+          id="name"
           type="text"
-          formControlName="id"
-          [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.ID.TOOLTIP' | translate"
+          formControlName="name"
+          [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.NAME.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
-          [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.ID.ARIA-LABEL' | translate"
+          [attr.aria-label]="'DOCUMENT_SEARCH.CRITERIA.NAME.ARIA-LABEL' | translate"
         />
-        <label for="id" style="white-space: nowrap">
-          {{ 'DOCUMENT_SEARCH.CRITERIA.ID.LABEL' | translate }}
+        <label for="name" style="white-space: nowrap">
+          {{ 'DOCUMENT_SEARCH.CRITERIA.NAME.LABEL' | translate }}
         </label>
       </p-float-label>
     </div>
-    <div class="col-12 md:col-3">
+    <div [class]="'col-12 ' + (viewMode === 'basic' ? 'md:col-4' : 'md:col-3')">
       <p-float-label variant="on">
         <p-multiSelect
-          inputId="lifeCycleState"
-          formControlName="lifeCycleState"
-          [options]="lifeCycleStates"
+          inputId="documentTypeId"
+          formControlName="documentTypeId"
+          [options]="availableDocumentTypes"
+          styleClass="pl-7"
           [filter]="true"
-          [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.LIFE_CYCLE_STATE.TOOLTIP' | translate"
+          [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.DOCUMENT_TYPE_ID.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
           appendTo="body"
-          [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.LIFE_CYCLE_STATE.ARIA-LABEL' | translate"
+          [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.DOCUMENT_TYPE_ID.ARIA-LABEL' | translate"
         ></p-multiSelect>
-        <label for="lifeCycleState" style="white-space: nowrap">
-          {{ 'DOCUMENT_SEARCH.CRITERIA.LIFE_CYCLE_STATE.LABEL' | translate }}
+        <label for="documentTypeId" style="white-space: nowrap">
+          {{ 'DOCUMENT_SEARCH.CRITERIA.DOCUMENT_TYPE_ID.LABEL' | translate }}
         </label>
       </p-float-label>
     </div>
-    <div class="col-12 md:col-3">
+    <div [class]="'col-12 ' + (viewMode === 'basic' ? 'md:col-4' : 'md:col-3')">
       <p-float-label variant="on">
-        <p-datepicker
-          inputId="startDate"
-          formControlName="startDate"
-          styleClass="w-full"
-          [showIcon]="true"
+        <p-select
+          inputId="channelName"
+          formControlName="channelName"
+          [options]="availableChannels"
+          data
           [showClear]="true"
+          [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.CHANNEL_NAME.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
           appendTo="body"
-          [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.START_DATE.TOOLTIP' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-          [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.START_DATE.ARIA-LABEL' | translate"
-        ></p-datepicker>
-        <label for="startDate" style="white-space: nowrap">
-          {{ 'DOCUMENT_SEARCH.CRITERIA.START_DATE.LABEL' | translate }}
+          [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.CHANNEL_NAME.ARIA-LABEL' | translate"
+        ></p-select>
+        <label for="channelName" style="white-space: nowrap">
+          {{ 'DOCUMENT_SEARCH.CRITERIA.CHANNEL_NAME.LABEL' | translate }}
         </label>
       </p-float-label>
     </div>
-    <div class="col-12 md:col-3">
-      <p-float-label variant="on">
-        <p-datepicker
-          inputId="endDate"
-          formControlName="endDate"
-          styleClass="w-full"
-          [showIcon]="true"
-          [showClear]="true"
-          appendTo="body"
-          [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.END_DATE.TOOLTIP' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-          [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.END_DATE.ARIA-LABEL' | translate"
-        ></p-datepicker>
-        <label for="endDate" style="white-space: nowrap">
-          {{ 'DOCUMENT_SEARCH.CRITERIA.END_DATE.LABEL' | translate }}
-        </label>
-      </p-float-label>
-    </div>
-    <div class="col-12 md:col-3">
-      <p-float-label variant="on">
-        <input
-          pInputText
-          id="createBy"
-          type="text"
-          formControlName="createBy"
-          [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.CREATE_BY.TOOLTIP' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-          [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.CREATE_BY.ARIA-LABEL' | translate"
-        />
-        <label for="createBy" style="white-space: nowrap">
-          {{ 'DOCUMENT_SEARCH.CRITERIA.CREATE_BY.LABEL' | translate }}
-        </label>
-      </p-float-label>
-    </div>
-    <div class="col-12 md:col-3">
-      <p-float-label variant="on">
-        <input
-          pInputText
-          id="objectReferenceId"
-          type="text"
-          formControlName="objectReferenceId"
-          [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_ID.TOOLTIP' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-          [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_ID.ARIA-LABEL' | translate"
-        />
-        <label for="objectReferenceId" style="white-space: nowrap">
-          {{ 'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_ID.LABEL' | translate }}
-        </label>
-      </p-float-label>
-    </div>
-    <div class="col-12 md:col-3">
-      <p-float-label variant="on">
-        <input
-          pInputText
-          id="objectReferenceType"
-          type="text"
-          formControlName="objectReferenceType"
-          [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_TYPE.TOOLTIP' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-          [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_TYPE.ARIA-LABEL' | translate"
-        />
-        <label for="objectReferenceType" style="white-space: nowrap">
-          {{ 'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_TYPE.LABEL' | translate }}
-        </label>
-      </p-float-label>
-    </div>
-  }
-</form>
+
+    @if (viewMode === 'advanced') {
+      <div class="col-12 md:col-3">
+        <p-float-label variant="on">
+          <input
+            pInputText
+            id="id"
+            type="text"
+            formControlName="id"
+            [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.ID.TOOLTIP' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+            [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.ID.ARIA-LABEL' | translate"
+          />
+          <label for="id" style="white-space: nowrap">
+            {{ 'DOCUMENT_SEARCH.CRITERIA.ID.LABEL' | translate }}
+          </label>
+        </p-float-label>
+      </div>
+      <div class="col-12 md:col-3">
+        <p-float-label variant="on">
+          <p-multiSelect
+            inputId="lifeCycleState"
+            formControlName="lifeCycleState"
+            [options]="lifeCycleStates"
+            [filter]="true"
+            [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.LIFE_CYCLE_STATE.TOOLTIP' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+            appendTo="body"
+            [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.LIFE_CYCLE_STATE.ARIA-LABEL' | translate"
+          ></p-multiSelect>
+          <label for="lifeCycleState" style="white-space: nowrap">
+            {{ 'DOCUMENT_SEARCH.CRITERIA.LIFE_CYCLE_STATE.LABEL' | translate }}
+          </label>
+        </p-float-label>
+      </div>
+      <div class="col-12 md:col-3">
+        <p-float-label variant="on">
+          <p-datepicker
+            inputId="startDate"
+            formControlName="startDate"
+            [showIcon]="true"
+            [showClear]="true"
+            appendTo="body"
+            [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.START_DATE.TOOLTIP' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+            [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.START_DATE.ARIA-LABEL' | translate"
+          ></p-datepicker>
+          <label for="startDate" style="white-space: nowrap">
+            {{ 'DOCUMENT_SEARCH.CRITERIA.START_DATE.LABEL' | translate }}
+          </label>
+        </p-float-label>
+      </div>
+      <div class="col-12 md:col-3">
+        <p-float-label variant="on">
+          <p-datepicker
+            inputId="endDate"
+            formControlName="endDate"
+            [showIcon]="true"
+            [showClear]="true"
+            appendTo="body"
+            [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.END_DATE.TOOLTIP' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+            [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.END_DATE.ARIA-LABEL' | translate"
+          ></p-datepicker>
+          <label for="endDate" style="white-space: nowrap">
+            {{ 'DOCUMENT_SEARCH.CRITERIA.END_DATE.LABEL' | translate }}
+          </label>
+        </p-float-label>
+      </div>
+      <div class="col-12 md:col-3">
+        <p-float-label variant="on">
+          <input
+            pInputText
+            id="createBy"
+            type="text"
+            formControlName="createBy"
+            [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.CREATE_BY.TOOLTIP' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+            [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.CREATE_BY.ARIA-LABEL' | translate"
+          />
+          <label for="createBy" style="white-space: nowrap">
+            {{ 'DOCUMENT_SEARCH.CRITERIA.CREATE_BY.LABEL' | translate }}
+          </label>
+        </p-float-label>
+      </div>
+      <div class="col-12 md:col-3">
+        <p-float-label variant="on">
+          <input
+            pInputText
+            id="objectReferenceId"
+            type="text"
+            formControlName="objectReferenceId"
+            [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_ID.TOOLTIP' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+            [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_ID.ARIA-LABEL' | translate"
+          />
+          <label for="objectReferenceId" style="white-space: nowrap">
+            {{ 'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_ID.LABEL' | translate }}
+          </label>
+        </p-float-label>
+      </div>
+      <div class="col-12 md:col-3">
+        <p-float-label variant="on">
+          <input
+            pInputText
+            id="objectReferenceType"
+            type="text"
+            formControlName="objectReferenceType"
+            [pTooltip]="'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_TYPE.TOOLTIP' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+            [ariaLabel]="'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_TYPE.ARIA-LABEL' | translate"
+          />
+          <label for="objectReferenceType" style="white-space: nowrap">
+            {{ 'DOCUMENT_SEARCH.CRITERIA.OBJECT_REFERENCE_TYPE.LABEL' | translate }}
+          </label>
+        </p-float-label>
+      </div>
+    }
+  </form>
+</p-fluid>

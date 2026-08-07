@@ -11,6 +11,7 @@ import { InputTextModule } from 'primeng/inputtext'
 import { TableModule } from 'primeng/table'
 import { TooltipModule } from 'primeng/tooltip'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { FluidModule } from 'primeng/fluid'
 
 @Component({
   selector: 'app-document-create-characteristics',
@@ -21,7 +22,8 @@ import { FloatLabelModule } from 'primeng/floatlabel'
     InputTextModule,
     TooltipModule,
     TableModule,
-    FloatLabelModule
+    FloatLabelModule,
+    FluidModule
   ],
   templateUrl: './document-create-characteristics.component.html'
 })

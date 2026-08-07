@@ -24,6 +24,7 @@ import { Textarea } from 'primeng/inputtextarea'
 import { AsyncPipe } from '@angular/common'
 import { PortalPageComponent } from '@onecx/angular-utils'
 import { LetDirective } from '@ngrx/component'
+import { ButtonModule } from 'primeng/button'
 
 @Component({
   selector: 'app-document-type-search',
@@ -31,6 +32,7 @@ import { LetDirective } from '@ngrx/component'
   imports: [
     TranslateModule,
     CheckboxModule,
+    ButtonModule,
     ReactiveFormsModule,
     DialogModule,
     InputTextModule,

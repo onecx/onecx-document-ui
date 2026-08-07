@@ -5,10 +5,11 @@ import { DocumentCreateDetailsFormGroup, DocumentCreateDetailsStepData } from '.
 import { TranslateModule } from '@ngx-translate/core'
 import { ReactiveFormsModule } from '@angular/forms'
 import { DocumentDetailsFormComponent } from 'src/app/document/components/document-details-form/document-details-form.component'
+import { ButtonModule } from 'primeng/button'
 
 @Component({
   selector: 'app-document-create-details-form',
-  imports: [TranslateModule, ReactiveFormsModule, DocumentDetailsFormComponent],
+  imports: [TranslateModule, ReactiveFormsModule, DocumentDetailsFormComponent, ButtonModule],
   templateUrl: './document-create-details-form.component.html'
 })
 export class DocumentCreateDetailsFormComponent implements OnInit {

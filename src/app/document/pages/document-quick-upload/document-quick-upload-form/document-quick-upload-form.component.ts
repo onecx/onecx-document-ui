@@ -4,6 +4,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, UntypedFormGroup, Validato
 import { TranslateModule } from '@ngx-translate/core'
 import { SelectItem } from 'primeng/api'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { FluidModule } from 'primeng/fluid'
+import { InputTextModule } from 'primeng/inputtext'
 import { SelectModule } from 'primeng/select'
 import { FileUploadComponent } from 'src/app/document/components/file-upload/file-upload.component'
 import { AttachmentData } from 'src/app/document/types/document-create.types'
@@ -12,7 +14,15 @@ import { LifeCycleState } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-document-quick-upload-form',
-  imports: [TranslateModule, SelectModule, ReactiveFormsModule, FileUploadComponent, FloatLabelModule],
+  imports: [
+    TranslateModule,
+    FluidModule,
+    SelectModule,
+    ReactiveFormsModule,
+    FileUploadComponent,
+    FloatLabelModule,
+    InputTextModule
+  ],
   templateUrl: './document-quick-upload-form.component.html',
   styleUrls: ['./document-quick-upload-form.component.scss']
 })

@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { SelectModule } from 'primeng/select'
 import { TooltipModule } from 'primeng/tooltip'
+import { FluidModule } from 'primeng/fluid'
 
 @Component({
   selector: 'app-document-search-criteria',
@@ -20,7 +21,7 @@ import { TooltipModule } from 'primeng/tooltip'
     InputTextModule,
     SelectModule,
     FloatLabelModule,
-    FloatLabelModule
+    FluidModule
   ],
   templateUrl: './document-search-criteria.component.html'
 })
