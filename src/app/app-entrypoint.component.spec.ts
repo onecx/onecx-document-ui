@@ -1,5 +1,5 @@
 import { TranslateService } from '@ngx-translate/core'
-import { PrimeNGConfig } from 'primeng/api'
+import { PrimeNG } from 'primeng/config'
 import { of, Subject } from 'rxjs'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 
@@ -9,7 +9,7 @@ describe('AppEntrypointComponent', () => {
   let onTranslationChange$: Subject<unknown>
   let onDefaultLangChange$: Subject<unknown>
   let translateService: jest.Mocked<TranslateService>
-  let primeNgConfig: jest.Mocked<PrimeNGConfig>
+  let primeNgConfig: jest.Mocked<PrimeNG>
 
   beforeEach(() => {
     onLangChange$ = new Subject()
@@ -25,7 +25,7 @@ describe('AppEntrypointComponent', () => {
 
     primeNgConfig = {
       setTranslation: jest.fn()
-    } as unknown as jest.Mocked<PrimeNGConfig>
+    } as unknown as jest.Mocked<PrimeNG>
 
     component = new AppEntrypointComponent(translateService, primeNgConfig)
   })
