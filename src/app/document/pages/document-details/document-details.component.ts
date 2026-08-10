@@ -23,7 +23,7 @@ import {
   DocumentDetailsFormGroup
 } from '../../types/document-create.types'
 import { TabsModule } from 'primeng/tabs'
-import { AsyncPipe } from '@angular/common'
+import { AsyncPipe, CommonModule } from '@angular/common'
 import { PortalPageComponent } from '@onecx/angular-utils'
 import { TranslateModule } from '@ngx-translate/core'
 import { LetDirective } from '@ngrx/component'
@@ -34,6 +34,7 @@ import { DocumentDetailsFormComponent } from '../../components/document-details-
 @Component({
   selector: 'app-document-details',
   imports: [
+    CommonModule,
     TabsModule,
     AsyncPipe,
     PortalPageComponent,

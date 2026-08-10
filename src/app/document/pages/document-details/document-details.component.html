@@ -15,16 +15,16 @@
       [ariaLabel]="'DOCUMENT_DETAILS.FORM.NAME' | translate"
     >
     </ocx-page-header>
-    <ocx-content-container>
-      <ocx-content class="mb-4" role="main" [ariaLabel]="'DOCUMENT_DETAILS.ARIA-LABEL' | translate">
-        <div class="surface-section mt-3 mb-1 mx-3">
+    <ocx-content-container layout="vertical">
+      <ocx-content class="w-full" role="main" [ariaLabel]="'DOCUMENT_DETAILS.ARIA-LABEL' | translate">
+        <div class="surface-section mb-1 mx-3">
           <app-document-details-form [formGroup]="formGroup" [availableTypes]="(documentTypes$ | async) || []">
           </app-document-details-form>
         </div>
       </ocx-content>
-      <ocx-content>
+      <ocx-content class="w-full">
         <div class="card p-4">
-          <p-tabs [value]="0">
+          <p-tabs value="0">
             <p-tablist>
               <p-tab value="0">{{ 'DOCUMENT_DETAILS.SECTIONS.ATTACHMENTS' | translate }}</p-tab>
               <p-tab value="1">{{ 'DOCUMENT_DETAILS.SECTIONS.CHARACTERISTICS' | translate }}</p-tab>
