@@ -323,7 +323,7 @@ describe('DocumentQuickUploadComponent', () => {
   })
 
   it('should return interactive attachments from getter', () => {
-    component.attachmentArray = [{ name: 'file.pdf', isValid: true } as any]
+    component.setAttachmentArray([{ name: 'file.pdf', isValid: true } as any])
 
     expect(component.attachments).toEqual([
       expect.objectContaining({
