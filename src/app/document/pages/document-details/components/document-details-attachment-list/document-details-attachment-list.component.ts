@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button'
 import { TooltipModule } from 'primeng/tooltip'
 import { FluidModule } from 'primeng/fluid'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
 
 @Component({
   selector: 'app-document-details-attachment-list',
@@ -20,7 +21,8 @@ import { FloatLabelModule } from 'primeng/floatlabel'
     FluidModule,
     ButtonModule,
     TooltipModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputTextModule
   ],
   templateUrl: './document-details-attachment-list.component.html',
   styleUrl: './document-details-attachment-list.component.scss'
