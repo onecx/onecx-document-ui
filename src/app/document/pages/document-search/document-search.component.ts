@@ -21,6 +21,7 @@ import { UserService } from '@onecx/angular-integration-interface'
 import { LifeCycleState } from 'src/app/shared/generated'
 import { DocumentSearchCriteriaComponent } from './components/document-search-criteria/document-search-criteria.component'
 import { DocumentSearchActions } from './document-search.actions'
+import { documentSearchColumns } from './document-search.columns'
 import { DocumentSearchCriteriaSchema, documentSearchCriteriasSchema } from './document-search.parameters'
 import { selectDocumentSearchViewModel } from './document-search.selectors'
 import { DocumentSearchViewModel } from './document-search.viewmodel'
@@ -57,6 +58,7 @@ export class DocumentSearchComponent implements OnInit {
   deleteEnabled = false
   public hasEditPermission = false
   public hasViewPermission = false
+  public displayedColumnKeys: string[] = []
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
@@ -72,6 +74,7 @@ export class DocumentSearchComponent implements OnInit {
     this.headerActions$ = this.buildHeaderActions()
     this.lifeCycleStates = this.buildLifeCycleStates()
     this.documentSearchFormGroup = this.buildSearchFormGroup()
+    this.displayedColumnKeys = documentSearchColumns.map((column) => column.id)
   }
 
   ngOnInit() {

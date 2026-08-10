@@ -25,6 +25,7 @@ import { AsyncPipe } from '@angular/common'
 import { PortalPageComponent } from '@onecx/angular-utils'
 import { LetDirective } from '@ngrx/component'
 import { ButtonModule } from 'primeng/button'
+import { documentTypeSearchColumns } from './document-type-search.columns'
 
 @Component({
   selector: 'app-document-type-search',
@@ -48,6 +49,7 @@ export class DocumentTypeSearchComponent implements OnInit {
   defaultDataSortDirection: DataSortDirection
   headerActions$: Observable<Action[]>
   documentTypeFormGroup: FormGroup
+  public displayedColumnKeys: string[] = []
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
@@ -58,6 +60,7 @@ export class DocumentTypeSearchComponent implements OnInit {
     this.defaultDataSortDirection = DataSortDirection.NONE
     this.headerActions$ = this.buildHeaderActions()
     this.documentTypeFormGroup = this.buildFormGroup()
+    this.displayedColumnKeys = documentTypeSearchColumns.map((column) => column.id)
   }
 
   ngOnInit() {

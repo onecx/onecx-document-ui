@@ -23,6 +23,7 @@
         deletePermission="DOCUMENT#DELETE"
         [data]="vm.results"
         [columns]="vm.columns"
+        [displayedColumnKeys]="displayedColumnKeys"
         [emptyResultsMessage]="'DOCUMENT_TYPE_SEARCH.EMPTY_RESULTS' | translate"
         (componentStateChanged)="resultComponentStateChanged($event)"
         [layout]="vm.resultComponentState?.layout ?? 'table'"
