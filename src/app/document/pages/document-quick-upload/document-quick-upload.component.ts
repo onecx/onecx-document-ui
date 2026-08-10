@@ -66,6 +66,7 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   layout: 'list' | 'grid' | 'table' = 'grid'
 
   private readonly subs = new Subscription()
+  public attachmentsData: RowListGridData[] = []
   readonly formatBytes = formatBytes
 
   constructor(
@@ -131,6 +132,7 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
    */
   setAttachmentArray(attachments: AttachmentData[]): void {
     this.attachmentArray = attachments
+    this.attachmentsData = this.toInteractiveData(this.attachmentArray)
   }
 
   /**
@@ -210,8 +212,8 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
     this.validateAttachmentArray()
   }
 
-  getAttachmentIcon(attachment: AttachmentData | RowListGridData): PrimeIcon {
-    const fileTypeData = (attachment as any)?.fileData ? (attachment as any).fileData.type : ''
+  getAttachmentIcon(attachment: AttachmentData): PrimeIcon {
+    const fileTypeData = attachment?.fileData ? attachment.fileData.type : ''
 
     if (fileTypeData) {
       const fileType = fileTypeData.split('/')
@@ -240,7 +242,7 @@ export class DocumentQuickUploadComponent implements OnInit, OnDestroy {
   }
 
   get attachments(): RowListGridData[] {
-    return this.toInteractiveData(this.attachmentArray)
+    return this.attachmentsData
   }
 
   /**

@@ -42,121 +42,115 @@
       class="w-full"
     ></app-document-quick-upload-form>
   </ocx-page-header>
-  <div class="card mt-2 p-0" *ngIf="attachmentArray.length">
-    <div class="p-3 border-bottom-1 surface-border">
+  <div *ngIf="attachmentArray.length">
+    <ocx-content class="w-full">
       <ocx-interactive-data-view
-        #dv
         *ngIf="attachmentArray.length"
         [data]="attachments"
+        [supportedViewLayouts]="['list', 'grid']"
+        [layout]="layout"
         [pageSize]="rowsPerPage"
         [pageSizes]="rowsPerPageOptions"
-        [supportedViewLayouts]="['list', 'grid']"
-        [layout]="'grid'"
         [clientSideFiltering]="false"
+        [clientSideSorting]="false"
         [emptyResultsMessage]="'DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.NO_DATA' | translate"
-        (sorted)="onSorted($event)"
         (dataViewLayoutChange)="updateAttachmentsLayout($event)"
       >
-        <ng-template pTemplate="item" let-attachment let-i="index">
-          <div class="grid grid-nogutter">
-            <div class="col-12 lg:col-4 xl:col-3 flex">
-              <div
-                class="card p-0 flex flex-column justify-content-between w-12 lg:w-11 mb-2 mt-2 mr-2 ml-2 align-self-stretch highlight"
-              >
-                <span class="tile-remove-icon">
-                  <button
-                    type="button"
-                    icon="pi pi-trash"
-                    class="p-button-rounded p-button-text"
-                    pButton
-                    (click)="isSubmitted ? null : onDeleteUploadFile(attachment)"
-                  >
-                    {{ 'GENERAL.REMOVE' | translate }}
-                  </button>
-                </span>
-                <div class="tile-item">
-                  <div class="mb-2">
-                    <i style="font-size: 1.5rem" [ngClass]="getAttachmentIcon(attachment)"></i>
+        <ng-template pTemplate="gridItem" let-attachment>
+          <div class="col-12 lg:col-4 xl:col-3 flex">
+            <div
+              class="card p-0 flex flex-column justify-content-between w-12 lg:w-11 mb-2 mt-2 mr-2 ml-2 align-self-stretch highlight"
+            >
+              <span class="tile-remove-icon">
+                <button
+                  type="button"
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-text"
+                  pButton
+                  (click)="isSubmitted ? null : onDeleteUploadFile(attachment)"
+                >
+                  {{ 'GENERAL.REMOVE' | translate }}
+                </button>
+              </span>
+              <div class="tile-item">
+                <div class="mb-2">
+                  <i style="font-size: 1.5rem" [ngClass]="getAttachmentIcon(attachment)"></i>
+                </div>
+                <div class="col-11 p-0">
+                  <div class="label">
+                    <div class="flex flex-row justify-content-between align-items-center text-2xl font-medium">
+                      <p
+                        class="white-space-nowrap overflow-hidden text-overflow-ellipsis"
+                        [pTooltip]="attachment.name"
+                        [tooltipPosition]="'right'"
+                      >
+                        {{ attachment.name }}
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-left font-light">
+                        {{ formatBytes(attachment.fileData?.size) }}
+                      </p>
+                    </div>
                   </div>
-                  <div class="col-11 p-0">
-                    <div class="label">
-                      <div class="flex flex-row justify-content-between align-items-center text-2xl font-medium">
-                        <p
-                          class="white-space-nowrap overflow-hidden text-overflow-ellipsis"
-                          [pTooltip]="attachment.name"
-                          [tooltipPosition]="'right'"
-                        >
-                          {{ attachment.name }}
-                        </p>
-                      </div>
-                      <div>
-                        <p class="text-left font-light">
-                          {{ formatBytes(attachment.fileData?.size) }}
-                        </p>
-                      </div>
-                    </div>
 
-                    <div
-                      class="tile-statusbar mb-3"
-                      [ngClass]="attachment.isValid ? 'green-bar' : 'red-bar'"
-                      [pTooltip]="
-                        attachment.isValid ? null : ('DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.FILE_SIZE_LIMIT' | translate)
-                      "
-                      [tooltipPosition]="attachment.isValid ? undefined : 'bottom'"
-                    >
-                      {{ attachment.isValid ? ('GENERAL.SUCCESS' | translate) : ('GENERAL.FAILED' | translate) }}
-                    </div>
+                  <div
+                    class="tile-statusbar mb-3"
+                    [ngClass]="attachment.isValid ? 'green-bar' : 'red-bar'"
+                    [pTooltip]="
+                      attachment.isValid ? null : ('DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.FILE_SIZE_LIMIT' | translate)
+                    "
+                    [tooltipPosition]="attachment.isValid ? undefined : 'bottom'"
+                  >
+                    {{ attachment.isValid ? ('GENERAL.SUCCESS' | translate) : ('GENERAL.FAILED' | translate) }}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </ng-template>
-        <ng-template pTemplate="item" let-attachment let-i="index">
-          <div class="grid grid-nogutter">
-            <div class="col-12 highlight">
-              <div class="align-items-center p-3 w-full gap-8">
-                <div class="flex-1">
-                  <div class="attachment-name-row list-item">
-                    <div
-                      class="list-icon-size-container flex align-items-center justify-content-center flex-column ml-2"
-                    >
-                      <i style="font-size: 1.5rem" [ngClass]="getAttachmentIcon(attachment)"></i>
-                    </div>
 
-                    <div class="attachment-name-div -mt-4 w-5 text-left -ml-7">
-                      <div
-                        class="attachment-name mr-8 font-medium text-2xl"
-                        [pTooltip]="attachment.name"
-                        [tooltipPosition]="'bottom'"
-                      >
-                        {{ attachment.name }}
-                      </div>
-                      <div class="font-light mt-3" *ngIf="attachment.fileData?.size">
-                        {{ formatBytes(attachment.fileData.size) }}
-                      </div>
-                    </div>
+        <ng-template pTemplate="listItem" let-attachment>
+          <div class="col-12 highlight">
+            <div class="align-items-center p-3 w-full gap-8">
+              <div class="flex-1">
+                <div class="attachment-name-row list-item">
+                  <div class="list-icon-size-container flex align-items-center justify-content-center flex-column ml-2">
+                    <i style="font-size: 1.5rem" [ngClass]="getAttachmentIcon(attachment)"></i>
+                  </div>
+
+                  <div class="attachment-name-div -mt-4 w-5 text-left -ml-7">
                     <div
-                      class="statusbar"
-                      [ngClass]="attachment.isValid ? 'green-bar' : 'red-bar'"
-                      [pTooltip]="
-                        attachment.isValid ? null : ('DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.FILE_SIZE_LIMIT' | translate)
-                      "
-                      [tooltipPosition]="attachment.isValid ? undefined : 'bottom'"
+                      class="attachment-name mr-8 font-medium text-2xl"
+                      [pTooltip]="attachment.name"
+                      [tooltipPosition]="'bottom'"
                     >
-                      {{ attachment.isValid ? ('GENERAL.SUCCESS' | translate) : ('GENERAL.FAILED' | translate) }}
+                      {{ attachment.name }}
                     </div>
-                    <div class="delete-div flex flex-column md:flex-row md:justify-content-between">
-                      <button
-                        type="button"
-                        icon="pi pi-trash"
-                        class="p-button-rounded p-button-text mb-1 mr-2"
-                        pButton
-                        (click)="isSubmitted ? null : onDeleteUploadFile(attachment.id)"
-                      >
-                        {{ 'GENERAL.REMOVE' | translate }}
-                      </button>
+                    <div class="font-light mt-3" *ngIf="attachment.fileData?.size">
+                      {{ formatBytes(attachment.fileData.size) }}
                     </div>
+                  </div>
+                  <div
+                    class="statusbar"
+                    [ngClass]="attachment.isValid ? 'green-bar' : 'red-bar'"
+                    [pTooltip]="
+                      attachment.isValid ? null : ('DOCUMENT_QUICK_UPLOAD.ATTACHMENTS.FILE_SIZE_LIMIT' | translate)
+                    "
+                    [tooltipPosition]="attachment.isValid ? undefined : 'bottom'"
+                  >
+                    {{ attachment.isValid ? ('GENERAL.SUCCESS' | translate) : ('GENERAL.FAILED' | translate) }}
+                  </div>
+                  <div class="delete-div flex flex-column md:flex-row md:justify-content-between">
+                    <button
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-rounded p-button-text mb-1 mr-2"
+                      pButton
+                      (click)="isSubmitted ? null : onDeleteUploadFile(attachment)"
+                    >
+                      {{ 'GENERAL.REMOVE' | translate }}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -164,7 +158,7 @@
           </div>
         </ng-template>
       </ocx-interactive-data-view>
-    </div>
+    </ocx-content>
   </div>
 </ocx-portal-page>
 <p-dialog

@@ -1,3 +1,11 @@
+::ng-deep ocx-data-list-grid-sorting {
+  display: none !important;
+}
+
+:host ::ng-deep .gap-4 {
+  gap: 0 !important;
+}
+
 .green-bar {
   background-color: #70ad47;
 }
@@ -97,4 +105,11 @@
   width: 30%;
   display: flex;
   align-items: flex-end;
+}
+
+.card {
+  background: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 }
