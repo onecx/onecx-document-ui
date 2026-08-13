@@ -14,9 +14,6 @@ export const documentSearchCriteriasSchema = z.object({
     z.array(z.string()).optional()
   ),
   channelName: z.string().optional(),
-  startDate: z.string().optional(),
-  endDate: z.string().optional(),
-  createBy: z.string().optional(),
   objectReferenceId: z.string().optional(),
   objectReferenceType: z.string().optional(),
   pageNumber: z.number().optional(),

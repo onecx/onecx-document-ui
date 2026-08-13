@@ -226,7 +226,7 @@ export class DocumentSearchEffects {
 
   private performSearch(searchCriteria: Record<string, unknown>) {
     return this.documentService
-      .getDocumentByCriteria({
+      .searchDocumentByCriteria({
         documentSearchCriteria: {
           ...Object.entries(searchCriteria).reduce(
             (acc, [key, value]) => ({
