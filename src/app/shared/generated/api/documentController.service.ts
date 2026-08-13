@@ -67,10 +67,6 @@ export interface DeleteDocumentByIdRequestParams {
     id: string;
 }
 
-export interface GetDocumentByCriteriaRequestParams {
-    documentSearchCriteria?: DocumentSearchCriteria;
-}
-
 export interface GetDocumentByIdRequestParams {
     id: string;
 }
@@ -83,7 +79,7 @@ export interface GetFileRequestParams {
     attachmentId: string;
 }
 
-export interface ShowAllDocumentsByCriteriaRequestParams {
+export interface SearchDocumentByCriteriaRequestParams {
     documentSearchCriteria?: DocumentSearchCriteria;
 }
 
@@ -443,7 +439,7 @@ export class DocumentControllerAPIService {
         }
 
         let localVarPath = `/document/delete-bulk-documents`;
-        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: requestBody,
@@ -571,78 +567,6 @@ export class DocumentControllerAPIService {
         return this.httpClient.request<Array<Channel>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Gets documents by criteria
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getDocumentByCriteria(requestParameters: GetDocumentByCriteriaRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DocumentPageResult>;
-    public getDocumentByCriteria(requestParameters: GetDocumentByCriteriaRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DocumentPageResult>>;
-    public getDocumentByCriteria(requestParameters: GetDocumentByCriteriaRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DocumentPageResult>>;
-    public getDocumentByCriteria(requestParameters: GetDocumentByCriteriaRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const documentSearchCriteria = requestParameters.documentSearchCriteria;
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                'application/json'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-        let localVarTransferCache: boolean | undefined = options && options.transferCache;
-        if (localVarTransferCache === undefined) {
-            localVarTransferCache = true;
-        }
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/document/search`;
-        return this.httpClient.request<DocumentPageResult>('post', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: documentSearchCriteria,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -849,15 +773,15 @@ export class DocumentControllerAPIService {
     }
 
     /**
-     * Gets all documents by criteria
+     * Search documents by criteria
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public showAllDocumentsByCriteria(requestParameters: ShowAllDocumentsByCriteriaRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<DocumentDetail>>;
-    public showAllDocumentsByCriteria(requestParameters: ShowAllDocumentsByCriteriaRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<DocumentDetail>>>;
-    public showAllDocumentsByCriteria(requestParameters: ShowAllDocumentsByCriteriaRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<DocumentDetail>>>;
-    public showAllDocumentsByCriteria(requestParameters: ShowAllDocumentsByCriteriaRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchDocumentByCriteria(requestParameters: SearchDocumentByCriteriaRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DocumentPageResult>;
+    public searchDocumentByCriteria(requestParameters: SearchDocumentByCriteriaRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DocumentPageResult>>;
+    public searchDocumentByCriteria(requestParameters: SearchDocumentByCriteriaRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DocumentPageResult>>;
+    public searchDocumentByCriteria(requestParameters: SearchDocumentByCriteriaRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const documentSearchCriteria = requestParameters.documentSearchCriteria;
 
         let localVarHeaders = this.defaultHeaders;
@@ -905,8 +829,8 @@ export class DocumentControllerAPIService {
             }
         }
 
-        let localVarPath = `/document/search/show-all-documents`;
-        return this.httpClient.request<Array<DocumentDetail>>('post', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/document/search`;
+        return this.httpClient.request<DocumentPageResult>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: documentSearchCriteria,

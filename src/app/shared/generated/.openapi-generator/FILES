@@ -26,14 +26,11 @@ model/documentDetail.ts
 model/documentPageResult.ts
 model/documentRelationship.ts
 model/documentRelationshipCreateUpdate.ts
-model/documentResponse.ts
 model/documentSearchCriteria.ts
 model/documentSpecification.ts
 model/documentSpecificationCreateUpdate.ts
 model/documentType.ts
 model/documentTypeCreateUpdate.ts
-model/fileInfo.ts
-model/fileMultipartBody.ts
 model/lifeCycleState.ts
 model/modelFile.ts
 model/models.ts
@@ -44,11 +41,8 @@ model/relatedObjectRef.ts
 model/relatedObjectRefCreateUpdate.ts
 model/relatedPartyRef.ts
 model/relatedPartyRefCreateUpdate.ts
-model/restException.ts
-model/status.ts
 model/storageUploadAudit.ts
 model/timePeriod.ts
-model/traceable.ts
 model/updateFileMetadataRequest.ts
 model/uploadAttachmentPresignedUrlRequest.ts
 model/uploadAttachmentPresignedUrlResponse.ts

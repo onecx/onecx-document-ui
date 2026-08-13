@@ -55,8 +55,8 @@ paths:
             - read
       tags:
         - DocumentController
-      description: Gets documents by criteria
-      operationId: getDocumentByCriteria
+      description: Search documents by criteria
+      operationId: searchDocumentByCriteria
       requestBody:
         content:
           application/json:
@@ -371,7 +371,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Channel'
   /document/delete-bulk-documents:
-    delete:
+    post:
       x-onecx:
         permissions:
           document:
@@ -502,36 +502,6 @@ paths:
                   $ref: '#/components/schemas/StorageUploadAudit'
         '404':
           description: Not found
-  /document/search/show-all-documents:
-    post:
-      x-onecx:
-        permissions:
-          document:
-            - read
-      tags:
-        - DocumentController
-      description: Gets all documents by criteria
-      operationId: showAllDocumentsByCriteria
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DocumentSearchCriteria'
-      responses:
-        '200':
-          description: The corresponding documents resource
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DocumentDetail'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
   /document/{id}:
     get:
       x-onecx:
@@ -964,12 +934,6 @@ components:
             type: string
         channelName:
           type: string
-        startDate:
-          type: string
-        endDate:
-          type: string
-        createBy:
-          type: string
         objectReferenceId:
           type: string
         objectReferenceType:
@@ -1206,64 +1170,6 @@ components:
           type: string
         validFor:
           $ref: '#/components/schemas/TimePeriod'
-    RestException:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/Status'
-        errorCode:
-          type: object
-        parameters:
-          type: array
-          items:
-            type: object
-        namedParameters:
-          type: object
-          additionalProperties:
-            type: object
-    Status:
-      enum:
-        - OK
-        - CREATED
-        - ACCEPTED
-        - NO_CONTENT
-        - RESET_CONTENT
-        - PARTIAL_CONTENT
-        - MOVED_PERMANENTLY
-        - FOUND
-        - SEE_OTHER
-        - NOT_MODIFIED
-        - USE_PROXY
-        - TEMPORARY_REDIRECT
-        - BAD_REQUEST
-        - UNAUTHORIZED
-        - PAYMENT_REQUIRED
-        - FORBIDDEN
-        - NOT_FOUND
-        - METHOD_NOT_ALLOWED
-        - NOT_ACCEPTABLE
-        - PROXY_AUTHENTICATION_REQUIRED
-        - REQUEST_TIMEOUT
-        - CONFLICT
-        - GONE
-        - LENGTH_REQUIRED
-        - PRECONDITION_FAILED
-        - REQUEST_ENTITY_TOO_LARGE
-        - REQUEST_URI_TOO_LONG
-        - UNSUPPORTED_MEDIA_TYPE
-        - REQUESTED_RANGE_NOT_SATISFIABLE
-        - EXPECTATION_FAILED
-        - PRECONDITION_REQUIRED
-        - TOO_MANY_REQUESTS
-        - REQUEST_HEADER_FIELDS_TOO_LARGE
-        - INTERNAL_SERVER_ERROR
-        - NOT_IMPLEMENTED
-        - BAD_GATEWAY
-        - SERVICE_UNAVAILABLE
-        - GATEWAY_TIMEOUT
-        - HTTP_VERSION_NOT_SUPPORTED
-        - NETWORK_AUTHENTICATION_REQUIRED
-      type: string
     StorageUploadAudit:
       type: object
       properties:
@@ -1327,29 +1233,6 @@ components:
           $ref: '#/components/schemas/OffsetDateTime'
         endDateTime:
           $ref: '#/components/schemas/OffsetDateTime'
-    Traceable:
-      type: object
-      properties:
-        createdBy:
-          type: string
-        createdDate:
-          type: string
-          format: date-time
-        lastModifiedBy:
-          type: string
-        lastModifiedDate:
-          type: string
-          format: date-time
-    DocumentResponse:
-      allOf:
-        - $ref: '#/components/schemas/Traceable'
-        - type: object
-          properties:
-            attachmentResponse:
-              type: object
-              additionalProperties:
-                type: integer
-              description: Map of attachment names to their response codes
     AttachmentPresignedUrlResponse:
       properties:
         url:
@@ -1377,23 +1260,6 @@ components:
       properties:
         attachmentId:
           type: string
-    FileMultipartBody:
-      type: object
-      properties:
-        file:
-          type: File
-    FileInfo:
-      type: object
-      properties:
-        contentType:
-          type: string
-          description: Type of file based on the InputStream.
-        path:
-          type: string
-          description: The path of the file.
-        bucket:
-          type: string
-          description: Name of bucket.
     ProblemDetailResponse:
       type: object
       properties:

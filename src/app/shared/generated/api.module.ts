@@ -2,9 +2,11 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
+
 @NgModule({
-  imports: [],
-  exports: [],
+  imports:      [],
+  declarations: [],
+  exports:      [],
   providers: []
 })
 export class ApiModule {

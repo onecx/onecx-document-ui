@@ -18,9 +18,6 @@ export interface DocumentSearchCriteria {
     lifeCycleState?: Array<LifeCycleState>;
     documentTypeId?: Array<string>;
     channelName?: string;
-    startDate?: string;
-    endDate?: string;
-    createBy?: string;
     objectReferenceId?: string;
     objectReferenceType?: string;
     pageNumber?: number;
