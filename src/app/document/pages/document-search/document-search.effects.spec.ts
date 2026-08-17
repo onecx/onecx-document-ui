@@ -275,7 +275,7 @@ describe('DocumentSearchEffects', () => {
 
     it('should dispatch documentSearchResultsLoadingFailed on API error', (done) => {
       const error = 'API failure'
-      documentService.searchDocumentByCriteria.mockReturnValue(throwiError(() => error) as any)
+      documentService.searchDocumentByCriteria.mockReturnValue(throwError(() => error) as any)
 
       effects.performSearch$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(DocumentSearchActions.documentSearchResultsLoadingFailed({ error }))
