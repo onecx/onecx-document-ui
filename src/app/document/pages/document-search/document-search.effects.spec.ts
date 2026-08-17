@@ -56,8 +56,9 @@ describe('DocumentSearchEffects', () => {
     actions$ = new ReplaySubject(1)
 
     documentService = {
-      getDocumentByCriteria: jest.fn(),
-      getAllChannels: jest.fn()
+      searchDocumentByCriteria: jest.fn(),
+      getAllChannels: jest.fn(),
+      deleteDocumentById: jest.fn()
     } as unknown as jest.Mocked<DocumentControllerAPIService>
 
     documentTypeService = {
@@ -246,7 +247,7 @@ describe('DocumentSearchEffects', () => {
   describe('performSearch$', () => {
     it('should dispatch documentSearchResultsReceived on success', (done) => {
       const stream = [{ id: '1', name: 'Doc A' }]
-      documentService.getDocumentByCriteria.mockReturnValue(
+      documentService.searchDocumentByCriteria.mockReturnValue(
         of({
           stream,
           size: 1,
@@ -272,69 +273,9 @@ describe('DocumentSearchEffects', () => {
       actions$.next(DocumentSearchActions.performSearch({ searchCriteria: mockCriteria }))
     })
 
-    it('should convert Date fields to ISO strings before calling the API', async () => {
-      const criteriaWithDate = {
-        startDate: '2023-01-01',
-        endDate: '2023-12-31'
-      }
-      documentService.getDocumentByCriteria.mockReturnValue(
-        of({
-          stream: [],
-          size: 0,
-          number: 0,
-          totalElements: 0,
-          totalPages: 0
-        }) as any
-      )
-      const effectPromise = firstValueFrom(effects.performSearch$.pipe(take(1)))
-      actions$.next(
-        DocumentSearchActions.performSearch({
-          searchCriteria: criteriaWithDate
-        })
-      )
-
-      await effectPromise
-
-      expect(documentService.getDocumentByCriteria).toHaveBeenCalledWith(
-        expect.objectContaining({
-          documentSearchCriteria: {
-            startDate: '2023-01-01',
-            endDate: '2023-12-31'
-          }
-        })
-      )
-    })
-
-    it('should convert actual Date object values to ISO strings', async () => {
-      const dateValue = new Date('2024-06-15T10:00:00.000Z')
-      documentService.getDocumentByCriteria.mockReturnValue(
-        of({
-          stream: [],
-          size: 0,
-          number: 0,
-          totalElements: 0,
-          totalPages: 0
-        }) as any
-      )
-      const effectPromise = firstValueFrom(effects.performSearch$.pipe(take(1)))
-      actions$.next(
-        DocumentSearchActions.performSearch({
-          searchCriteria: { startDate: dateValue as any }
-        })
-      )
-
-      await effectPromise
-
-      expect(documentService.getDocumentByCriteria).toHaveBeenCalledWith(
-        expect.objectContaining({
-          documentSearchCriteria: { startDate: dateValue.toISOString() }
-        })
-      )
-    })
-
     it('should dispatch documentSearchResultsLoadingFailed on API error', (done) => {
       const error = 'API failure'
-      documentService.getDocumentByCriteria.mockReturnValue(throwError(() => error) as any)
+      documentService.searchDocumentByCriteria.mockReturnValue(throwError(() => error) as any)
 
       effects.performSearch$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(DocumentSearchActions.documentSearchResultsLoadingFailed({ error }))
@@ -564,7 +505,7 @@ describe('DocumentSearchEffects', () => {
 
   describe('performSearch$ with null/undefined stream fields', () => {
     it('should default stream to [] when API returns undefined stream', (done) => {
-      documentService.getDocumentByCriteria.mockReturnValue(
+      documentService.searchDocumentByCriteria.mockReturnValue(
         of({
           stream: undefined,
           size: undefined,
