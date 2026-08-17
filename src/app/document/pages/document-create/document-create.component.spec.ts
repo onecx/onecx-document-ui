@@ -55,10 +55,10 @@ describe('DocumentCreateComponent', () => {
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
-          'de',
-          require('./src/assets/i18n/de.json')
-        ),
+        TranslateTestingModule.withTranslations({
+          de: require('./src/assets/i18n/de.json'),
+          en: require('./src/assets/i18n/en.json')
+        }).withDefaultLanguage('en'),
         NoopAnimationsModule
       ],
       providers: [

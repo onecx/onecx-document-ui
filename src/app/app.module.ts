@@ -49,6 +49,7 @@ import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
   ],
   providers: [
     providePortalDialogService(),
+    provideHttpClient(withInterceptorsFromDi()),
     { provide: APP_CONFIG, useValue: environment },
     {
       provide: Configuration,

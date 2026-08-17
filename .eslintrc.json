@@ -1,11 +1,15 @@
 {
   "root": true,
-  "plugins": ["@nx"],
+  "plugins": ["@nx", "deprecation"],
   "overrides": [
     {
       "files": ["*.ts"],
+      "extends": ["plugin:deprecation/recommended"],
       "parserOptions": {
         "project": ["./tsconfig.*?.json"]
+      },
+      "rules": {
+        "deprecation/deprecation": "warn"
       }
     },
     {
@@ -24,10 +28,8 @@
       "rules": {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": ["error", { "vars": "all", "args": "none" }],
-        "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/no-var-requires": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {

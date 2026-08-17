@@ -10,7 +10,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
-import { provideNavigatedEventStoreConnector } from '@onecx/ngrx-accelerator'
 import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import {
@@ -71,9 +70,8 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
     }),
     providePermissionService(),
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
-    provideThemeConfig(),
-    provideNavigatedEventStoreConnector(),
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi()),
+    provideThemeConfig()
   ]
 })
 export class OneCXDocumentModule implements DoBootstrap {

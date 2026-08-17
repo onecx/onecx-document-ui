@@ -36,6 +36,7 @@ import { DocumentSearchComponent } from './document-search.component'
 import { initialState } from './document-search.reducers'
 import { selectDocumentSearchViewModel } from './document-search.selectors'
 import { DocumentSearchViewModel } from './document-search.viewmodel'
+import { documentSearchCriteriasSchema } from './document-search.parameters'
 
 describe('DocumentSearchComponent', () => {
   const origAddEventListener = window.addEventListener
@@ -115,10 +116,10 @@ describe('DocumentSearchComponent', () => {
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
-          'de',
-          require('./src/assets/i18n/de.json')
-        ),
+        TranslateTestingModule.withTranslations({
+          de: require('./src/assets/i18n/de.json'),
+          en: require('./src/assets/i18n/en.json')
+        }).withDefaultLanguage('en'),
         NoopAnimationsModule,
         DatePickerModule,
         SelectModule,
@@ -468,7 +469,6 @@ describe('DocumentSearchComponent', () => {
 
   describe('buildSearchFormGroup', () => {
     it('should build form group with all keys from documentSearchCriteriasSchema', () => {
-      const { documentSearchCriteriasSchema } = require('./document-search.parameters')
       const schemaKeys = documentSearchCriteriasSchema.keyof().options
       const formKeys = Object.keys(component.documentSearchFormGroup.controls)
       schemaKeys.forEach((key: string) => {

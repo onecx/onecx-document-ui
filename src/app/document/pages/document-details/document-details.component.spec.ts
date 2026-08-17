@@ -1,6 +1,5 @@
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { ReactiveFormsModule } from '@angular/forms'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
@@ -45,10 +44,10 @@ describe('DocumentDetailsComponent', () => {
         LetDirective,
         ReactiveFormsModule,
         NoopAnimationsModule,
-        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
-          'de',
-          require('./src/assets/i18n/de.json')
-        )
+        TranslateTestingModule.withTranslations({
+          de: require('./src/assets/i18n/de.json'),
+          en: require('./src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
       ],
       providers: [
         provideHttpClient(),
@@ -64,8 +63,7 @@ describe('DocumentDetailsComponent', () => {
           provide: HAS_PERMISSION_CHECKER,
           useExisting: UserService
         }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+      ]
     }).compileComponents()
 
     store = TestBed.inject(MockStore)

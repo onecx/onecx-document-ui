@@ -7,6 +7,8 @@ import {
 
 import { DocumentSearchActions } from './document-search.actions'
 import * as reducers from './document-search.reducers'
+import { documentSearchCriteriasSchema } from './document-search.parameters'
+import { routerNavigatedAction } from '@ngrx/router-store'
 
 describe('DocumentSearchReducer', () => {
   it('should reset results and criteria on resetButtonClicked', () => {
@@ -107,19 +109,17 @@ describe('DocumentSearchReducer', () => {
   })
 
   it('should set criteria and searchLoadingIndicator=true when routerNavigatedAction succeeds and queryParams present', () => {
-    const { routerNavigatedAction } = require('@ngrx/router-store')
-    const mockSchema = require('./document-search.parameters')
-    jest.spyOn(mockSchema.documentSearchCriteriasSchema, 'safeParse').mockReturnValue({
+    jest.spyOn(documentSearchCriteriasSchema, 'safeParse').mockReturnValue({
       success: true,
       data: { foo: 'bar' }
-    })
+    } as any)
     const preState = {
       ...reducers.initialState,
       criteria: {},
       searchLoadingIndicator: false
     }
     const action = routerNavigatedAction({
-      payload: { routerState: { root: { queryParams: { foo: 'bar' } } } }
+      payload: { routerState: { root: { queryParams: { foo: 'bar' } } } } as any
     })
     const state = reducers.documentSearchReducer(preState, action)
     expect(state.criteria).toEqual({ foo: 'bar' })
@@ -127,31 +127,28 @@ describe('DocumentSearchReducer', () => {
   })
 
   it('should not change state when routerNavigatedAction fails schema parse', () => {
-    const { routerNavigatedAction } = require('@ngrx/router-store')
-    const mockSchema = require('./document-search.parameters')
-    jest.spyOn(mockSchema.documentSearchCriteriasSchema, 'safeParse').mockReturnValue({
+    jest.spyOn(documentSearchCriteriasSchema, 'safeParse').mockReturnValue({
       success: false
-    })
+    } as any)
     const preState = {
       ...reducers.initialState,
       criteria: { name: 'bar' },
       searchLoadingIndicator: true
     }
     const action = routerNavigatedAction({
-      payload: { routerState: { root: { queryParams: { foo: 'bar' } } } }
+      payload: { routerState: { root: { queryParams: { foo: 'bar' } } } } as any
     })
     const state = reducers.documentSearchReducer(preState, action)
     expect(state).toBe(preState)
   })
 
   it('should set searchLoadingIndicator to false when routerNavigatedAction has empty queryParams', () => {
-    const { routerNavigatedAction } = require('@ngrx/router-store')
     const preState = {
       ...reducers.initialState,
       searchLoadingIndicator: false
     }
     const action = routerNavigatedAction({
-      payload: { routerState: { root: { queryParams: {} } } }
+      payload: { routerState: { root: { queryParams: {} } } } as any
     })
     const state = reducers.documentSearchReducer(preState, action)
     expect(state.searchLoadingIndicator).toBe(false)
