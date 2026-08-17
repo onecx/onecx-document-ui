@@ -4,7 +4,6 @@ import { provideMockActions } from '@ngrx/effects/testing'
 import { routerNavigatedAction } from '@ngrx/router-store'
 import { Action, Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
-import { firstValueFrom, of, ReplaySubject, throwError } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 import { DialogService } from 'primeng/dynamicdialog'
