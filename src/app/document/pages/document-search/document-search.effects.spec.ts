@@ -19,6 +19,7 @@ import { DocumentSearchEffects } from './document-search.effects'
 import { DocumentSearchCriteriaSchema } from './document-search.parameters'
 import { documentSearchSelectors, selectDocumentSearchViewModel } from './document-search.selectors'
 import { initialState } from './document-search.reducers'
+import { of, ReplaySubject, throwError } from 'rxjs'
 
 jest.mock('@onecx/ngrx-accelerator', () => {
   const actual = jest.requireActual('@onecx/ngrx-accelerator')
@@ -274,7 +275,7 @@ describe('DocumentSearchEffects', () => {
 
     it('should dispatch documentSearchResultsLoadingFailed on API error', (done) => {
       const error = 'API failure'
-      documentService.searchDocumentByCriteria.mockReturnValue(throwError(() => error) as any)
+      documentService.searchDocumentByCriteria.mockReturnValue(throwiError(() => error) as any)
 
       effects.performSearch$.pipe(take(1)).subscribe((action) => {
         expect(action).toEqual(DocumentSearchActions.documentSearchResultsLoadingFailed({ error }))
