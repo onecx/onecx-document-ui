@@ -122,6 +122,8 @@ describe('DocumentSearchEffects', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
+    router.navigate.mockReturnValue(Promise.resolve(true))
+    exportDataService.exportCsv.mockReturnValue(Promise.resolve())
     ;(router.parseUrl as jest.Mock).mockImplementation(
       (url: string) =>
         ({
@@ -179,6 +181,26 @@ describe('DocumentSearchEffects', () => {
       })
 
       actions$.next(DocumentSearchActions.resetButtonClicked())
+    })
+
+    it('should log an error when router.navigate rejects during syncParamsToUrl', async () => {
+      const error = new Error('Navigation failed')
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      route.queryParams = of({ name: 'different' }) as any
+      jest.spyOn(router, 'navigate').mockRejectedValue(error)
+
+      effects.syncParamsToUrl$.pipe(take(1)).subscribe()
+      actions$.next(DocumentSearchActions.searchButtonClicked({ searchCriteria: mockCriteria }))
+      await Promise.resolve()
+
+      expect(router.navigate).toHaveBeenCalledWith([], {
+        relativeTo: route,
+        queryParams: mockCriteria,
+        replaceUrl: true,
+        onSameUrlNavigation: 'ignore'
+      })
+      expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+      consoleErrorSpy.mockRestore()
     })
   })
 
@@ -303,6 +325,29 @@ describe('DocumentSearchEffects', () => {
       actions$.next(DocumentSearchActions.exportButtonClicked())
     })
 
+    it('should log an error when exportCsv rejects', async () => {
+      const error = new Error('Export failed')
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const mockResults = [{ id: '1', name: 'Context 1' } as any]
+      store.overrideSelector(selectDocumentSearchViewModel, {
+        resultComponentState: { displayedColumns: [{ field: 'name', header: 'Name' }] },
+        results: mockResults
+      } as any)
+      exportDataService.exportCsv.mockReturnValue(Promise.reject(error))
+
+      effects.exportData$.pipe(take(1)).subscribe()
+      actions$.next(DocumentSearchActions.exportButtonClicked())
+      await Promise.resolve()
+
+      expect(exportDataService.exportCsv).toHaveBeenCalledWith(
+        [{ field: 'name', header: 'Name' }],
+        mockResults,
+        'Document.csv'
+      )
+      expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+      consoleErrorSpy.mockRestore()
+    })
+
     it('should pass empty array for columns when resultComponentState is null', (done) => {
       const mockResults = [{ id: '1', name: 'Context 1' } as any]
       store.overrideSelector(selectDocumentSearchViewModel, {
@@ -367,6 +412,21 @@ describe('DocumentSearchEffects', () => {
       })
 
       actions$.next(DocumentSearchActions.detailsButtonClicked({ id: testId }))
+    })
+
+    it('should log an error when navigate to details rejects', async () => {
+      const error = new Error('Details navigation failed')
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const testId = 'test-234'
+      router.navigate.mockReturnValue(Promise.reject(error))
+
+      effects.navigateToOrderDetailsPage$.pipe(take(1)).subscribe()
+      actions$.next(DocumentSearchActions.detailsButtonClicked({ id: testId }))
+      await Promise.resolve()
+
+      expect(router.navigate).toHaveBeenCalledWith(['/search', 'details', testId])
+      expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+      consoleErrorSpy.mockRestore()
     })
 
     it('should clear query params and fragment before navigating', (done) => {
@@ -488,6 +548,22 @@ describe('DocumentSearchEffects', () => {
       })
 
       actions$.next(DocumentSearchActions.navigateToTypesButtonClicked())
+    })
+
+    it('should log an error when navigate to types rejects', async () => {
+      const error = new Error('Types navigation failed')
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      store.overrideSelector(selectUrl, '/document/search')
+      store.refreshState()
+      router.navigate.mockReturnValue(Promise.reject(error))
+
+      effects.navigateToTypes$.pipe(take(1)).subscribe()
+      actions$.next(DocumentSearchActions.navigateToTypesButtonClicked())
+      await Promise.resolve()
+
+      expect(router.navigate).toHaveBeenCalledWith(['/document/search', 'document-types'])
+      expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+      consoleErrorSpy.mockRestore()
     })
 
     it('should strip query params from the current URL before navigating', (done) => {

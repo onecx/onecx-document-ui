@@ -156,7 +156,11 @@
       "CREATE_SEARCH_CONFIG": "Suchkonfiguration erstellen",
       "UPDATE_SEARCH_CONFIG": "Suchkonfiguration aktualisieren",
       "DIALOG_CONFIRM": "Bestätigen",
-      "DIALOG_CANCEL": "Abbrechen"
+      "DIALOG_CANCEL": "Abbrechen",
+      "RESET_BUTTON": {
+        "ARIA_LABEL": "Suchkriterien und Ergebnisse zurücksetzen",
+        "TOOLTIP": "Suchkriterien und Ergebnisse zurücksetzen"
+      }
     },
     "ERROR_MESSAGES": {
       "SEARCH_RESULTS_LOADING_FAILED": "Suchergebnisse konnten nicht geladen werden.",

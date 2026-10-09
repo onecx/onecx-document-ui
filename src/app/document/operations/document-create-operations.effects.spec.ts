@@ -545,5 +545,25 @@ describe('DocumentCreateOperationsEffects', () => {
         })
       )
     })
+
+    it('should log an error when router.navigate rejects during navigateToDetails$', async () => {
+      const error = new Error('details navigation failed')
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const router = TestBed.inject(Router)
+      jest.spyOn(router, 'navigate').mockRejectedValue(error)
+
+      ;(appStateService.currentMfe$ as any).publish({ baseHref: '/app' })
+      effects.navigateToDetails$.pipe(take(1)).subscribe()
+      actions$.next(
+        DocumentCreateOperationsActions.documentCreationCompleted({
+          documentId: 'doc-1'
+        })
+      )
+      await Promise.resolve()
+
+      expect(router.navigate).toHaveBeenCalledWith(['//app', 'details', 'doc-1'])
+      expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+      consoleErrorSpy.mockRestore()
+    })
   })
 })

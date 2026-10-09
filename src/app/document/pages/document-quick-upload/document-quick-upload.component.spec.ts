@@ -221,6 +221,32 @@ describe('DocumentQuickUploadComponent', () => {
     })
   })
 
+  it('should log an error when onCancel navigation rejects', async () => {
+    const error = new Error('Cancel navigation failed')
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    jest.spyOn(router, 'navigate').mockRejectedValue(error)
+    component.documentQuickUploadForm.reset()
+    component.attachmentArray = []
+
+    component.onCancel()
+    await Promise.resolve()
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+    consoleErrorSpy.mockRestore()
+  })
+
+  it('should log an error when onCancelYes navigation rejects', async () => {
+    const error = new Error('Explicit cancel navigation failed')
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    jest.spyOn(router, 'navigate').mockRejectedValue(error)
+
+    component.onCancelYes()
+    await Promise.resolve()
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+    consoleErrorSpy.mockRestore()
+  })
+
   it('should remove attachment from array on onDeleteUploadFile', () => {
     const attachment1 = { name: 'file1.pdf', isValid: true } as any
     const attachment2 = { name: 'file2.pdf', isValid: true } as any

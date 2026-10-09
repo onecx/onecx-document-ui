@@ -410,6 +410,29 @@ describe('DocumentDetailsEffects', () => {
 
       actions$.next(DocumentDetailsActions.deleteDocumentSucceeded())
     })
+
+    it('should log an error when router navigation rejects after delete success', async () => {
+      const error = new Error('navigation failed')
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      store.overrideSelector(selectUrl, '/document/details/1')
+      store.refreshState()
+
+      const mockUrlTree: any = {
+        toString: jest.fn(() => '/document/details/1'),
+        queryParams: { q: '1' },
+        fragment: 'frag'
+      }
+      router.parseUrl.mockReturnValue(mockUrlTree)
+      router.navigate.mockReturnValue(Promise.reject(error))
+
+      effects.deleteDocumentSucceeded$.pipe(take(1)).subscribe()
+      actions$.next(DocumentDetailsActions.deleteDocumentSucceeded())
+      await Promise.resolve()
+
+      expect(router.navigate).toHaveBeenCalledWith(['/document'])
+      expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+      consoleErrorSpy.mockRestore()
+    })
   })
 
   describe('startAttachmentDownload$', () => {

@@ -9,6 +9,8 @@
   <ocx-search-header
     [header]="'DOCUMENT_TYPE_SEARCH.HEADER' | translate"
     [subheader]="'DOCUMENT_TYPE_SEARCH.SUB_HEADER' | translate"
+    [resetButtonAriaLabel]="'DOCUMENT_SEARCH.HEADER_ACTIONS.RESET_BUTTON.ARIA_LABEL' | translate"
+    [resetButtonTooltip]="'DOCUMENT_SEARCH.HEADER_ACTIONS.RESET_BUTTON.TOOLTIP' | translate"
     [manualBreadcrumbs]="true"
     [actions]="(headerActions$ | async) ?? []"
     (componentStateChanged)="searchHeaderComponentStateChanged($event)"

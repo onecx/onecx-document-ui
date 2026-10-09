@@ -161,7 +161,11 @@
       "CREATE_SEARCH_CONFIG": "Create search configuration",
       "UPDATE_SEARCH_CONFIG": "Update search configuration",
       "DIALOG_CONFIRM": "Confirm",
-      "DIALOG_CANCEL": "Cancel"
+      "DIALOG_CANCEL": "Cancel",
+      "RESET_BUTTON": {
+        "ARIA_LABEL": "Reset search criteria and results",
+        "TOOLTIP": "Reset search criteria and results"
+      }
     },
     "ERROR_MESSAGES": {
       "SEARCH_RESULTS_LOADING_FAILED": "Loading search results failed.",

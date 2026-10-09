@@ -54,7 +54,7 @@ describe('DocumentTypeSearchEffects', () => {
     } as unknown as jest.Mocked<PortalMessageService>
 
     router = {
-      navigate: jest.fn(),
+      navigate: jest.fn().mockResolvedValue(true),
       events: of()
     } as unknown as jest.Mocked<Router>
 
@@ -76,6 +76,7 @@ describe('DocumentTypeSearchEffects', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
+    router.navigate.mockResolvedValue(true)
   })
 
   describe('loadOnNavigation$', () => {
@@ -338,6 +339,22 @@ describe('DocumentTypeSearchEffects', () => {
 
       ;(appStateService.currentMfe$ as any).publish({ baseHref: 'test-base' })
       actions$.next(DocumentTypeSearchActions.navigateBackButtonClicked())
+    })
+
+    it('should log an error when router.navigate rejects during navigateBack$', async () => {
+      const error = new Error('navigate back failed')
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const appStateService = TestBed.inject(AppStateService)
+      jest.spyOn(router, 'navigate').mockRejectedValue(error)
+
+      effects.navigateBack$.pipe(take(1)).subscribe()
+      ;(appStateService.currentMfe$ as any).publish({ baseHref: 'test-base' })
+      actions$.next(DocumentTypeSearchActions.navigateBackButtonClicked())
+      await Promise.resolve()
+
+      expect(router.navigate).toHaveBeenCalledWith(['/test-base'])
+      expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+      consoleErrorSpy.mockRestore()
     })
   })
 })

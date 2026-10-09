@@ -445,6 +445,32 @@ describe('DocumentSearchComponent', () => {
     )
   })
 
+  it('should log an error when quickUpload navigation rejects', async () => {
+    const error = new Error('quick upload navigation failed')
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    const router = TestBed.inject(Router)
+    jest.spyOn(router, 'navigate').mockRejectedValue(error)
+
+    component.quickUpload()
+    await Promise.resolve()
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+    consoleErrorSpy.mockRestore()
+  })
+
+  it('should log an error when createNewDocument navigation rejects', async () => {
+    const error = new Error('create document navigation failed')
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    const router = TestBed.inject(Router)
+    jest.spyOn(router, 'navigate').mockRejectedValue(error)
+
+    component.createNewDocument()
+    await Promise.resolve()
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+    consoleErrorSpy.mockRestore()
+  })
+
   describe('buildHeaderActions', () => {
     it('should emit 4 header actions: quickUpload, createNewDocument, exportAll', (done) => {
       component.headerActions$.subscribe((actions) => {
