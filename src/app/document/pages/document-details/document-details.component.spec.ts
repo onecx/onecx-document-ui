@@ -338,8 +338,9 @@ describe('DocumentDetailsComponent', () => {
     it('should select document types', () => {
       const spy = jest.spyOn(store, 'select')
 
-      component.documentTypes$
+      const result = component.documentTypes$
 
+      expect(result).toBeDefined()
       expect(spy).toHaveBeenCalledWith(selectDocumentTypes)
     })
   })

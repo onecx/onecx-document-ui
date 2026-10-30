@@ -11,10 +11,7 @@ export const reducers: ActionReducerMap<State> = {
   onecx: oneCxReducer
 }
 
-export function localStorageSyncReducer(
-  reducer: ActionReducer<any> // eslint-disable-line @typescript-eslint/no-explicit-any
-): ActionReducer<any> {
-  // eslint-disable-line @typescript-eslint/no-explicit-any
+export function localStorageSyncReducer<StateType>(reducer: ActionReducer<StateType>): ActionReducer<StateType> {
   return localStorageSync({
     keys: [
       {
